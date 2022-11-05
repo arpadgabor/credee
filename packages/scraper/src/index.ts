@@ -2,6 +2,7 @@ import { promises as fs } from 'fs'
 import { join } from 'path'
 import playwright from 'playwright'
 import { Edge, RedditHomeResponse } from 'types/reddit-home'
+import { createSubredditSpider } from './spiders/subreddit.spider.js'
 
 let browser: playwright.Browser
 const edges: Edge[] = []
@@ -14,71 +15,72 @@ async function cleanup() {
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
 
-async function initializeRedditPage(page: playwright.Page) {
-  await page.goto('https://reddit.com')
-  const home = await page.waitForSelector('[href="/"]')
+// async function main() {
+//   browser = await playwright.chromium.launch({
+//     headless: false,
+//     timeout: 5000,
+//     args: ['--disable-gpu'],
+//   })
+//   const page = await browser.newPage()
+//   page.on('response', interceptResponse)
 
-  home.click()
+//   await initializeRedditPage(page, pageSuffix)
+//   await startScrolling(page)
 
-  await page.waitForTimeout(2000)
-}
+//   const posts = edges
+//     .filter(edge => !!edge.node.subreddit)
+//     .map(({ node }) => ({
+//       id: node.id,
+//       title: node.title,
+//       author: node.authorInfo?.name,
+//       subreddit: node.subreddit?.prefixedName,
+//       score: node.score,
+//       upvoteRatio: node.upvoteRatio,
+//       url: node.url,
+//       domain: node.domain,
+//       createdAt: node.createdAt,
+//       isNsfw: node.isNsfw,
+//       isOriginalContent: node.isOriginalContent,
+//       isSelfPost: node.isSelfPost,
+//       permalink: node.permalink,
+//     }))
 
-async function startScrolling(page: playwright.Page, scrolls = 50) {
-  const scrollLength = 1000
+//   const postsJsonPath = join(process.cwd(), 'data', `posts-${Date.now()}.json`)
+//   fs.writeFile(postsJsonPath, JSON.stringify(posts, null, 2))
 
-  for (let idx = 0; idx < scrolls; idx++) {
-    console.log(`[${idx}] Scrolling...`)
-
-    await page.mouse.wheel(0, scrollLength)
-    await page.waitForTimeout(500)
-  }
-}
-
-async function interceptResponse(response: playwright.Response) {
-  const url = response.url()
-  if (!url.includes('gql.reddit.com')) return
-
-  const json: { data: RedditHomeResponse } = await response.json()
-  if (!json?.data?.home) return
-
-  const elements = json?.data?.home?.elements?.edges
-
-  edges.push(...elements)
-
-  console.log(`Got ${elements.length} edges.`)
-}
+//   await browser.close()
+// }
 
 async function main() {
-  browser = await playwright.chromium.launch({
+  browser = await playwright.firefox.launch({
     headless: false,
+    timeout: 5000,
+    args: ['--blink-settings=mainFrameClipsContent=false'],
   })
   const page = await browser.newPage()
 
-  page.on('response', interceptResponse)
+  const subreddit = '/r/Android'
+  const subredditSpider = createSubredditSpider({
+    page,
+    subreddit,
+  })
 
-  await initializeRedditPage(page)
-  await startScrolling(page)
+  const baseFilesPath = join(process.cwd(), 'data', 'files')
+  subredditSpider.onData(async data => {
+    await fs.writeFile(join(baseFilesPath, `${data.id}.png`), data.screenshot)
+    console.log('Got data!', data)
+  })
 
-  const posts = edges
-    .filter(edge => !!edge.node.authorInfo)
-    .map(({ node }) => ({
-      id: node.id,
-      title: node.title,
-      author: node.authorInfo?.name,
-      subreddit: node.subreddit?.prefixedName,
-      score: node.score,
-      upvoteRatio: node.upvoteRatio,
-      url: node.url,
-      domain: node.domain,
-      createdAt: node.createdAt,
-      isNsfw: node.isNsfw,
-      isOriginalContent: node.isOriginalContent,
-      isSelfPost: node.isSelfPost,
-      permalink: node.permalink,
-    }))
+  await subredditSpider.preparePage([`[href="${subreddit}/new/"][role="button"]`])
+  await subredditSpider.crawl()
 
-  const postsJsonPath = join(process.cwd(), 'data', 'posts.json')
-  fs.writeFile(postsJsonPath, JSON.stringify(posts, null, 2))
+  await new Promise(async resolve => {
+    setTimeout(() => {
+      resolve(null)
+    }, 10000)
+  })
+
+  await subredditSpider.stop()
 
   await browser.close()
 }
