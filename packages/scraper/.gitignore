@@ -1,2 +1,2 @@
-data/*.json
-data/files/*.png
+data/screenshots/*.png
+data/json/*.json

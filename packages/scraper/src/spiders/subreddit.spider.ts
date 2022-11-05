@@ -2,8 +2,7 @@ import playwright from 'playwright'
 import { Post } from 'types/reddit-sub'
 
 interface ScrapedPost {
-  id: string
-  title: string
+  post: Post
   screenshot: Buffer
 }
 
@@ -75,21 +74,46 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
 
   async function crawler() {
     for await (const [id, post] of queue) {
-      const postElement = await page.waitForSelector(`[id="${id}"]`, { timeout: 0 })
+      if (!crawling) {
+        return resolveTask()
+      }
+
+      const elems = await page.$$(`[id="${post.postId}"]`)
+
+      if (elems.length !== 1) {
+        console.log({
+          message: `${post.id} has ${elems.length} matches. Skipping to not crash.`,
+          reason: 'This might be because this is the ID of the original post in a crosspost.',
+          id: id,
+          postId: post.id,
+          postTitle: post.title,
+        })
+        queue.delete(id)
+        continue
+      }
+
+      const postElement = await page.waitForSelector(`[id="${id}"]`)
       await postElement.scrollIntoViewIfNeeded()
+
+      await page.evaluate(() => {
+        const els = document.querySelectorAll('.subredditvars-r-science')
+        els.forEach(popup => {
+          if (popup.children?.[0]?.id === 'AppRouter-main-content') return
+          popup.remove()
+        })
+      })
+
       const screenshot = await postElement.screenshot()
 
-      await onDataCallback?.({
-        id: post.id,
+      await onDataCallback({
+        post,
         screenshot,
-        title: post.title,
       })
 
       queue.delete(id)
     }
 
     if (crawling) setTimeout(crawler, 100)
-    else resolveTask?.()
   }
 
   async function crawl() {
@@ -100,6 +124,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 
   async function stop() {
+    console.log('Stopping task.')
     crawling = false
     await task
   }

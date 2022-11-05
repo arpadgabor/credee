@@ -2,7 +2,8 @@
   "name": "@arpadgabor/thesis-scraper",
   "type": "module",
   "scripts": {
-    "start": "ts-node --esm ./src"
+    "start": "ts-node --esm ./src",
+    "cleanup": "rm -r data/screenshots/*.png data/json/*.json"
   },
   "dependencies": {
     "playwright": "^1.27.1"
