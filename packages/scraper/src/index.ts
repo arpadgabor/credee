@@ -15,20 +15,6 @@ async function cleanup() {
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
 
-// async function main() {
-//   browser = await playwright.chromium.launch({
-//     headless: false,
-//     timeout: 5000,
-//     args: ['--disable-gpu'],
-//   })
-//   const page = await browser.newPage()
-//   page.on('response', interceptResponse)
-
-//   await initializeRedditPage(page, pageSuffix)
-//   await startScrolling(page)
-
-//   const posts = edges
-//     .filter(edge => !!edge.node.subreddit)
 //     .map(({ node }) => ({
 //       id: node.id,
 //       title: node.title,
@@ -43,16 +29,9 @@ process.on('SIGTERM', cleanup)
 //       isOriginalContent: node.isOriginalContent,
 //       isSelfPost: node.isSelfPost,
 //       permalink: node.permalink,
-//     }))
-
-//   const postsJsonPath = join(process.cwd(), 'data', `posts-${Date.now()}.json`)
-//   fs.writeFile(postsJsonPath, JSON.stringify(posts, null, 2))
-
-//   await browser.close()
-// }
 
 async function main() {
-  browser = await playwright.firefox.launch({
+  browser = await playwright.chromium.launch({
     headless: false,
     timeout: 5000,
     args: ['--blink-settings=mainFrameClipsContent=false'],
