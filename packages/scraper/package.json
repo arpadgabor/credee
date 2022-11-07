@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "ts-node --esm ./src",
+    "ts": "ts-node --esm",
     "cleanup": "rm -r data/screenshots/*.png data/json/*.json"
   },
   "dependencies": {

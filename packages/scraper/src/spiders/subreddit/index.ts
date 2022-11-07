@@ -1,46 +1,55 @@
 import playwright from 'playwright'
-import { Post } from 'types/reddit-sub'
-
-interface ScrapedPost {
-  post: Post
-  screenshot: Buffer
-}
-
-interface SubredditSpiderInit {
-  page: playwright.Page
-  /**
-   * @example '/r/Android'
-   */
-  subreddit: `/r/${string}`
-}
+import { Post } from './subreddit.types.js'
+import { DataCallback, SubredditSpiderInit } from './util.js'
+import { Comment } from './comment.types.js'
 
 export function createSubredditSpider({ page: _page, subreddit: _subreddit }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
-  const queue: Map<string, Post> = new Map()
+  const queue: Map<string, { post: Post; comments?: Comment[] }> = new Map()
   const page: playwright.Page = _page
   const subreddit = _subreddit
   let crawling = true
   let task: Promise<any>
   let resolveTask: Function
 
-  let onDataCallback: (data: ScrapedPost) => PromiseLike<void>
+  let onDataCallback: (data: DataCallback) => PromiseLike<void>
 
   async function interceptor(response: playwright.Response) {
+    if (!crawling) return
     const url = response.url()
     if (!url.includes('gateway.reddit.com')) return
 
-    const data = await response.json()
-    if (!('posts' in data)) return
+    // handle post with comments
+    if (url.includes('postcomments')) {
+      const data = await response.json()
+      if (!('comments' in data)) return
 
-    const posts: Post[] = Object.values(data.posts)
-    posts.forEach(post => {
-      if (post.isSurveyAd || post.isCreatedFromAdsUi || post.isSponsored) return
+      const [post]: Post[] = Object.values(data.posts)
+      const comments: Comment[] = Object.values(data.comments)
 
-      queue.set(post.id, post)
-    })
+      onDataCallback({
+        post,
+        comments,
+      })
+      return
+    }
+
+    // handle subreddit posts
+    if (url.includes('subreddits')) {
+      const data = await response.json()
+      if (!('posts' in data)) return
+
+      const posts: Post[] = Object.values(data.posts)
+      posts.forEach(post => {
+        if (post.isSurveyAd || post.isCreatedFromAdsUi || post.isSponsored) return
+
+        queue.set(post.id, { post })
+        return
+      })
+    }
   }
 
-  function onData(cb: (data: ScrapedPost) => PromiseLike<void>) {
+  function onData(cb: (data: DataCallback) => PromiseLike<void>) {
     onDataCallback = cb
   }
 
@@ -73,7 +82,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 
   async function crawler() {
-    for await (const [id, post] of queue) {
+    for await (const [id, { post, comments }] of queue) {
       if (!crawling) {
         return resolveTask()
       }
@@ -88,6 +97,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
           postId: post.id,
           postTitle: post.title,
         })
+
         queue.delete(id)
         continue
       }
@@ -105,11 +115,11 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
 
       const screenshot = await postElement.screenshot()
 
-      await onDataCallback({
-        post,
-        screenshot,
-      })
+      await postElement.click()
+      await page.waitForSelector(`[id="overlayScrollContainer"]`)
+      await page.mouse.click(5, 200, { delay: 100 })
 
+      await onDataCallback({ screenshot, post })
       queue.delete(id)
     }
 
@@ -136,3 +146,5 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
     stop,
   }
 }
+
+export { Post } from './subreddit.types'

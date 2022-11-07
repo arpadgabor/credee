@@ -1,3 +1,5 @@
+import { RichTextJSONSegment } from './rich-text'
+
 export interface SubredditResponse {
   authorFlair: AuthorFlair
   postIds: string[]
@@ -102,7 +104,7 @@ export interface Account {
 }
 
 export interface AuthorFlair {
-  t5_2qlqh: { [key: string]: Applied | null }
+  [key: string]: { [key: string]: Applied | null }
 }
 
 export interface Applied {
@@ -110,8 +112,8 @@ export interface Applied {
   richtext?: any[]
   type: EEnum
   textColor: TextColor
-  backgroundColor: BackgroundColor | null
-  templateId: null | string
+  backgroundColor: string | null
+  templateId: string | null
 }
 
 export enum BackgroundColor {
@@ -199,7 +201,7 @@ export interface Template {
   richtext: any[]
   type: EEnum
   textColor: TextColor
-  backgroundColor: BackgroundColor
+  backgroundColor: string
   modOnly: boolean
   cssClass: string
   maxEmojis: number
@@ -373,7 +375,7 @@ export interface Media {
   width: number
   height: number | null
   provider: string
-  richtextContent: RichtextContent
+  richtextContent: RichTextJSONSegment
   mediaMetadata: unknown
   rteMode: RTEMode
 }

@@ -1,0 +1,4597 @@
+{
+  "richtextContent": {
+    "document": [
+      {
+        "h": [
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Monday"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Tuesday"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Wednesday"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Friday"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Saturday"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Sunday"
+              }
+            ]
+          }
+        ],
+        "c": [
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Anything Goes"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Album Share"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Wins Wednesday"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Salty Saturday"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Self-Promotion Sunday"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "Raw Share"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "-"
+                }
+              ]
+            }
+          ]
+        ],
+        "e": "table"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "When we get back she says to our friends she actually knows the guy because they used to chat and nothing ever happened but that’s why she knows that girl."
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "Hey, "
+          },
+          {
+            "e": "u/",
+            "t": "spinatmixxer",
+            "l": false
+          },
+          {
+            "e": "text",
+            "t": " here! You may know me from the startpages I created: "
+          },
+          {
+            "u": "https://www.reddit.com/r/startpages/comments/m82izg/my_new_startpage_any_ideas_for_names/",
+            "e": "link",
+            "t": "Fluidity"
+          },
+          {
+            "e": "text",
+            "t": ", "
+          },
+          {
+            "u": "https://www.reddit.com/r/startpages/comments/s5fu42/yet_another_generic_startpage/",
+            "e": "link",
+            "t": "YAGS"
+          },
+          {
+            "e": "text",
+            "t": " and "
+          },
+          {
+            "u": "https://www.reddit.com/r/startpages/comments/xclr4a/nordic_goose/",
+            "e": "link",
+            "t": "Nordic goose"
+          },
+          {
+            "e": "text",
+            "t": "."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "I had the idea of creating a community project where:"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "r/",
+                    "t": "startpages",
+                    "l": false
+                  },
+                  {
+                    "e": "text",
+                    "t": " collects ideas for one startpage"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "I set up the repository and base project structure"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "We (or I) develop the startpage"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Anyone can help by contributing ideas and/or code"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Profit and fun!!"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          }
+        ],
+        "e": "list",
+        "o": true
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Technologies"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "If I host this project, the tech stack is:"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Typescript"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "React"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "https://vitejs.dev/",
+                    "e": "link",
+                    "t": "Vite"
+                  },
+                  {
+                    "e": "text",
+                    "t": " (build tool)"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "https://vanilla-extract.style/",
+                    "e": "link",
+                    "t": "Vanilla Extract"
+                  },
+                  {
+                    "e": "text",
+                    "t": " (CSS Framework) (Alternative: "
+                  },
+                  {
+                    "u": "https://emotion.sh",
+                    "e": "link",
+                    "t": "Emotion"
+                  },
+                  {
+                    "e": "text",
+                    "t": ")"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "https://www.radix-ui.com/",
+                    "e": "link",
+                    "t": "Radix"
+                  },
+                  {
+                    "e": "text",
+                    "t": " (headless ui components)"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "ESLint & Prettier (code linting and formatting)"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          }
+        ],
+        "e": "list",
+        "o": false
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Ideation Phase"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "If the project is accepted by the community, we can start the ideation phase. My current thought is to create two followup posts for the ideation:"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Concept"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "Finding a rough concept for the startpage, maybe a sketch, a list of features, a special design idea, whether it should be a web extension or not... Such things. Then anybody can submit concept(s) in the comments and the upvotes decide which one to use."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Refinement"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "Followed by that we can start a refinement phase where everyone has a second chance to submit their ideas to refine and extend the picked concept. New / extended features, design extensions whatever. Rather smaller changes and additions. Upvotes decide here as well, but this is more like an open end than \"one wins\"."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "I don't know how much time to allocate for those \"phases\", maybe 2 weeks for each. We will see."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "After that, the development phase can start, but that's tbd."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Rules"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "I will set up more specific rules for the specific phases I guess. But for now I have that:"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "I won't create any immoral or illegal content of course."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "There won't be a backend. Frontend only, hosted with Github Pages."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Creating the page has to lay within my skill set. That being said:"
+                  }
+                ],
+                "e": "par"
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "I am a professional web developer and am confident in creating a lot of things."
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "An example of what is not within my possibilities right now are 3D animations."
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "I am open for challenges!"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": false
+              }
+            ],
+            "e": "li"
+          }
+        ],
+        "e": "list",
+        "o": false
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "What is the scope of THIS post?"
+          }
+        ],
+        "e": "h",
+        "l": 2
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "The first step right now is: Evaluating if "
+          },
+          {
+            "e": "r/",
+            "t": "startpages",
+            "l": false
+          },
+          {
+            "e": "text",
+            "t": " is interested at all. Maybe you don't want to put energy into this or you think its a whacky concept."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "Second: Collecting ideas or critique for the ideation phase. About structure, timing and whatnot. I am open for changes, the points I wrote above are just a spontaneous draft."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "text",
+            "t": "18-Nov-2011: Updated to include the ",
+            "f": [
+              [
+                64,
+                0,
+                11
+              ]
+            ]
+          },
+          {
+            "u": "http://www.reddit.com/r/changelog/comments/mg1j6/reddit_change_new_markdown_interpreter/",
+            "e": "link",
+            "t": "latest markdown changes."
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "Contents"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "e": "text",
+                        "t": "Basic text formatting (Italics, Bold, Strikethrough, Superscript, inline code, Quoting) 2. Linking 3. Line Breaks & Paragraphs 4. Lists 5. Tables 6. Block Code 7. Headlines and Horizontals",
+                        "f": [
+                          [
+                            2,
+                            23,
+                            7
+                          ],
+                          [
+                            1,
+                            32,
+                            4
+                          ],
+                          [
+                            8,
+                            38,
+                            13
+                          ],
+                          [
+                            32,
+                            58,
+                            7
+                          ],
+                          [
+                            64,
+                            66,
+                            11
+                          ]
+                        ]
+                      }
+                    ],
+                    "e": "par"
+                  }
+                ],
+                "e": "li"
+              }
+            ],
+            "e": "list",
+            "o": true
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "1. Basic Text Formatting"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Italics are created using either a single asterisk (*) or single underscore (_).",
+                "f": [
+                  [
+                    1,
+                    0,
+                    7
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is *italic text*, this is also _italic text_."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is italic text, this is also italic text.",
+                    "f": [
+                      [
+                        2,
+                        8,
+                        11
+                      ],
+                      [
+                        2,
+                        34,
+                        11
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Bold text is created with double asterisks (**) or double underscores (__).",
+                "f": [
+                  [
+                    1,
+                    0,
+                    9
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is **bold text**, this is also __bold text__."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is bold text, this is also bold text.",
+                    "f": [
+                      [
+                        1,
+                        8,
+                        9
+                      ],
+                      [
+                        1,
+                        32,
+                        9
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Strikethrough text is created using a double tilde (~~).",
+                "f": [
+                  [
+                    1,
+                    0,
+                    18
+                  ],
+                  [
+                    64,
+                    52,
+                    2
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is ~~strikethrough text~~.",
+                    "f": [
+                      [
+                        64,
+                        8,
+                        2
+                      ],
+                      [
+                        64,
+                        28,
+                        2
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is strikethrough text.",
+                    "f": [
+                      [
+                        8,
+                        8,
+                        13
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Superscript text is created using the carot (^).",
+                "f": [
+                  [
+                    1,
+                    0,
+                    16
+                  ],
+                  [
+                    64,
+                    45,
+                    1
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence contains super^script.",
+                    "f": [
+                      [
+                        64,
+                        28,
+                        1
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence contains superscript.",
+                    "f": [
+                      [
+                        32,
+                        28,
+                        7
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Note that you cannot leave space before the carot, and there is no closing tag.",
+                "f": [
+                  [
+                    2,
+                    67,
+                    11
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Superscript can also be stackedlikethis.",
+                    "f": [
+                      [
+                        32,
+                        31,
+                        9
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "inline code (monospaced text) is created using the backtick (",
+                "f": [
+                  [
+                    1,
+                    0,
+                    11
+                  ]
+                ]
+              },
+              {
+                "u": "http://en.wikipedia.org/wiki/Grave_accent",
+                "e": "link",
+                "t": "grave accents"
+              },
+              {
+                "e": "text",
+                "t": ") (`)."
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence contains inline code: `javascript:alert(\"hello world\");`",
+                    "f": [
+                      [
+                        64,
+                        36,
+                        1
+                      ],
+                      [
+                        64,
+                        69,
+                        1
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence contains inline code: javascript:alert(\"hello world\");",
+                    "f": [
+                      [
+                        64,
+                        36,
+                        32
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Quoting is achieved by starting a line with an Angle Bracket (>)",
+                "f": [
+                  [
+                    1,
+                    0,
+                    7
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": ">Here's a quote."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": ">Another paragraph in the same quote."
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": ">>A nested quote."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": ">Back to a single quote."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "And finally some unquoted text."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "e": "text",
+                        "t": "Here's a quote."
+                      }
+                    ],
+                    "e": "par"
+                  }
+                ],
+                "e": "blockquote"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "e": "text",
+                        "t": "Another paragraph in the same quote."
+                      }
+                    ],
+                    "e": "par"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "A nested quote."
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "blockquote"
+                  }
+                ],
+                "e": "blockquote"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "e": "text",
+                        "t": "Back to a single quote."
+                      }
+                    ],
+                    "e": "par"
+                  }
+                ],
+                "e": "blockquote"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "And finally some unquoted text."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "To remove formatting you will need to use a Backslash (\\)",
+                "f": [
+                  [
+                    1,
+                    3,
+                    17
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence escapes \\*italic text\\* and \\*\\*bold text\\*\\*."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This sentence escapes *italic text* and **bold text**."
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "2. Linking"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Creating a link",
+                "f": [
+                  [
+                    1,
+                    0,
+                    15
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[Reddit](http://reddit.com)",
+                    "f": [
+                      [
+                        64,
+                        9,
+                        17
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "http://reddit.com",
+                    "e": "link",
+                    "t": "Reddit"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "You cannot begin a link with \"www\", it must begin with one of the following URL schemes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "http://"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": false
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "https://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "ftp://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "mailto:"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "steam://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "irc://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "news://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "mumble://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          },
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "ssh://"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "li"
+          }
+        ],
+        "e": "list",
+        "o": false
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "You can also provide title text for links:",
+                "f": [
+                  [
+                    1,
+                    21,
+                    10
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[Reddit](http://reddit.com \"what's new online!\").",
+                    "f": [
+                      [
+                        64,
+                        9,
+                        17
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "a": "what's new online!",
+                    "u": "http://reddit.com",
+                    "e": "link",
+                    "t": "Reddit"
+                  },
+                  {
+                    "e": "text",
+                    "t": " ← (hover!)",
+                    "f": [
+                      [
+                        2,
+                        4,
+                        5
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Title text can be used to hide spoilers:",
+                "f": [
+                  [
+                    1,
+                    31,
+                    8
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[spoiler](/s\"The spoiler text goes here\")",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        41
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "/s\"The spoiler text goes here\"",
+                    "e": "link",
+                    "t": "spoiler"
+                  },
+                  {
+                    "e": "text",
+                    "t": " ← (hover!)",
+                    "f": [
+                      [
+                        2,
+                        4,
+                        5
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Reddit now recognises when you want to link to a subreddit.",
+                "f": [
+                  [
+                    1,
+                    39,
+                    19
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is a shameless plug for "
+                  },
+                  {
+                    "e": "r/",
+                    "t": "BritishTV",
+                    "l": true
+                  },
+                  {
+                    "e": "text",
+                    "t": "!"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is a shameless plug for "
+                  },
+                  {
+                    "e": "r/",
+                    "t": "BritishTV",
+                    "l": true
+                  },
+                  {
+                    "e": "text",
+                    "t": "!"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "If a URL contains brackets you will need to escape these."
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example without escaping:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[Cube](http://en.wikipedia.org/wiki/Cube_(film))",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        48
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "u": "http://en.wikipedia.org/wiki/Cube_(film)",
+                    "e": "link",
+                    "t": "Cube"
+                  },
+                  {
+                    "e": "text",
+                    "t": " ← (note the surplus bracket!)",
+                    "f": [
+                      [
+                        2,
+                        4,
+                        24
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example with escaping:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[Cube](http://en.wikipedia.org/wiki/Cube_(film\\))",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        49
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "[Cube]("
+                  },
+                  {
+                    "u": "http://en.wikipedia.org/wiki/Cube_(film)",
+                    "e": "link",
+                    "t": "http://en.wikipedia.org/wiki/Cube_(film)"
+                  },
+                  {
+                    "e": "text",
+                    "t": ") ← (no surplus bracket!)",
+                    "f": [
+                      [
+                        2,
+                        5,
+                        18
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "3. Line Breaks & Paragraphs"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Line breaks in comments are achieved by adding four spaces (shown using ░) to the end of the line. Simply hitting return (shown using ↵) will not work.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    11
+                  ],
+                  [
+                    2,
+                    60,
+                    11
+                  ],
+                  [
+                    2,
+                    122,
+                    11
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First line↵"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "Second line"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First line Second line"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "but:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First line░░░░↵"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "Second line"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First line"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "Second line"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Paragraphs are formed when you hit return (shown using ↵) twice.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    10
+                  ],
+                  [
+                    2,
+                    43,
+                    11
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First Paragraph↵"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "↵"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "Second Paragraph"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "First Paragraph"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Second Paragraph"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "4. Lists"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "To create Unordered Lists each item should begin with either an asterisk (*), plus sign (+) or minus sign (-).",
+                "f": [
+                  [
+                    1,
+                    10,
+                    15
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "* Item 1"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "+ Item 2"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "- Item 3"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "Item 1"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": false
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "Item 2"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": false
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "Item 3"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": false
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Ordered Lists are created with a number and period. It doesn't matter which number you start with, as markdown will always start with 1.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    13
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "3. Item 1"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "2. Item 2"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "1. Item 3"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "3. Item 1 2. Item 2"
+                  }
+                ],
+                "e": "par"
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "Item 3"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": true
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "The markup for Nested Lists has changed slightly:",
+                "f": [
+                  [
+                    1,
+                    15,
+                    12
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "1. This is Item 1"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "2."
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░1. This is Item 2.1"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░2. This is Item 2.2"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "3. This is Item 3"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "4. This is Item 4"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "This is Item 1"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": ""
+                          }
+                        ],
+                        "e": "par"
+                      },
+                      {
+                        "c": [
+                          {
+                            "c": [
+                              {
+                                "c": [
+                                  {
+                                    "e": "text",
+                                    "t": "This is Item 2.1"
+                                  }
+                                ],
+                                "e": "par"
+                              }
+                            ],
+                            "e": "li"
+                          },
+                          {
+                            "c": [
+                              {
+                                "c": [
+                                  {
+                                    "e": "text",
+                                    "t": "This is Item 2.2"
+                                  }
+                                ],
+                                "e": "par"
+                              }
+                            ],
+                            "e": "li"
+                          }
+                        ],
+                        "e": "list",
+                        "o": true
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "This is Item 3"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "This is Item 4"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": true
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Lists should be clear of any text in the line immediately above and below, the same as making a new paragraph:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is the wrong way to make a list",
+                    "f": [
+                      [
+                        1,
+                        12,
+                        24
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "lorem"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "ispum"
+                          },
+                          {
+                            "e": "br"
+                          },
+                          {
+                            "e": "text",
+                            "t": "reddit doesn't realize it should listify..."
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": true
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is the wrong way to make a list",
+                    "f": [
+                      [
+                        1,
+                        12,
+                        24
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              },
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "lorem"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "ispum reddit doesn't realize it should listify..."
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": true
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Place lists in their own paragraph:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "This is the correct way to make a list",
+                    "f": [
+                      [
+                        1,
+                        12,
+                        26
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "lorem"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  },
+                  {
+                    "c": [
+                      {
+                        "c": [
+                          {
+                            "e": "text",
+                            "t": "ispum"
+                          }
+                        ],
+                        "e": "par"
+                      }
+                    ],
+                    "e": "li"
+                  }
+                ],
+                "e": "list",
+                "o": true
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "reddit realizes it should listify!"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Paragraphs in Lists and Nested lists using a combination of ordered and unordered lists, are no longer supported.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    19
+                  ],
+                  [
+                    1,
+                    24,
+                    63
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "5. Tables"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Tables are created using pipes (|):",
+                "f": [
+                  [
+                    1,
+                    0,
+                    6
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "u": "ftp://grrr.net",
+            "e": "link",
+            "t": ""
+          },
+          {
+            "e": "text",
+            "t": "Left align | Center align | Right align"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "u": "ftp://grrr.net",
+            "e": "link",
+            "t": ""
+          },
+          {
+            "e": "text",
+            "t": ":--|:--:|--:"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "This | This | This"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "column | column | column"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "will | will | will"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "be | be |  be"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "left |  center | right"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "aligned | aligned   | aligned"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "h": [
+          {
+            "a": "L",
+            "c": [
+              {
+                "e": "text",
+                "t": "Left align"
+              }
+            ]
+          },
+          {
+            "a": "C",
+            "c": [
+              {
+                "e": "text",
+                "t": "Center align"
+              }
+            ]
+          },
+          {
+            "a": "R",
+            "c": [
+              {
+                "e": "text",
+                "t": "Right align"
+              }
+            ]
+          }
+        ],
+        "c": [
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "This"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "This"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "This"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "column"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "column"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "column"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "will"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "will"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "will"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "be"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "be"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "be"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "left"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "center"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "right"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "aligned"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "aligned"
+                }
+              ]
+            },
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "aligned"
+                }
+              ]
+            }
+          ]
+        ],
+        "e": "table"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Note that by default the first row is always bolded.",
+                "f": [
+                  [
+                    1,
+                    45,
+                    6
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Column Alignment is determined by the second row.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    16
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "Use \":--:\" for centre aligned text, \"--:\" for right, and \":--\" for left.",
+                    "f": [
+                      [
+                        1,
+                        5,
+                        4
+                      ],
+                      [
+                        1,
+                        37,
+                        3
+                      ],
+                      [
+                        1,
+                        58,
+                        3
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "You can also leave the top row empty, as long as you have the correct amount of pipes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "u": "ftp://grr.net",
+            "e": "link",
+            "t": ""
+          },
+          {
+            "e": "text",
+            "t": "||"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "u": "ftp://grrr.net",
+            "e": "link",
+            "t": ""
+          },
+          {
+            "e": "text",
+            "t": ":--|:--:|--:"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "the|top|row"
+          },
+          {
+            "e": "br"
+          },
+          {
+            "e": "text",
+            "t": "is|now|empty"
+          }
+        ],
+        "e": "par"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "h": [
+          {
+            "a": "L"
+          }
+        ],
+        "c": [
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "the"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "c": [
+                {
+                  "e": "text",
+                  "t": "is"
+                }
+              ]
+            }
+          ]
+        ],
+        "e": "table"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "6. Block code"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Displaying block code, without formatting and in monospaced font, is as simple as starting the line with four spaces (shown using ░).",
+                "f": [
+                  [
+                    1,
+                    11,
+                    10
+                  ],
+                  [
+                    2,
+                    118,
+                    11
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Example:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "░░░░line of code"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░░░░░line of code"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░░░░░░░░░line of code"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░░░░░line of code"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "░░░░line of code"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "line of code",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        12
+                      ]
+                    ]
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "line of code",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        12
+                      ]
+                    ]
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "line of code",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        12
+                      ]
+                    ]
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "line of code",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        12
+                      ]
+                    ]
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "line of code",
+                    "f": [
+                      [
+                        64,
+                        0,
+                        12
+                      ]
+                    ]
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "7. Headlines & Horizonal Rules"
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "Headline text can be created by using a number of hashes (#) corresponding to the tag you want. Headline tags will format all text until it encounters a Line Break or new Paragraph.",
+                "f": [
+                  [
+                    1,
+                    0,
+                    13
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "# Headline 1"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "## Headline 2"
+                  },
+                  {
+                    "e": "br"
+                  },
+                  {
+                    "e": "text",
+                    "t": "### Headline 3"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "raw",
+                    "t": "Headline 1"
+                  }
+                ],
+                "e": "h",
+                "l": 1
+              },
+              {
+                "c": [
+                  {
+                    "e": "raw",
+                    "t": "Headline 2"
+                  }
+                ],
+                "e": "h",
+                "l": 2
+              },
+              {
+                "c": [
+                  {
+                    "e": "raw",
+                    "t": "Headline 3"
+                  }
+                ],
+                "e": "h",
+                "l": 3
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "NOTE: Markdown supports up to six headline tags, but only the first three have default formatting.",
+                "f": [
+                  [
+                    64,
+                    0,
+                    4
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": ""
+          }
+        ],
+        "e": "h",
+        "l": 1
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "To create a Horizontal Rule, simply add three asterisks (*) to an empty line.",
+                "f": [
+                  [
+                    1,
+                    12,
+                    15
+                  ]
+                ]
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "c": [
+                  {
+                    "e": "text",
+                    "t": "***"
+                  }
+                ],
+                "e": "par"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "becomes:"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "hr"
+              }
+            ],
+            "e": "blockquote"
+          }
+        ],
+        "e": "blockquote"
+      },
+      {
+        "c": [
+          {
+            "e": "raw",
+            "t": "And Finally..."
+          }
+        ],
+        "e": "h",
+        "l": 4
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "e": "text",
+                "t": "I hope you find this useful. If you want to say thanks, you can always "
+              },
+              {
+                "u": "https://www.buymeacoffee.com/raerth",
+                "e": "link",
+                "t": "buy me a coffee"
+              },
+              {
+                "e": "text",
+                "t": " and I'll love you longtime."
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "blockquote"
+      }
+    ]
+  }
+}
