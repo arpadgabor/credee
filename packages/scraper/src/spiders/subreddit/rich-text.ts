@@ -125,5 +125,3 @@ function styleText(text: string, replacements: RichTextJSONSegment['f']) {
     })
     .join('')
 }
-
-console.log(richTextToHtml(testJson.richtextContent.document as any))

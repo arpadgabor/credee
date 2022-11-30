@@ -31,6 +31,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
         post,
         comments,
       })
+
       return
     }
 
@@ -105,13 +106,15 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       const postElement = await page.waitForSelector(`[id="${id}"]`)
       await postElement.scrollIntoViewIfNeeded()
 
-      await page.evaluate(() => {
-        const els = document.querySelectorAll('.subredditvars-r-science')
-        els.forEach(popup => {
-          if (popup.children?.[0]?.id === 'AppRouter-main-content') return
-          popup.remove()
-        })
-      })
+      // Remove user card popups because they cover posts in screenshots
+      // @TODO: Update this to be more generic.
+      // await page.evaluate(() => {
+      //   const els = document.querySelectorAll('.subredditvars-r-science')
+      //   els.forEach(popup => {
+      //     if (popup.children?.[0]?.id === 'AppRouter-main-content') return
+      //     popup.remove()
+      //   })
+      // })
 
       const screenshot = await postElement.screenshot()
 
@@ -147,4 +150,6 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 }
 
-export { Post } from './subreddit.types'
+export { Post, Media } from './subreddit.types'
+export { Comment } from './comment.types'
+export { RichTextJSONSegment } from './rich-text'

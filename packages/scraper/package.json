@@ -4,10 +4,12 @@
   "scripts": {
     "start": "ts-node --esm ./src",
     "ts": "ts-node --esm",
-    "cleanup": "rm -r data/screenshots/*.png data/json/*.json"
+    "cleanup": "rm -r data/screenshots/*.png data/json/*.json",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "playwright": "^1.27.1"
+    "playwright": "^1.28.1"
   },
   "devDependencies": {
     "ts-node": "^10.9.1"
