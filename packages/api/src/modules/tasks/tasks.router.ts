@@ -2,7 +2,7 @@ import { procedure, router } from "@/core/trpc.js";
 import { z } from "zod";
 
 export const TasksRouter = router({
-  create: procedure
+  crawlSubreddit: procedure
     .input(
       z.object({
         subreddit: z.string().startsWith('/r/'),
