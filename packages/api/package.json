@@ -1,0 +1,19 @@
+{
+  "name": "@credee/api",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "tsx watch ./src/server"
+  },
+  "dependencies": {
+    "@trpc/client": "^10.4.2",
+    "@trpc/server": "^10.4.2",
+    "fastify": "^4.10.2",
+    "superjson": "^1.11.0",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "tsx": "^3.12.1"
+  }
+}
