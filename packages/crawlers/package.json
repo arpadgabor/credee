@@ -1,5 +1,5 @@
 {
-  "name": "@arpadgabor/thesis-scraper",
+  "name": "@credee/crawlers",
   "type": "module",
   "scripts": {
     "start": "ts-node --esm ./src",

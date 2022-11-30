@@ -1,5 +1,5 @@
 {
-  "name": "@arpadgabor/thesis",
+  "name": "credee",
   "version": "0.0.1",
   "description": "A system to scrape data from social media to analyse and label in order to determine what factors affect percieved credibility of social media content.",
   "scripts": {
