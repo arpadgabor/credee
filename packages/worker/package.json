@@ -1,22 +1,16 @@
 {
-  "name": "@credee/api",
+  "name": "@credee/worker",
   "type": "module",
   "version": "0.0.1",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node --esm ./src/server"
   },
   "dependencies": {
-    "@credee/worker": "workspace:*",
-    "@fastify/cors": "^8.2.0",
-    "@trpc/client": "^10.4.2",
-    "@trpc/server": "^10.4.2",
     "bull": "^4.10.2",
     "convict": "^6.2.3",
-    "fastify": "^4.10.2",
-    "superjson": "^1.11.0",
-    "zod": "^3.19.1"
+    "zod": "^3.19.1",
+    "playwright": "^1.28.1"
   },
   "devDependencies": {
     "@types/bull": "^4.10.0",

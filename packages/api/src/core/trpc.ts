@@ -1,9 +1,8 @@
-import { TasksRouter } from '@/modules/tasks/tasks.router.js';
 import { initTRPC } from '@trpc/server'
-import superjson from "superjson";
+import superjson from 'superjson'
 
 const trpc = initTRPC.create({
-  transformer: superjson
+  transformer: superjson,
 })
 
 export const router = trpc.router

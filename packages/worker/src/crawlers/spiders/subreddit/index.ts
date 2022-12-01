@@ -1,7 +1,7 @@
 import playwright from 'playwright'
-import { Post } from './subreddit.types.js'
-import { DataCallback, SubredditSpiderInit } from './util.js'
-import { Comment } from './comment.types.js'
+import type { Post } from './subreddit.types.js'
+import type { DataCallback, SubredditSpiderInit } from './util.js'
+import type { Comment } from './comment.types.js'
 
 export function createSubredditSpider({ page: _page, subreddit: _subreddit }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
@@ -106,21 +106,11 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       const postElement = await page.waitForSelector(`[id="${id}"]`)
       await postElement.scrollIntoViewIfNeeded()
 
-      // Remove user card popups because they cover posts in screenshots
-      // @TODO: Update this to be more generic.
-      // await page.evaluate(() => {
-      //   const els = document.querySelectorAll('.subredditvars-r-science')
-      //   els.forEach(popup => {
-      //     if (popup.children?.[0]?.id === 'AppRouter-main-content') return
-      //     popup.remove()
-      //   })
-      // })
-
       const screenshot = await postElement.screenshot()
 
       await postElement.click()
       await page.waitForSelector(`[id="overlayScrollContainer"]`)
-      await page.mouse.click(5, 200, { delay: 100 })
+      await page.mouse.click(5, 200, { delay: 250 })
 
       await onDataCallback({ screenshot, post })
       queue.delete(id)
@@ -150,6 +140,6 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 }
 
-export { Post, Media } from './subreddit.types'
-export { Comment } from './comment.types'
-export { RichTextJSONSegment } from './rich-text'
+export type { Post, Media } from './subreddit.types.js'
+export type { Comment } from './comment.types.js'
+export type { RichTextJSONSegment } from './rich-text.js'

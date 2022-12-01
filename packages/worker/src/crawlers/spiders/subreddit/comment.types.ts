@@ -1,4 +1,4 @@
-import { RichTextJSONSegment } from './rich-text'
+import type { RichTextJSONSegment } from './rich-text.js'
 
 export interface Comments {
   comments: Comment[]

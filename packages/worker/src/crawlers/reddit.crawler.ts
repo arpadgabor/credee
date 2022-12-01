@@ -1,21 +1,26 @@
 import playwright from 'playwright'
-import { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
-import { createSubredditSpider, RichTextJSONSegment, Media } from './spiders/subreddit/index.js'
+import type { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
+import { createSubredditSpider } from './spiders/subreddit/index.js'
 
-let browser: playwright.Browser
+let browser: playwright.Browser | null = null
 export async function crawlReddit(options: RedditCrawlerOptions) {
-  browser = browser || await playwright.chromium.launch({
-    headless: true,
-    args: ['--blink-settings=mainFrameClipsContent=false'],
-  })
+  browser =
+    browser ??
+    (await playwright.chromium.launch({
+      headless: false,
+      args: ['--blink-settings=mainFrameClipsContent=false'],
+    }))
 
   const subredditSpider = createSubredditSpider({
     subreddit: options.subreddit,
     page: await browser.newPage({
-      viewport: { height: 800, width: 1600 }
+      viewport: { height: 800, width: 1600 },
     }),
   })
-  await subredditSpider.preparePage([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
+  await subredditSpider.preparePage([
+    `//button[contains(., 'Accept all')]`,
+    `[href="${options.subreddit}/new/"][role="button"]`,
+  ])
 
   let stop: Function
   const startTime = Date.now()
@@ -23,18 +28,18 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
   subredditSpider.onData(async data => {
     const now = Date.now()
-    const elapsed = ((now - startTime) / 1000)
+    const elapsed = (now - startTime) / 1000
 
-    if('count' in options.endAfter && collection.size >= options.endAfter.count) {
+    if ('count' in options.endAfter && collection.size >= options.endAfter.count) {
       const posts = Array.from(collection.values())
       const readyPosts = posts.filter(item => item.id && item.screenshot)
-      if(readyPosts.length === options.endAfter.count) {
+      if (readyPosts.length === options.endAfter.count) {
         stop()
         return
       }
     }
 
-    if('seconds' in options.endAfter && elapsed >= options.endAfter.seconds) {
+    if ('seconds' in options.endAfter && elapsed >= options.endAfter.seconds) {
       stop()
       return
     }
@@ -45,7 +50,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       return
     }
 
-    if('comments' in data) {
+    if ('comments' in data) {
       const { post, comments } = data
 
       const isSelfPost = post.media.type === 'rtjson'
@@ -111,16 +116,20 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   })
 
   await subredditSpider.crawl()
-  await new Promise(resolve => { stop = resolve })
+  await new Promise(resolve => {
+    stop = resolve
+  })
 
   await subredditSpider.stop()
+  await browser?.close()
+  browser = null
 
   return Array.from(collection.values()).filter(post => post.id && post.screenshot)
 }
 
 async function cleanup() {
   console.log('Closing browser...')
-  await browser.close()
+  await browser?.close()
   process.exit(1)
 }
 

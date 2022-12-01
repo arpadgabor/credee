@@ -1,16 +1,18 @@
-import { procedure, router } from "@/core/trpc.js";
-import { z } from "zod";
+import { z } from 'zod'
+import { procedure, router } from '../../core/trpc.js'
+import { sendCrawlInput } from './crawlers.js'
 
 export const TasksRouter = router({
   crawlSubreddit: procedure
     .input(
       z.object({
         subreddit: z.string().startsWith('/r/'),
-        stopsAfterCountIs: z.number().optional().default(25),
-        stopsAfterSeconds: z.number().optional()
+        stopsAfterCount: z.number().optional().default(25),
+        stopsAfterSeconds: z.number().optional(),
       })
     )
     .mutation(({ input }) => {
-      console.log(input)
-    })
+      sendCrawlInput({ subreddit: '/r/subreddit' })
+      return true
+    }),
 })

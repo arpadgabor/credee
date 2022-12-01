@@ -1,0 +1,25 @@
+{
+  "name": "@credee/www",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^3.2.4",
+    "vite-plugin-solid": "^2.4.0"
+  },
+  "dependencies": {
+    "@credee/api": "workspace:*",
+    "@tanstack/solid-query": "^4.18.0",
+    "@trpc/client": "^10.4.2",
+    "solid-js": "^1.6.2",
+    "solid-trpc": "0.0.11-rc.2",
+    "superjson": "^1.11.0"
+  }
+}
