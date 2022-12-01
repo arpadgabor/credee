@@ -46,7 +46,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     if ('screenshot' in data) {
       const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
-      collection.set(data.post.id, { ...post, screenshot: data.screenshot })
+      collection.set(data.post.id, { ...post, screenshot: data.screenshot.toString('base64') })
       return
     }
 

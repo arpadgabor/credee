@@ -1,4 +1,4 @@
-import testJson from './rich-text-test.json' assert { type: 'json' }
+// import testJson from './rich-text-test.json' assert { type: 'json' }
 
 enum TextStyle {
   None = 0, // added by us

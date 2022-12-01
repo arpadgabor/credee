@@ -14,10 +14,10 @@ export function createQueue(redisUrl: string) {
   })
 
   async function sendCrawlInput(input: CrawlInput) {
-    inputQueue.add(input)
+    return inputQueue.add(input)
   }
   async function sendCrawlOutput(data: CrawlOutput) {
-    outputQueue.add(data)
+    return outputQueue.add(data)
   }
 
   return { inputQueue, outputQueue, sendCrawlInput, sendCrawlOutput }

@@ -2,8 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",
@@ -12,6 +12,5 @@
     "noEmit": true,
     "isolatedModules": true,
     "lib": ["DOM", "ESNext"]
-  },
-  "exclude": ["node_modules", "**/node_modules"]
+  }
 }

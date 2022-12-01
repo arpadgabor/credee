@@ -1,15 +1,9 @@
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import { Component, createSignal, For } from 'solid-js'
-import { api } from '../utils/trpc.js'
+import { api } from '../utils/trpc'
 
 export const Home: Component = () => {
   const [subreddit, setSubreddit] = createSignal<string>()
-
-  const crawl = createMutation(() => api.tasks.crawlSubreddit.mutate({ subreddit: subreddit()!, stopsAfterCount: 5 }), {
-    onSuccess(data, variables, context) {
-      console.log({ data })
-    },
-  })
 
   const jobs = createQuery(
     () => ['jobs'],
@@ -22,6 +16,12 @@ export const Home: Component = () => {
       },
     }
   )
+
+  const crawl = createMutation(() => api.tasks.crawlSubreddit.mutate({ subreddit: subreddit()!, stopsAfterCount: 5 }), {
+    onSuccess() {
+      jobs.refetch()
+    },
+  })
 
   return (
     <div>
