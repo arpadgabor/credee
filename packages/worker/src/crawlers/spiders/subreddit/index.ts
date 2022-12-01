@@ -83,6 +83,10 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 
   async function crawler() {
+    if (queue.size === 0) {
+      console.log('Queue is empty.')
+    }
+
     for await (const [id, { post, comments }] of queue) {
       if (!crawling) {
         return resolveTask()

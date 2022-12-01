@@ -3,7 +3,8 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
+    "outDir": "dist",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "es2020",

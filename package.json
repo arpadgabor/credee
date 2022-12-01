@@ -4,12 +4,14 @@
   "description": "A system to scrape data from social media to analyse and label in order to determine what factors affect percieved credibility of social media content.",
   "scripts": {
     "turbo": "turbo",
-    "dev": "turbo run dev --parallel"
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
     "@types/node": "16",
     "@vitest/coverage-c8": "^0.25.3",
+    "nodemon": "^2.0.20",
     "prettier": "^2.8.0",
     "ts-node": "^10.9.1",
     "turbo": "^1.6.3",

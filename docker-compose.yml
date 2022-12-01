@@ -9,5 +9,18 @@ services:
     volumes:
       - redis:/data
 
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: credee
+      POSTGRES_USER: credee
+      POSTGRES_DB: credee
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
 volumes:
   redis:
+  postgres:

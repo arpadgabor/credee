@@ -7,7 +7,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   browser =
     browser ??
     (await playwright.chromium.launch({
-      headless: false,
+      headless: true,
       args: ['--blink-settings=mainFrameClipsContent=false'],
     }))
 

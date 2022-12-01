@@ -2,6 +2,8 @@ import type { RedditCrawledPost } from '../../../src/crawlers/reddit.crawler.typ
 
 export interface CrawlInput {
   subreddit: `/r/${string}`
+  stopsAfterCount?: number
+  stopsAfterSeconds?: number
 }
 export interface CrawlOutput {
   subreddit: `/r/${string}`

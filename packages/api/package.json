@@ -5,12 +5,13 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "dev": "ts-node --esm ./src/server"
+    "dev": "nodemon --exec \"ts-node --esm\" ./src/server",
+    "start": "node dist/server.js",
+    "build": "node build.cjs"
   },
   "dependencies": {
     "@credee/worker": "workspace:*",
     "@fastify/cors": "^8.2.0",
-    "@trpc/client": "^10.4.2",
     "@trpc/server": "^10.4.2",
     "bull": "^4.10.2",
     "convict": "^6.2.3",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@types/bull": "^4.10.0",
     "@types/convict": "^6.1.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.15.16"
   }
 }
