@@ -6,6 +6,7 @@ export interface RedditPost {
   id: Generated<number>
 
   post_id: string
+  screenshot_filename: string
   created_at: Date
   title: string
 
@@ -18,7 +19,7 @@ export interface RedditPost {
   url_title: string
 
   score: number
-  ration: number
+  ratio: number
   gold_count: number
 
   is_original_content: boolean
@@ -31,7 +32,8 @@ export interface RedditPost {
   media: Media
 
   nr_of_comments: number
-  comments: {
+  comments?: string
+  comments_raw: {
     id: string
     author: string
     content: RichTextJSONSegment
@@ -52,7 +54,7 @@ export interface RedditPost {
     icon: string
   }[]
 
-  inserted_at: Date
+  inserted_at?: Date
 }
 
 export interface Database {

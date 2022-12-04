@@ -40,6 +40,8 @@ importers:
       kysely: ^0.22.0
       pg: ^8.8.0
       superjson: ^1.11.0
+      wink-eng-lite-web-model: ^1.4.3
+      wink-nlp: ^1.12.3
       zod: ^3.19.1
     dependencies:
       '@credee/worker': link:../worker
@@ -51,6 +53,8 @@ importers:
       kysely: 0.22.0
       pg: 8.8.0
       superjson: 1.11.0
+      wink-eng-lite-web-model: 1.4.3_wink-nlp@1.12.3
+      wink-nlp: 1.12.3
       zod: 3.19.1
     devDependencies:
       '@types/bull': 4.10.0
@@ -3173,6 +3177,19 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
+
+  /wink-eng-lite-web-model/1.4.3_wink-nlp@1.12.3:
+    resolution: {integrity: sha512-HAx6nmDdoCucs4RnPhlxpTqiw0/MYiiGtSyfykYM03KTxvCVjX6HNtdfBhmdUeGLzGh0M/D4WJANU42qH6/1nA==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      wink-nlp: '>1.8.1'
+    dependencies:
+      wink-nlp: 1.12.3
+    dev: false
+
+  /wink-nlp/1.12.3:
+    resolution: {integrity: sha512-icK32uR/Cw5LxbgCBZhCnoGzQFTZ4Z/oKAb2Fbo/d92c87hH4V7kCWAau22gnU+WLRIDVRnFchkjZrtAsZlqlw==}
+    dev: false
 
   /wrap-ansi/7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}

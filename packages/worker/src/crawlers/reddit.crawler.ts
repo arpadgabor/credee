@@ -1,13 +1,15 @@
 import playwright from 'playwright'
+import fs from 'fs/promises'
 import type { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
 import { createSubredditSpider } from './spiders/subreddit/index.js'
+import { resolve } from 'path'
 
 let browser: playwright.Browser | null = null
 export async function crawlReddit(options: RedditCrawlerOptions) {
   browser =
     browser ??
     (await playwright.chromium.launch({
-      headless: false,
+      headless: true,
       args: ['--blink-settings=mainFrameClipsContent=false'],
     }))
 
@@ -32,7 +34,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     if ('count' in options.endAfter && collection.size >= options.endAfter.count) {
       const posts = Array.from(collection.values())
-      const readyPosts = posts.filter(item => item.id && item.screenshot)
+      const readyPosts = posts.filter(item => item.id && item.screenshotPath)
       if (readyPosts.length === options.endAfter.count) {
         stop()
         return
@@ -46,7 +48,13 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     if ('screenshot' in data) {
       const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
-      collection.set(data.post.id, { ...post, screenshot: data.screenshot.toString('base64') })
+      const screenshotPath = `${data.post.id}_${Date.now()}.png`
+      await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), data.screenshot)
+
+      collection.set(data.post.id, {
+        ...post,
+        screenshotPath,
+      })
       return
     }
 
@@ -59,7 +67,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       const isImage = post.media.type === 'image'
       const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
 
-      const result = {
+      const result: RedditCrawledPost = {
         id: post.id,
         createdAt: new Date(post.created).toISOString(),
 
@@ -69,7 +77,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
         permalink: post.permalink,
 
         score: post.score,
-        ration: post.upvoteRatio,
+        ratio: post.upvoteRatio,
         goldCount: post.goldCount,
 
         domain: post.domain,
@@ -111,6 +119,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
       const existingPost = collection.get(post.id) ?? ({} as RedditCrawledPost)
       collection.set(post.id, { ...existingPost, ...result })
+      console.log('Found post', post.id)
       return
     }
   })
@@ -124,7 +133,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   await browser?.close()
   browser = null
 
-  return Array.from(collection.values()).filter(post => post.id && post.screenshot)
+  return Array.from(collection.values()).filter(post => post.id && post.screenshotPath)
 }
 
 async function cleanup() {

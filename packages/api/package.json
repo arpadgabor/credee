@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon --exec \"ts-node --esm\" ./src/server -e ts,js,cjs,mjs",
     "start": "node dist/server.js",
-    "build": "node build.cjs"
+    "build": "node build.cjs",
+    "migrate:up": "ts-node --esm ./scripts/migrate.ts"
   },
   "dependencies": {
     "@credee/worker": "workspace:*",
@@ -19,6 +20,8 @@
     "kysely": "^0.22.0",
     "pg": "^8.8.0",
     "superjson": "^1.11.0",
+    "wink-eng-lite-web-model": "^1.4.3",
+    "wink-nlp": "^1.12.3",
     "zod": "^3.19.1"
   },
   "devDependencies": {

@@ -5,8 +5,7 @@ export interface RedditCrawledPost {
   createdAt: string
   title: string
 
-  /** `base64` string */
-  screenshot?: string
+  screenshotPath?: string
 
   subreddit: string
   author: string
@@ -17,7 +16,7 @@ export interface RedditCrawledPost {
   urlTitle: string
 
   score: number
-  ration: number
+  ratio: number
   goldCount: number
 
   isOriginalContent: boolean

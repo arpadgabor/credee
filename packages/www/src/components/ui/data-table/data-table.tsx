@@ -1,7 +1,20 @@
 import { Cell, flexRender, Header, HeaderGroup, Row, Table as TableInstance } from '@tanstack/solid-table'
-import { For, Show } from 'solid-js'
+import { cva, VariantProps } from 'class-variance-authority'
+import { createComputed, createEffect, createMemo, For, Show, splitProps } from 'solid-js'
+import { Button } from '../Button'
+import { FormRow } from '../FormRow'
 
-interface DataTableProps<T extends unknown> {
+const styles = cva('w-full', {
+  variants: {
+    size: {
+      auto: 'table-auto',
+      fixed: 'table-fixed',
+    },
+  },
+})
+type TableVariants = VariantProps<typeof styles>
+
+interface DataTableProps<T extends unknown> extends TableVariants {
   table: TableInstance<T>
 
   loading: boolean
@@ -26,7 +39,6 @@ function TableHeaderGroup<T>(headerGroup: HeaderGroup<T>) {
     </tr>
   )
 }
-
 function TableCell<T>(cell: Cell<T, unknown>) {
   return (
     <td class='py-3 px-3' style={{ width: `${cell.column.getSize()}px` }}>
@@ -34,7 +46,6 @@ function TableCell<T>(cell: Cell<T, unknown>) {
     </td>
   )
 }
-
 function TableRow<T>(row: Row<T>) {
   return (
     <tr>
@@ -46,14 +57,16 @@ function TableRow<T>(row: Row<T>) {
 export function DataTable<T extends unknown>(props: DataTableProps<T>) {
   const isSuccess = !(props.loading || props.error)
 
-  const headerGroup = props.table.getHeaderGroups()
-  const rows = props.table.getRowModel().rows
+  const table = createMemo(() => props.table)
+  const headerGroup = createMemo(() => table().getHeaderGroups())
+  const rows = createMemo(() => table().getRowModel().rows)
+  const pageCount = createMemo(() => table().getPageCount())
 
   return (
     <div class='w-full overflow-x-auto relative border border-gray-200 rounded'>
-      <table class='table-auto w-full'>
+      <table class={styles({ size: props.size })}>
         <thead>
-          <For each={headerGroup}>{TableHeaderGroup}</For>
+          <For each={headerGroup()}>{TableHeaderGroup}</For>
         </thead>
 
         <tbody>
@@ -65,7 +78,7 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
             </tr>
           </Show>
 
-          <Show when={isSuccess && rows.length === 0}>
+          <Show when={isSuccess && rows().length === 0}>
             <tr>
               <td class='py-3 px-3' colSpan='100%'>
                 No data to show.
@@ -74,9 +87,42 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
           </Show>
 
           <Show when={isSuccess}>
-            <For each={rows}>{TableRow}</For>
+            <For each={rows()}>{TableRow}</For>
+
+            <Show when={rows().length < table().getState().pagination.pageSize}>
+              <For each={Array.from({ length: table().getState().pagination.pageSize - rows().length })}>
+                {(_, index) => (
+                  <tr>
+                    <td colSpan={100} class='py-3 px-3'>
+                      <span class='opacity-0 invisible'>{index}</span>
+                    </td>
+                  </tr>
+                )}
+              </For>
+            </Show>
           </Show>
         </tbody>
+
+        <tfoot class='bg-gray-100'>
+          <tr>
+            <td class='px-3 py-3' colspan='100%'>
+              <div class='flex justify-between w-full items-center'>
+                <div class='text-sm'>
+                  Page {table().getState().pagination.pageIndex + 1}/{pageCount()}.
+                </div>
+
+                <FormRow>
+                  <Button size='sm' theme='default' onClick={table().previousPage} disabled={!table().getCanPreviousPage()}>
+                    Previous page
+                  </Button>
+                  <Button size='sm' theme='default' onClick={table().nextPage} disabled={!table().getCanNextPage()}>
+                    Next page
+                  </Button>
+                </FormRow>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   )

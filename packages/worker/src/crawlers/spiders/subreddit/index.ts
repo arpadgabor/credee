@@ -11,7 +11,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   let crawling = true
   let task: Promise<any>
   let resolveTask: Function
-  let remainingEmptyLoops = 10
+  let remainingEmptyLoops = 25
 
   let onDataCallback: (data: DataCallback) => PromiseLike<void>
 
@@ -93,8 +93,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   async function crawler() {
     if (remainingEmptyLoops === 0) {
       stop()
-      resolveTask()
-      return
+      return resolveTask()
     }
 
     if (queue.size === 0) {
@@ -127,7 +126,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       const postElement = await page.waitForSelector(`[id="${id}"]`)
       await postElement.scrollIntoViewIfNeeded()
 
-      const screenshot = await postElement.screenshot()
+      const screenshot = await postElement.screenshot({ type: 'png' })
 
       await postElement.click()
       await page.waitForSelector(`[id="overlayScrollContainer"]`)
@@ -137,7 +136,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       queue.delete(id)
     }
 
-    remainingEmptyLoops = 10
+    remainingEmptyLoops = 25
     if (crawling) setTimeout(crawler, 100)
   }
 

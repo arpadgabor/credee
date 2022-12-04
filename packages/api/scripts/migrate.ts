@@ -1,7 +1,8 @@
 import { Migration, MigrationProvider, Migrator } from 'kysely'
-import { db } from './client.js'
+import { db } from '../src/database/client.js'
 
-import * as _001 from './migrations/001-reddit-posts.js'
+import * as _001 from '../src/database/migrations/001-reddit-posts.js'
+import * as _002 from '../src/database/migrations/002-reddit-posts-screenshot.js'
 
 class LocalProvider implements MigrationProvider {
   constructor() {}
@@ -9,6 +10,7 @@ class LocalProvider implements MigrationProvider {
   async getMigrations() {
     return {
       '001_reddit_posts': _001,
+      '002-reddit-posts-screenshot': _002,
     } satisfies Record<string, Migration>
   }
 }

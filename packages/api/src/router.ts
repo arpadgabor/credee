@@ -1,7 +1,7 @@
 import { router } from './core/trpc.js'
-import { TasksRouter } from './modules/tasks/tasks.router.js'
+import { JobsRouter } from './modules/jobs/jobs.router.js'
 
 export const appRouter = router({
-  tasks: TasksRouter,
+  jobs: JobsRouter,
 })
 export type AppRouter = typeof appRouter

@@ -5,7 +5,7 @@ import { Dynamic } from 'solid-js/web'
 
 const button = cva(
   [
-    'flex items-center rounded border font-normal transition',
+    'flex items-center justify-center rounded border font-normal transition',
     'group-[.formrow]:!rounded-none group-[.formrow]:!border-y group-[.formrow]:!border-x-0',
     'group-[.formrow]:first:!rounded-l group-[.formrow]:last:!rounded-r',
     'group-[.formrow]:!border-l group-[.formrow]:last:!border-r',
@@ -15,12 +15,13 @@ const button = cva(
       size: {
         lg: 'h-12 px-4 rounded-md group-[.formrow]:first:!rounded-l-md group-[.formrow]:last:!rounded-r-md',
         default: 'h-10 px-4',
-        sm: 'h-8 px-3',
+        sm: 'h-8 px-3 text-sm',
       },
       theme: {
         main: 'bg-amber-400 border-amber-500 hover:bg-amber-500 active:bg-amber-600 text-gray-900',
         accent: 'bg-blue-500 border-blue-600 hover:bg-blue-600 active:bg-blue-700 text-white',
         default: 'bg-white border-gray-200 hover:bg-gray-100 active:bg-gray-200 text-gray-900',
+        disabled: 'bg-gray-100 border-gray-200 text-gray-400',
       },
     },
     defaultVariants: {
@@ -42,7 +43,7 @@ export const Button: ParentComponent<ButtonProps> = props => {
       {...attrs}
       class={button({
         class: local.class,
-        theme: local.theme,
+        theme: attrs.disabled ? 'disabled' : local.theme,
         size: local.size,
       })}
     >

@@ -5,15 +5,7 @@ const Index: Component = () => {
   return (
     <div class='p-8'>
       <div class='flex space-x-4'>
-        <ButtonLink href='/overview'>
-          Hello <IconPhAt />{' '}
-        </ButtonLink>
-        <Button theme='accent' size='sm'>
-          Hello
-        </Button>
-        <Button theme='main' size='lg'>
-          Hello
-        </Button>
+        <ButtonLink href='/overview'>Go to overview</ButtonLink>{' '}
       </div>
     </div>
   )
