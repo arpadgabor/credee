@@ -30,8 +30,7 @@ type StyleProps = VariantProps<typeof input>
 interface InputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'size'>, StyleProps {}
 
 export const Input: ParentComponent<InputProps> = props => {
-  const slot = children(() => props.children)
-  const [local, attrs] = splitProps(props, ['children', 'theme', 'size', 'class'])
+  const [local, attrs] = splitProps(props, ['theme', 'size', 'class'])
 
   return (
     <input
@@ -41,8 +40,6 @@ export const Input: ParentComponent<InputProps> = props => {
         theme: local.theme,
         size: local.size,
       })}
-    >
-      {slot()}
-    </input>
+    ></input>
   )
 }

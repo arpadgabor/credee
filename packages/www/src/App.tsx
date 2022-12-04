@@ -7,6 +7,7 @@ export const queryClient = new QueryClient()
 
 const App: Component = () => {
   const Routes = useRoutes(routes)
+
   return (
     <QueryClientProvider client={queryClient}>
       <Routes />

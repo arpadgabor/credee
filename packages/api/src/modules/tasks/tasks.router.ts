@@ -14,13 +14,12 @@ export const TasksRouter = router({
           .optional(),
       })
     )
-    .mutation(({ input }) => {
-      sendCrawlInput({
+    .mutation(async ({ input }) => {
+      return sendCrawlInput({
         subreddit: input.subreddit as any,
         stopsAfterCount: input.stopsAfterCount,
         stopsAfterSeconds: input.stopsAfterSeconds,
       })
-      return true
     }),
 
   jobs: procedure.query(async () => {

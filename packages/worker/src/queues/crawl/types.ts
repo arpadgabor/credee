@@ -1,3 +1,4 @@
+import Bull from 'bull'
 import type { RedditCrawledPost } from '../../../src/crawlers/reddit.crawler.types.js'
 
 export interface CrawlInput {
@@ -6,6 +7,7 @@ export interface CrawlInput {
   stopsAfterSeconds?: number
 }
 export interface CrawlOutput {
+  jobId: Bull.JobId
   subreddit: `/r/${string}`
   posts: RedditCrawledPost[]
 }

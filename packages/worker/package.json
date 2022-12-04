@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon --exec \"ts-node --esm\" ./src/server",
+    "dev": "nodemon --exec \"ts-node --esm\" ./src/server -e ts,js,cjs,mjs",
     "start": "node dist/server.js",
     "build": "node build.cjs"
   },

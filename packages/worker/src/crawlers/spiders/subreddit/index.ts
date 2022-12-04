@@ -11,6 +11,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   let crawling = true
   let task: Promise<any>
   let resolveTask: Function
+  let remainingEmptyLoops = 10
 
   let onDataCallback: (data: DataCallback) => PromiseLike<void>
 
@@ -21,7 +22,10 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
 
     // handle post with comments
     if (url.includes('postcomments')) {
-      const data = await response.json()
+      const data = await response.json().catch(error => {
+        console.log(error)
+        return {}
+      })
       if (!('comments' in data)) return
 
       const [post]: Post[] = Object.values(data.posts)
@@ -37,7 +41,11 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
 
     // handle subreddit posts
     if (url.includes('subreddits')) {
-      const data = await response.json()
+      const data = await response.json().catch(error => {
+        console.log(error)
+        return {}
+      })
+
       if (!('posts' in data)) return
 
       const posts: Post[] = Object.values(data.posts)
@@ -83,8 +91,17 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   }
 
   async function crawler() {
+    if (remainingEmptyLoops === 0) {
+      stop()
+      resolveTask()
+      return
+    }
+
     if (queue.size === 0) {
       console.log('Queue is empty.')
+      remainingEmptyLoops -= 1
+      setTimeout(crawler, 500)
+      return
     }
 
     for await (const [id, { post, comments }] of queue) {
@@ -120,6 +137,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       queue.delete(id)
     }
 
+    remainingEmptyLoops = 10
     if (crawling) setTimeout(crawler, 100)
   }
 

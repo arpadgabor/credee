@@ -9,6 +9,7 @@ export function createQueue(redisUrl: string) {
       timeout: 60_000 * 10, // 10 minutes
     },
   })
+
   const outputQueue = new Queue<CrawlOutput>('crawl-output', {
     redis: redisUrl,
   })

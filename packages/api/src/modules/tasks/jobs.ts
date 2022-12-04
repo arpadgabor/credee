@@ -4,8 +4,7 @@ import { config } from '../../config.js'
 const { sendCrawlInput, outputQueue, inputQueue } = createCrawlQueue(config.get('redisUrl'))
 
 outputQueue.process((job, done) => {
-  console.log(job.data)
-  done()
+  done(null, job.data)
 })
 
 export async function getJobsInQueue() {
@@ -14,7 +13,7 @@ export async function getJobsInQueue() {
   return Promise.all(
     jobs.map(async job => ({
       id: job.id,
-      data: job.data,
+      subreddit: job.data.subreddit,
       state: await job.getState(),
       createdAt: job.timestamp,
       startedAt: job.processedOn,

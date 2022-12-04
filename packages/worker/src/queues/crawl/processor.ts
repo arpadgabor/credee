@@ -17,6 +17,7 @@ export const queueCallback =
       })
 
       await sendOutput({
+        jobId: job.id,
         posts: result,
         subreddit: job.data.subreddit,
       })
