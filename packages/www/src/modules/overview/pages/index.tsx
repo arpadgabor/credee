@@ -7,7 +7,6 @@ import {
   getPaginationRowModel,
 } from '@tanstack/solid-table'
 import { Component, Switch, Match } from 'solid-js'
-import { createStore } from 'solid-js/store'
 import { Button, DataTable, DateCell, FormRow, Input, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { createForm, Form, Field, required } from '@modular-forms/solid'
@@ -18,11 +17,6 @@ type JobForm = {
 }
 
 const Overview: Component = () => {
-  const [state, setState] = createStore({
-    subreddit: '/r/science',
-    stopsAfterCount: 5,
-  })
-
   const jobForm = createForm<JobForm>({
     initialValues: {
       subreddit: '/r/science',
