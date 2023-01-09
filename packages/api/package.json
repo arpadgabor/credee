@@ -1,7 +1,7 @@
 {
   "name": "@credee/api",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
@@ -13,9 +13,9 @@
   "dependencies": {
     "@credee/worker": "workspace:*",
     "@fastify/cors": "^8.2.0",
-    "@trpc/server": "^10.7.0",
+    "@trpc/server": "^10.8.1",
     "bull": "^4.10.2",
-    "convict": "^6.2.3",
+    "convict": "^6.2.4",
     "fastify": "^4.11.0",
     "kysely": "^0.23.3",
     "pg": "^8.8.0",
@@ -29,6 +29,6 @@
     "@types/convict": "^6.1.1",
     "@types/pg": "^8.6.6",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.16.13"
+    "esbuild": "^0.16.16"
   }
 }

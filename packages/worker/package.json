@@ -1,7 +1,7 @@
 {
   "name": "@credee/worker",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon --exec \"ts-node --esm\" ./src/server -e ts,js,cjs,mjs",
@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "bull": "^4.10.2",
-    "convict": "^6.2.3",
+    "convict": "^6.2.4",
     "zod": "^3.20.2",
-    "playwright": "^1.29.1"
+    "playwright": "^1.29.2"
   },
   "devDependencies": {
     "@types/bull": "^4.10.0",
