@@ -108,7 +108,7 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
             <td class='px-3 py-3' colspan='100%'>
               <div class='flex justify-between w-full items-center'>
                 <div class='text-sm'>
-                  Page {table().getState().pagination.pageIndex + 1}/{pageCount()}.
+                  Page {table().getState().pagination.pageIndex + 1} of {pageCount()}
                 </div>
 
                 <FormRow>

@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 :root {
-  @apply font-main;
+  @apply font-main text-sm;
 }

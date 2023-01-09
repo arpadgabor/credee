@@ -85,12 +85,6 @@ const Overview: Component = () => {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    state: {
-      columnPinning: {},
-      columnSizing: {},
-    },
-    onStateChange: () => {},
-    renderFallbackValue: () => {},
   })
   table.setPageSize(15)
 

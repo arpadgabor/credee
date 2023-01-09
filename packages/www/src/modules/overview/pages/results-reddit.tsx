@@ -1,12 +1,6 @@
 import { createQuery } from '@tanstack/solid-query'
-import {
-  createColumnHelper,
-  createSolidTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-} from '@tanstack/solid-table'
-import { Component, createEffect, createMemo, createSignal } from 'solid-js'
+import { createColumnHelper, createSolidTable, getCoreRowModel } from '@tanstack/solid-table'
+import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { DataTable, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
@@ -38,22 +32,22 @@ const Page: Component = () => {
       return results.data?.data
     },
     columns: [
-      col.accessor('post_id', {
-        header: 'Post id',
-        cell: StringCell,
-        size: 128,
-      }),
       col.accessor('title', {
-        header: 'Title',
-        cell: StringCell,
-        size: 726,
-      }),
-      col.accessor('subreddit', {
-        header: 'Subreddit',
-        cell: StringCell,
-      }),
-      col.accessor('author', {
-        cell: StringCell,
+        header: 'Post',
+        cell: cell => {
+          const row = cell.row.original
+          return (
+            <PostInfoCell
+              author={row.author}
+              permalink={row.permalink}
+              postId={row.post_id}
+              subreddit={row.subreddit}
+              title={cell.getValue()}
+              createdAt={row.created_at}
+            />
+          )
+        },
+        size: Infinity,
       }),
       col.accessor('score', {
         header: 'Score',
@@ -67,28 +61,58 @@ const Page: Component = () => {
         header: 'Comments',
         cell: StringCell,
       }),
-      col.accessor('permalink', {
-        header: 'Permalink',
-        cell: cell => (
-          <a href={cell.getValue()} class='text-blue-500 underline' target='_blank'>
-            Permalink
-          </a>
-        ),
-      }),
     ],
     getCoreRowModel: getCoreRowModel(),
     state: {
-      pagination,
+      get pagination() {
+        return pagination
+      },
     },
-    pageCount: results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0,
-    manualPagination: true,
     onPaginationChange: setPagination,
+    get pageCount() {
+      return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
+    },
+    manualPagination: true,
   })
 
   return (
     <section class='max-w-full'>
       <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' />
     </section>
+  )
+}
+
+const dateFormat = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'short',
+  timeStyle: 'short',
+})
+
+function PostInfoCell(row: {
+  postId: string
+  permalink: string
+  subreddit: string
+  author: string
+  title: string
+  createdAt: string | Date
+}) {
+  return (
+    <div>
+      <p class={'font-normal mb-1 text-gray-400 space-x-4'}>
+        <small>
+          <a class='text-blue-500 underline' href={row.permalink}>
+            {row.postId}
+          </a>
+        </small>
+        <small>
+          <time>{dateFormat.format(new Date(row.createdAt))}</time>
+        </small>
+        <small>
+          Posted on {row.subreddit} by {row.author}
+        </small>
+      </p>
+
+      <p>{row.title}</p>
+    </div>
   )
 }
 
