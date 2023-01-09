@@ -1,16 +1,15 @@
 import { A, Outlet } from '@solidjs/router'
 import { cva } from 'class-variance-authority'
-import { link } from 'fs'
 import { Component } from 'solid-js'
 
 const NavLink: Component<{ href: string; label: string }> = props => {
   const linkClass = cva([
-    'w-full py-2 px-3',
+    'w-full py-3 px-3',
     'font-semibold text-gray-500',
     'transition duration-300 ease-in-out',
     'rounded hover:bg-gray-50',
   ])
-  const activeClass = cva('text-blue-500 hover:bg-blue-50 bg-blue-50')
+  const activeClass = cva('text-blue-500 hover:bg-blue-50 bg-gradient-to-r from-blue-50 to-blue-100/10')
 
   return (
     <A href={props.href} end activeClass={activeClass()} class={linkClass()}>

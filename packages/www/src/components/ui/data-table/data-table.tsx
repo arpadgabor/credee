@@ -1,6 +1,6 @@
 import { Cell, flexRender, Header, HeaderGroup, Row, Table as TableInstance } from '@tanstack/solid-table'
 import { cva, VariantProps } from 'class-variance-authority'
-import { createComputed, createEffect, createMemo, For, Show, splitProps } from 'solid-js'
+import { createMemo, For, Show } from 'solid-js'
 import { Button } from '../Button'
 import { FormRow } from '../FormRow'
 
