@@ -22,7 +22,7 @@ const NavLink: Component<{ href: string; label: string }> = props => {
 const OverviewLayout: Component = () => {
   return (
     <div class='w-screen max-h-screen flex'>
-      <aside class='flex flex-col w-80 border-r border-gray-200'>
+      <aside class='flex flex-col h-screen w-80 border-r border-gray-200'>
         <div class='py-6 px-6 border-b border-gray-200'>
           <h1 class='font-bold text-2xl text-blue-700'>Credee</h1>
         </div>

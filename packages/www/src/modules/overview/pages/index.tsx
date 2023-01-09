@@ -6,7 +6,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from '@tanstack/solid-table'
-import type { Component } from 'solid-js'
+import { Component, Switch, Match } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Button, DataTable, DateCell, FormRow, Input, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
@@ -56,6 +56,17 @@ const Overview: Component = () => {
       return jobs.data
     },
     columns: [
+      col.accessor('state', {
+        cell: cell => (
+          <Switch>
+            <Match when={cell.getValue() === 'completed'}>✅</Match>
+            <Match when={cell.getValue() === 'failed'}>❌</Match>
+            <Match when={cell.getValue() === 'active'}>⌛</Match>
+          </Switch>
+        ),
+        header: '',
+        size: 16,
+      }),
       col.accessor('id', {
         header: 'Id',
         cell: StringCell,
@@ -64,9 +75,6 @@ const Overview: Component = () => {
       }),
       col.accessor('subreddit', {
         header: 'Subreddit',
-        cell: StringCell,
-      }),
-      col.accessor('state', {
         cell: StringCell,
       }),
       col.accessor('createdAt', {
@@ -86,7 +94,7 @@ const Overview: Component = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   })
-  table.setPageSize(15)
+  table.setPageSize(20)
 
   return (
     <div>

@@ -8,7 +8,7 @@ import { api } from '../../../utils/trpc'
 const Page: Component = () => {
   const [pagination, setPagination] = createStore({
     pageIndex: 0,
-    pageSize: 15,
+    pageSize: 12,
   })
 
   const results = createQuery(() => ['results_reddit', pagination], {
