@@ -11,12 +11,12 @@
   "license": "MIT",
   "dependencies": {
     "@credee/api": "workspace:*",
-    "@modular-forms/solid": "^0.9.5",
+    "@modular-forms/solid": "^0.10.0",
     "@solidjs/router": "^0.6.0",
     "@tanstack/solid-query": "^4.22.0",
     "@tanstack/solid-table": "^8.7.6",
-    "@trpc/client": "^10.8.1",
-    "solid-js": "^1.6.8",
+    "@trpc/client": "^10.9.0",
+    "solid-js": "^1.6.9",
     "superjson": "^1.12.1"
   },
   "devDependencies": {
