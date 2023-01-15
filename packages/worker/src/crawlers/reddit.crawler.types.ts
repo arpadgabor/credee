@@ -1,3 +1,4 @@
+import type { EventEmitter } from  'events'
 import { Media, RichTextJSONSegment } from './spiders/subreddit/index.js'
 
 export interface RedditCrawledPost {
@@ -53,5 +54,6 @@ export interface RedditCrawledPost {
 
 export interface RedditCrawlerOptions {
   subreddit: `/r/${string}`
-  endAfter: { count: number } | { seconds: number }
+  endAfter: { count: number }
+  notifications?: EventEmitter
 }

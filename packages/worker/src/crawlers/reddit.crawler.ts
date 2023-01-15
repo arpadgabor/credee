@@ -1,8 +1,9 @@
-import playwright from 'playwright'
 import fs from 'fs/promises'
+import { resolve } from 'path'
+import playwright from 'playwright'
+
 import type { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
 import { createSubredditSpider } from './spiders/subreddit/index.js'
-import { resolve } from 'path'
 
 let browser: playwright.Browser | null = null
 export async function crawlReddit(options: RedditCrawlerOptions) {
@@ -28,9 +29,8 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   const startTime = Date.now()
   const collection = new Map<string, RedditCrawledPost>()
 
-  subredditSpider.onData(async data => {
+  const checkRemaining = () => {
     const now = Date.now()
-    const elapsed = (now - startTime) / 1000
 
     if ('count' in options.endAfter && collection.size >= options.endAfter.count) {
       const posts = Array.from(collection.values())
@@ -41,86 +41,105 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       }
     }
 
-    if ('seconds' in options.endAfter && elapsed >= options.endAfter.seconds) {
-      stop()
-      return
-    }
+    // if ('seconds' in options.endAfter && elapsed >= options.endAfter.seconds) {
+    //   stop()
+    //   return
+    // }
+  }
 
-    if ('screenshot' in data) {
-      const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
-      const screenshotPath = `${data.post.id}_${Date.now()}.png`
-      await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), data.screenshot)
+  const isPostDone = (id: string) => collection.get(id)?.title && collection.get(id)?.screenshotPath
 
-      collection.set(data.post.id, {
-        ...post,
-        screenshotPath,
-      })
-      return
-    }
+  subredditSpider.on('post-data', async (data) => {
+    checkRemaining()
+    const { post, comments } = data
 
-    if ('comments' in data) {
-      const { post, comments } = data
+    const isSelfPost = post.media.type === 'rtjson'
+    const isCrossPost = !!post.crosspostParentId
+    const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
+    const isImage = post.media.type === 'image'
+    const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
 
-      const isSelfPost = post.media.type === 'rtjson'
-      const isCrossPost = !!post.crosspostParentId
-      const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
-      const isImage = post.media.type === 'image'
-      const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
+    const result: RedditCrawledPost = {
+      id: post.id,
+      createdAt: new Date(post.created).toISOString(),
 
-      const result: RedditCrawledPost = {
-        id: post.id,
-        createdAt: new Date(post.created).toISOString(),
+      title: post.title,
+      subreddit: options.subreddit,
+      author: post.author,
+      permalink: post.permalink,
 
-        title: post.title,
-        subreddit: options.subreddit,
-        author: post.author,
-        permalink: post.permalink,
+      score: post.score,
+      ratio: post.upvoteRatio,
+      goldCount: post.goldCount,
 
-        score: post.score,
-        ratio: post.upvoteRatio,
-        goldCount: post.goldCount,
+      domain: post.domain,
+      url: post.source?.url,
+      urlTitle: post.source?.displayText,
 
-        domain: post.domain,
-        url: post.source?.url,
-        urlTitle: post.source?.displayText,
+      isOriginalContent: post.isOriginalContent,
+      isSelfPost,
+      isCrossPost,
+      isVideo,
+      isImage,
+      isLink,
 
-        isOriginalContent: post.isOriginalContent,
-        isSelfPost,
-        isCrossPost,
-        isVideo,
-        isImage,
-        isLink,
+      media: post.media,
 
-        media: post.media,
-
-        nrOfComments: post.numComments,
-        comments: comments
-          .filter(com => !(com.isAdmin || com.isMod))
-          .map(com => ({
-            id: com.id,
-            author: com.author,
-            content: com.media.richtextContent,
-            createdAt: new Date(com.created).toISOString(),
-            editedAt: com.editedAt ? new Date(com.editedAt).toISOString() : null,
-            gildings: com.gildings,
-            goldCount: com.goldCount,
-            permalink: com.permalink,
-            score: com.score,
-            voteState: com.voteState,
-          })),
-        awards: post.allAwardings?.map(award => ({
-          id: award.id,
-          name: award.name,
-          count: award.count,
-          description: award.description,
-          icon: award.iconUrl,
+      nrOfComments: post.numComments,
+      comments: comments
+        .filter(com => !(com.isAdmin || com.isMod))
+        .map(com => ({
+          id: com.id,
+          author: com.author,
+          content: com.media.richtextContent,
+          createdAt: new Date(com.created).toISOString(),
+          editedAt: com.editedAt ? new Date(com.editedAt).toISOString() : null,
+          gildings: com.gildings,
+          goldCount: com.goldCount,
+          permalink: com.permalink,
+          score: com.score,
+          voteState: com.voteState,
         })),
-      }
+      awards: post.allAwardings?.map(award => ({
+        id: award.id,
+        name: award.name,
+        count: award.count,
+        description: award.description,
+        icon: award.iconUrl,
+      })),
+    }
 
-      const existingPost = collection.get(post.id) ?? ({} as RedditCrawledPost)
-      collection.set(post.id, { ...existingPost, ...result })
-      console.log('Found post', post.id)
-      return
+    const existingPost = collection.get(post.id) ?? ({} as RedditCrawledPost)
+    collection.set(post.id, { ...existingPost, ...result })
+    console.log('Found post', post.id)
+
+    if(isPostDone(post.id)) {
+      console.log('done in post-data', collection.size / options.endAfter.count)
+      options.notifications?.emit('progress', {
+        post: collection.get(post.id),
+        progress: collection.size / options.endAfter.count
+      })
+    }
+  })
+
+  subredditSpider.on('screenshot', async (data) => {
+    checkRemaining()
+
+    const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
+    const screenshotPath = `${data.post.id}_${Date.now()}.png`
+    await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), data.screenshot)
+
+    collection.set(data.post.id, {
+      ...post,
+      screenshotPath,
+    })
+
+    if(isPostDone(post.id)) {
+      console.log('done in screenshot', collection.size / options.endAfter.count)
+      options.notifications?.emit('progress', {
+        post: collection.get(post.id),
+        progress: (collection.size * 100) / options.endAfter.count
+      })
     }
   })
 

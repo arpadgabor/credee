@@ -60,6 +60,7 @@ export async function getJobsInQueue() {
       createdAt: job.timestamp,
       startedAt: job.processedOn,
       completedAt: job.finishedOn,
+      progress: job.progress()
     }))
   )
 }

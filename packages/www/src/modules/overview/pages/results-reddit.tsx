@@ -1,21 +1,30 @@
 import { createQuery } from '@tanstack/solid-query'
-import { createColumnHelper, createSolidTable, getCoreRowModel } from '@tanstack/solid-table'
-import { Component } from 'solid-js'
+import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel, SortingState } from '@tanstack/solid-table'
+import { Component, createEffect } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DataTable, StringCell } from '../../../components/ui'
+import { DataTable, DateCell, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 
 const Page: Component = () => {
+  const [sorting, setSorting] = createStore<SortingState>([])
   const [pagination, setPagination] = createStore({
     pageIndex: 0,
     pageSize: 12,
   })
 
-  const results = createQuery(() => ['results_reddit', pagination], {
+  createEffect(() => {
+    console.log(sorting)
+  })
+
+  const results = createQuery(() => ['results_reddit', pagination, sorting], {
     queryFn: () =>
       api.jobs.redditResults.query({
         limit: pagination.pageSize,
         offset: pagination.pageIndex * pagination.pageSize,
+        order: sorting?.map(({ id, desc }) => ({
+          column: id as any,
+          sort: desc ? 'desc' : 'asc'
+        }))
       }),
     keepPreviousData: true,
     initialData: {
@@ -61,14 +70,22 @@ const Page: Component = () => {
         header: 'Comments',
         cell: StringCell,
       }),
+      col.accessor('inserted_at', {
+        header: 'Inserted',
+        cell: DateCell
+      })
     ],
     getCoreRowModel: getCoreRowModel(),
     state: {
-      get pagination() {
-        return pagination
-      },
+      get pagination() { return pagination },
+      get sorting() { return sorting }
     },
     onPaginationChange: setPagination,
+    onSortingChange: (data) => {
+      console.log('set sort')
+      setSorting(data)
+    },
+    getSortedRowModel: getSortedRowModel(),
     get pageCount() {
       return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
     },

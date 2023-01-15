@@ -71,6 +71,10 @@ const Overview: Component = () => {
         header: 'Subreddit',
         cell: StringCell,
       }),
+      col.accessor('progress', {
+        header: 'Progress',
+        cell: StringCell,
+      }),
       col.accessor('createdAt', {
         header: 'Created at',
         cell: DateCell,

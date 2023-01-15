@@ -3,6 +3,8 @@ import { cva, VariantProps } from 'class-variance-authority'
 import { createMemo, For, Show } from 'solid-js'
 import { Button } from '../Button'
 import { FormRow } from '../FormRow'
+import PhArrowDown from '~icons/ph/arrow-down'
+import PhArrowUp from '~icons/ph/arrow-up'
 
 const styles = cva('w-full', {
   variants: {
@@ -22,13 +24,21 @@ interface DataTableProps<T extends unknown> extends TableVariants {
 }
 
 function TableHeaderCell<T>(header: Header<T, unknown>) {
+  const style = cva([
+    'text-left py-2 px-3 text-sm uppercase border-b bg-gray-100 text-gray-600',
+    header.column.getCanSort() ? 'cursor-pointer' : '',
+  ])
   return (
     <th
-      class='text-left py-2 px-3 text-sm uppercase border-b bg-gray-100 text-gray-600'
+      class={style()}
       style={{ width: `${header.column.getSize()}px` }}
+      onClick={header.column.getToggleSortingHandler()}
     >
-      {}
-      {flexRender(header.column.columnDef.header, header.getContext())}
+      <div class='flex'>
+        {flexRender(header.column.columnDef.header, header.getContext())}
+        <Show when={header.column.getIsSorted() === 'desc'}><PhArrowDown /></Show>
+        <Show when={header.column.getIsSorted() === 'asc'}><PhArrowUp /></Show>
+      </div>
     </th>
   )
 }
