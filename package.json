@@ -3,21 +3,26 @@
   "description": "A system to scrape data from social media to analyse and label in order to determine what factors affect percieved credibility of social media content.",
   "scripts": {
     "turbo": "turbo",
+    "start": "turbo run start --parallel",
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "build:api": "docker build -f packages/api/Dockerfile -t credee/api:latest .",
+    "build:worker": "docker build -f packages/worker/Dockerfile -t credee/worker:latest .",
+    "clean": "rimraf ./**/.turbo ./**/dist ./**/node_modules"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
     "@tsconfig/node16": "^1.0.3",
     "@types/node": "16.18.11",
-    "@vitest/coverage-c8": "^0.27.1",
+    "@vitest/coverage-c8": "^0.27.2",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.3",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "turbo": "^1.7.0",
     "typescript": "^4.9.4",
-    "vitest": "^0.27.1"
+    "vitest": "^0.27.2"
   },
   "workspaces": {
     "packages": [
@@ -34,7 +39,7 @@
   "author": "Arpad Gabor <hello@arpadgabor.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=16.18"
+    "node": ">=16.19"
   },
-  "packageManager": "pnpm@7.14.2"
+  "packageManager": "pnpm@7.24.3"
 }

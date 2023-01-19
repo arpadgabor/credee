@@ -1,1 +1,1 @@
-export { createQueue as createCrawlQueue } from './queues/crawl/queue.js'
+export { Reddit } from './queues/reddit-crawler/index.js'

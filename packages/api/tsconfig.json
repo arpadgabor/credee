@@ -1,14 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "./src",
     "outDir": "dist",
-    "module": "NodeNext",
+    "module": "ESNext",
     "moduleResolution": "NodeNext",
-    "target": "es2020",
-    "lib": ["ES2022", "DOM"]
-  },
-  "exclude": ["node_modules", "**/node_modules"]
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"]
+  }
 }

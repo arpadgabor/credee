@@ -3,6 +3,8 @@ import cors from '@fastify/cors'
 
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import { appRouter } from './router.js'
+import { config } from './config.js'
+import { migrateToLatest } from './database/migrations.js'
 
 const server = fastify({
   maxParamLength: 5000,
@@ -20,10 +22,17 @@ server.register(fastifyTRPCPlugin, {
 })
 
 const start = async () => {
-  await server.listen({ port: 3000 }).catch((err: unknown) => {
-    server.log.error(err)
-    process.exit(1)
-  })
+  await migrateToLatest()
+
+  await server
+    .listen({
+      port: Number(config.get('port')),
+      host: config.get('host'),
+    })
+    .catch((err: unknown) => {
+      server.log.error(err)
+      process.exit(1)
+    })
 }
 
 start()

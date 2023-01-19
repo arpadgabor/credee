@@ -1,14 +1,16 @@
-import { createCrawlQueue } from '@credee/worker'
+import { Reddit } from '@credee/worker'
 import { db, json } from '../../database/client.js'
-import { config } from '../../config.js'
+import { Job } from 'bullmq'
 
-const { sendCrawlInput, outputQueue, inputQueue } = createCrawlQueue(config.get('redisUrl'))
+Reddit.queueEvents.on('completed', async ({ jobId }, id) => {
+  const job = await Job.fromId<Reddit.Input, Reddit.Output>(Reddit.queue, jobId)
+  console.log({ job })
 
-outputQueue.process(async (job, done) => {
-  console.log(`Saving crawled posts for job "${job.data.jobId}".`)
+  const { posts } = job.returnvalue
+  console.log(`Saving crawled posts for job "${jobId}".`)
 
   await Promise.all(
-    job.data.posts.map(async post => {
+    posts.map(async post => {
       await db
         .insertInto('reddit_posts')
         .values({
@@ -45,12 +47,10 @@ outputQueue.process(async (job, done) => {
         .execute()
     })
   )
-
-  done(null, job.data)
 })
 
 export async function getJobsInQueue() {
-  const jobs = await inputQueue.getJobs(['active', 'completed', 'delayed', 'failed', 'paused', 'waiting'])
+  const jobs = await Reddit.queue.getJobs(['active', 'completed', 'delayed', 'failed', 'paused', 'waiting'])
 
   return Promise.all(
     jobs.map(async job => ({
@@ -60,9 +60,11 @@ export async function getJobsInQueue() {
       createdAt: job.timestamp,
       startedAt: job.processedOn,
       completedAt: job.finishedOn,
-      progress: job.progress()
+      progress: job.progress,
     }))
   )
 }
 
-export { sendCrawlInput }
+export async function queueRedditCrawl(data: Reddit.Input) {
+  return Reddit.queue.add(data.subreddit, data)
+}

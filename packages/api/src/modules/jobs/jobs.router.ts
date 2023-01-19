@@ -1,7 +1,7 @@
-import { db } from '../../database/client.js'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
-import { getJobsInQueue, sendCrawlInput } from './jobs.service.js'
+import { db } from '../../database/client.js'
+import { getJobsInQueue, queueRedditCrawl } from './jobs.service.js'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),
@@ -13,9 +13,48 @@ const crawlRedditInput = z.object({
 })
 export type CrawlRedditInput = z.infer<typeof crawlRedditInput>
 
+const getRedditResultsInput = z
+  .object({
+    limit: z.number().default(25).optional(),
+    offset: z.number().default(25).optional(),
+    order: z
+      .array(
+        z.object({
+          column: z.enum(['created_at', 'inserted_at', 'score', 'ratio', 'nr_of_comments', 'domain', 'title']).optional(),
+          sort: z.enum(['asc', 'desc']).optional(),
+        })
+      )
+      .optional(),
+  })
+  .optional()
+
+const getRedditResultsOutput = z.object({
+  meta: z.object({
+    count: z.number(),
+  }),
+  data: z.array(
+    z.object({
+      id: z.number(),
+      post_id: z.string(),
+      title: z.string(),
+      author: z.string(),
+      subreddit: z.string(),
+      created_at: z.date().or(z.string()),
+      inserted_at: z.date().or(z.string()),
+      score: z.number(),
+      ratio: z.number(),
+      nr_of_comments: z.number(),
+      permalink: z.string(),
+      domain: z.string(),
+      url: z.string(),
+      url_title: z.string(),
+    })
+  ),
+})
+
 export const JobsRouter = router({
   redditCrawl: procedure.input(crawlRedditInput).mutation(async ({ input }) => {
-    await sendCrawlInput({
+    await queueRedditCrawl({
       subreddit: input.subreddit as any,
       stopsAfterCount: input.stopsAfterCount,
       stopsAfterSeconds: input.stopsAfterSeconds,
@@ -23,19 +62,8 @@ export const JobsRouter = router({
   }),
 
   redditResults: procedure
-    .input(
-      z
-        .object({
-          limit: z.number().default(25).optional(),
-          offset: z.number().default(25).optional(),
-          order: z.array(z.object({
-            column: z.enum(['created_at', 'inserted_at', 'score', 'ratio', 'nr_of_comments', 'domain', 'title']).optional(),
-            sort: z.enum(['asc', 'desc']).optional(),
-          })).optional()
-        })
-        .optional()
-    )
-    // .output(redditResults)
+    .input(getRedditResultsInput)
+    .output(getRedditResultsOutput)
     .query(async ({ input }) => {
       let query = db
         .selectFrom('reddit_posts')
@@ -70,7 +98,7 @@ export const JobsRouter = router({
       return {
         data,
         meta: {
-          count: Number(count!.count),
+          count: Number(count!.count) || 0,
         },
       }
     }),

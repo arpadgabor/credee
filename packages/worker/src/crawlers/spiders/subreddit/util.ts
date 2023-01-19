@@ -3,9 +3,9 @@ import type { Post } from './subreddit.types.js'
 import type { Comment } from './comment.types.js'
 
 export interface EmittedEvents {
-  'screenshot': { post: Post; screenshot: Buffer }
+  screenshot: { post: Post; screenshot: Buffer }
   'post-data': { post: Post; comments: Comment[] }
-  'done': void
+  done: void
 }
 
 export interface SubredditSpiderInit {

@@ -1,5 +1,5 @@
-import fs from 'fs/promises'
-import { resolve } from 'path'
+import fs from 'node:fs/promises'
+import { resolve } from 'node:path'
 import playwright from 'playwright'
 
 import type { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
@@ -49,7 +49,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
   const isPostDone = (id: string) => collection.get(id)?.title && collection.get(id)?.screenshotPath
 
-  subredditSpider.on('post-data', async (data) => {
+  subredditSpider.on('post-data', async data => {
     checkRemaining()
     const { post, comments } = data
 
@@ -113,16 +113,16 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     collection.set(post.id, { ...existingPost, ...result })
     console.log('Found post', post.id)
 
-    if(isPostDone(post.id)) {
+    if (isPostDone(post.id)) {
       console.log('done in post-data', collection.size / options.endAfter.count)
       options.notifications?.emit('progress', {
         post: collection.get(post.id),
-        progress: collection.size / options.endAfter.count
+        progress: collection.size / options.endAfter.count,
       })
     }
   })
 
-  subredditSpider.on('screenshot', async (data) => {
+  subredditSpider.on('screenshot', async data => {
     checkRemaining()
 
     const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
@@ -134,11 +134,11 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       screenshotPath,
     })
 
-    if(isPostDone(post.id)) {
+    if (isPostDone(post.id)) {
       console.log('done in screenshot', collection.size / options.endAfter.count)
       options.notifications?.emit('progress', {
         post: collection.get(post.id),
-        progress: (collection.size * 100) / options.endAfter.count
+        progress: (collection.size * 100) / options.endAfter.count,
       })
     }
   })

@@ -1,8 +1,8 @@
+import { EventEmitter } from 'node:events'
 import playwright from 'playwright'
+import type { Comment } from './comment.types.js'
 import type { Post } from './subreddit.types.js'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
-import type { Comment } from './comment.types.js'
-import { EventEmitter } from 'events'
 
 export function createSubredditSpider({ page: _page, subreddit: _subreddit }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
@@ -154,6 +154,6 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
     preparePage,
     crawl,
     stop,
-    on: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.on(key, cb)
+    on: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.on(key, cb),
   }
 }

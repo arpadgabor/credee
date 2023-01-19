@@ -8,10 +8,18 @@ export const config = convict({
     default: 'development',
     format: ['development', 'production'],
   },
-  redisUrl: {
-    env: 'REDIS_URL',
-    format: String,
-    nullable: false,
-    default: 'redis://127.0.0.1:6379',
+  redis: {
+    host: {
+      env: 'REDIS_HOST',
+      format: String,
+      nullable: false,
+      default: '127.0.0.1',
+    },
+    port: {
+      env: 'REDIS_PORT',
+      format: Number,
+      nullable: true,
+      default: 6379,
+    },
   },
 })

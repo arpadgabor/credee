@@ -1,5 +1,5 @@
 import Bull from 'bull'
-import type { RedditCrawledPost } from '../../../src/crawlers/reddit.crawler.types.js'
+import type { RedditCrawledPost } from '../../crawlers/reddit.crawler.types.js'
 
 export interface CrawlInput {
   subreddit: `/r/${string}`
