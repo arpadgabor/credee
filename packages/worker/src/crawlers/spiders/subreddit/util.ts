@@ -14,4 +14,5 @@ export interface SubredditSpiderInit {
    * @example '/r/Android'
    */
   subreddit: `/r/${string}`
+  limit: number
 }

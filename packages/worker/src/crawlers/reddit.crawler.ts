@@ -19,30 +19,14 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     page: await browser.newPage({
       viewport: { height: 800, width: 1600 },
     }),
+    limit: options.endAfter.count || 5,
   })
   await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
-
-  let stop: Function
   const collection = new Map<string, RedditCrawledPost>()
-
-  const checkRemaining = () => {
-    if (collection.size >= options.endAfter.count) {
-      const posts = Array.from(collection.values())
-      const readyPosts = posts.filter(item => item.id && item.screenshotPath)
-
-      if (readyPosts.length === options.endAfter.count) {
-        stop()
-        return
-      }
-    }
-  }
 
   const isPostDone = (id: string) => collection.get(id)?.title && collection.get(id)?.screenshotPath
 
-  subredditSpider.on('post-data', async data => {
-    checkRemaining()
-    const { post, comments } = data
-
+  subredditSpider.on('post-data', async ({ post, comments }) => {
     const isSelfPost = post.media.type === 'rtjson'
     const isCrossPost = !!post.crosspostParentId
     const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
@@ -101,10 +85,8 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     const existingPost = collection.get(post.id) ?? ({} as RedditCrawledPost)
     collection.set(post.id, { ...existingPost, ...result })
-    console.log('Found post', post.id)
 
     if (isPostDone(post.id)) {
-      console.log('done in post-data', collection.size / options.endAfter.count)
       options.notifications?.emit('progress', {
         post: collection.get(post.id),
         progress: collection.size / options.endAfter.count,
@@ -113,8 +95,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   })
 
   subredditSpider.on('screenshot', async data => {
-    checkRemaining()
-
     const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
     const screenshotPath = `${data.post.id}_${Date.now()}.png`
     await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), data.screenshot)
@@ -123,14 +103,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       ...post,
       screenshotPath,
     })
-
-    if (isPostDone(post.id)) {
-      console.log('done in screenshot', collection.size / options.endAfter.count)
-      options.notifications?.emit('progress', {
-        post: collection.get(post.id),
-        progress: (collection.size * 100) / options.endAfter.count,
-      })
-    }
   })
 
   await subredditSpider.crawl()

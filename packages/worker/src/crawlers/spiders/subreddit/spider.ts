@@ -4,7 +4,7 @@ import type { Comment } from './comment.types.js'
 import type { Post } from './subreddit.types.js'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
 
-export function createSubredditSpider({ page: _page, subreddit: _subreddit }: SubredditSpiderInit) {
+export function createSubredditSpider({ page: _page, subreddit: _subreddit, limit }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
   const queue: Map<string, { post: Post; comments?: Comment[] }> = new Map()
   const page: playwright.Page = _page
@@ -13,6 +13,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
   let crawling = true
   let resolveTask: Function
   let remainingEmptyLoops = 25
+  let count = 0
 
   const eventQueue = new EventEmitter()
 
@@ -66,7 +67,10 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
       const comments: Comment[] = Object.values(data.comments)
 
       eventQueue.emit('post-data', { post, comments })
-
+      ++count
+      if (count === limit) {
+        crawling = false
+      }
       return
     }
 
