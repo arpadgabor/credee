@@ -41,7 +41,7 @@ runs:
       uses: docker/build-push-action@v3
       with:
         context: ${{ inputs.context }}
-        push: false
+        push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         file: ${{ inputs.dockerfile }}
