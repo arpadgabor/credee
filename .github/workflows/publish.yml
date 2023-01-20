@@ -27,7 +27,7 @@ jobs:
         uses: ./.github/actions/docker-build
         with:
           context: .
-          imageTag: credee/api
+          imageTag: arpadgabor/credee-api
           dockerfile: packages/api/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -45,7 +45,7 @@ jobs:
         uses: ./.github/actions/docker-build
         with:
           context: .
-          imageTag: credee/worker
+          imageTag: arpadgabor/credee-worker
           dockerfile: packages/worker/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/docker-build
         with:
           context: .
-          imageTag: credee/www
+          imageTag: arpadgabor/credee-www
           dockerfile: packages/www/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
