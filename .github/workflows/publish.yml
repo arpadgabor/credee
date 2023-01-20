@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
@@ -34,6 +36,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
@@ -49,6 +53,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
