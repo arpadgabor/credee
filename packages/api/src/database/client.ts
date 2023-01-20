@@ -3,16 +3,17 @@ import pg from 'pg'
 import { config } from '../config.js'
 import { Database } from './database.js'
 
+const pool = new pg.Pool({
+  host: config.get('database.host'),
+  database: config.get('database.name'),
+  password: config.get('database.pass'),
+  port: config.get('database.port'),
+  user: config.get('database.user'),
+  connectionTimeoutMillis: 5000,
+})
+
 export const db = new Kysely<Database>({
-  dialect: new PostgresDialect({
-    pool: new pg.Pool({
-      host: config.get('database.host'),
-      database: config.get('database.name'),
-      password: config.get('database.pass'),
-      port: config.get('database.port'),
-      user: config.get('database.user'),
-    }),
-  }),
+  dialect: new PostgresDialect({ pool }),
 })
 
 export function json<T>(obj: T): RawBuilder<T> {

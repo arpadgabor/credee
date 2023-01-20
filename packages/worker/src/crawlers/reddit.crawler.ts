@@ -40,11 +40,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
         return
       }
     }
-
-    // if ('seconds' in options.endAfter && elapsed >= options.endAfter.seconds) {
-    //   stop()
-    //   return
-    // }
   }
 
   const isPostDone = (id: string) => collection.get(id)?.title && collection.get(id)?.screenshotPath

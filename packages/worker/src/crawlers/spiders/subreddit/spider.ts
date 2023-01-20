@@ -25,7 +25,9 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit }: Su
     // handle post with comments
     if (url.includes('postcomments')) {
       const data = await response.json().catch(error => {
-        console.log(error)
+        console.info('This error should be fine, the browser is closing.')
+        console.info(error)
+
         return {}
       })
 

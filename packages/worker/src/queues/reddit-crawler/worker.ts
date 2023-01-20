@@ -15,7 +15,7 @@ export const worker = new Worker<CrawlInput, CrawlOutput>(
     notifications.on('progress', async ({ post, progress }) => {
       await job.updateProgress(progress)
 
-      console.log(`Processing: ${progress}%`)
+      console.log(`Processing: ${progress * 100}%`)
       console.log(`Sending ${post.id}.`)
     })
 

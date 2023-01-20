@@ -34,6 +34,4 @@ export async function migrateToLatest() {
     console.error(error)
     process.exit(1)
   }
-
-  await db.destroy()
 }
