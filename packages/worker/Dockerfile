@@ -1,7 +1,7 @@
 # REMOVE UNUSED PACKAGES
 FROM node:16.19 as init
 
-RUN npm i -g pnpm@7.24.3
+RUN npm i -g pnpm@7.25.1
 RUN npm i -g turbo@1.7
 
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN turbo prune --scope=@credee/worker --docker
 # INSTALLER
 FROM mcr.microsoft.com/playwright:v1.29.0-focal AS installer
 
-RUN npm i -g pnpm@7.24.3
+RUN npm i -g pnpm@7.25.1
 WORKDIR /app
 
 COPY .gitignore .gitignore

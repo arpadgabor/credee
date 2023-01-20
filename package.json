@@ -9,6 +9,7 @@
     "changeset": "changeset",
     "build:api": "docker build -f packages/api/Dockerfile -t credee/api:latest .",
     "build:worker": "docker build -f packages/worker/Dockerfile -t credee/worker:latest .",
+    "build:www": "docker build -f packages/www/Dockerfile -t credee/www:latest .",
     "clean": "rimraf ./**/.turbo ./**/dist ./**/node_modules"
   },
   "devDependencies": {
@@ -41,5 +42,5 @@
   "engines": {
     "node": ">=16.19"
   },
-  "packageManager": "pnpm@7.24.3"
+  "packageManager": "pnpm@7.25.1"
 }

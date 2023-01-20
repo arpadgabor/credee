@@ -7,7 +7,7 @@ RUN npm i -g turbo@1.7
 WORKDIR /app
 COPY . .
 
-RUN turbo prune --scope=@credee/api --docker
+RUN turbo prune --scope=@credee/www --docker
 
 # INSTALLER
 FROM node:16.19 AS installer
@@ -22,13 +22,17 @@ RUN pnpm install
 
 COPY --from=init /app/out/full/ ./
 COPY turbo.json turbo.json
+
+ENV API_URL=/api
 RUN pnpm run build
 
-ENV HOST=0.0.0.0
-ENV PORT=3000
+WORKDIR /app/packages/www
 
-EXPOSE $PORT
+FROM nginx AS server
 
-WORKDIR /app/packages/api
+COPY --from=installer /app/packages/www/dist /usr/share/nginx/html
+COPY --from=installer /app/packages/www/nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD node dist/server.js
+EXPOSE 80
+
+CMD nginx -g "daemon off;"

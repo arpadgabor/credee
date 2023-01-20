@@ -1,7 +1,14 @@
 name: credee-test
 
 services:
-  api:
+  www:
+    image: credee/www:latest
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - '8080:80'
+  backend:
     image: credee/api:latest
     restart: always
     depends_on:
