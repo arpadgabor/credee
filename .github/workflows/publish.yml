@@ -24,8 +24,9 @@ jobs:
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
+          context: .
           imageTag: credee/api
-          context: packages/api
+          dockerfile: packages/api/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -41,8 +42,9 @@ jobs:
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
+          context: .
           imageTag: credee/worker
-          context: packages/worker
+          dockerfile: packages/worker/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -58,8 +60,9 @@ jobs:
       - name: Build and Publish
         uses: ./.github/actions/docker-build
         with:
+          context: .
           imageTag: credee/www
-          context: packages/www
+          dockerfile: packages/www/Dockerfile
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}

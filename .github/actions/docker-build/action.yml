@@ -17,6 +17,9 @@ inputs:
   context:
     description: Docker build context
     required: true
+  dockerfile:
+    description: Dockerfile location, relative to the root
+    required: true
 
 runs:
   using: composite
@@ -41,3 +44,4 @@ runs:
         push: false
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        file: ${{ inputs.dockerfile }}
