@@ -20,21 +20,16 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       viewport: { height: 800, width: 1600 },
     }),
   })
-  await subredditSpider.preparePage([
-    `//button[contains(., 'Accept all')]`,
-    `[href="${options.subreddit}/new/"][role="button"]`,
-  ])
+  await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
 
   let stop: Function
-  const startTime = Date.now()
   const collection = new Map<string, RedditCrawledPost>()
 
   const checkRemaining = () => {
-    const now = Date.now()
-
-    if ('count' in options.endAfter && collection.size >= options.endAfter.count) {
+    if (collection.size >= options.endAfter.count) {
       const posts = Array.from(collection.values())
       const readyPosts = posts.filter(item => item.id && item.screenshotPath)
+
       if (readyPosts.length === options.endAfter.count) {
         stop()
         return
@@ -139,11 +134,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   })
 
   await subredditSpider.crawl()
-  await new Promise(resolve => {
-    stop = resolve
-  })
-
-  await subredditSpider.stop()
   await browser?.close()
   browser = null
 
