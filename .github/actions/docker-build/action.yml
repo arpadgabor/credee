@@ -1,0 +1,43 @@
+name: Docker build & publish
+description: Build docker image and publish to registry
+
+inputs:
+  registry:
+    description: Registry name
+    required: true
+  username:
+    description: Docker username
+    required: true
+  password:
+    description: Docker password
+    required: true
+  imageTag:
+    description: Image tag
+    required: true
+  context:
+    description: Docker build context
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Log in to Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ inputs.registry }}/${{ inputs.imageTag }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ inputs.context }}
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}

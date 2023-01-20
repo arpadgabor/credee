@@ -1,0 +1,59 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    name: Build & Publish API
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Build and Publish
+        uses: ./.github/actions/docker-build
+        with:
+          imageTag: credee/api
+          context: packages/api
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+  worker:
+    runs-on: ubuntu-latest
+    name: Build & Publish Worker
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Build and Publish
+        uses: ./.github/actions/docker-build
+        with:
+          imageTag: credee/worker
+          context: packages/worker
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+  www:
+    runs-on: ubuntu-latest
+    name: Build & Publish Web
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Build and Publish
+        uses: ./.github/actions/docker-build
+        with:
+          imageTag: credee/www
+          context: packages/www
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
