@@ -63,7 +63,7 @@ export const JobsRouter = router({
 
   redditResults: procedure
     .input(getRedditResultsInput)
-    .output(getRedditResultsOutput)
+    // .output(getRedditResultsOutput)
     .query(async ({ input }) => {
       let query = db
         .selectFrom('reddit_posts')
