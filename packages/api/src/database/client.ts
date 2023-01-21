@@ -1,4 +1,4 @@
-import { config } from '@api/config.js'
+import { config } from '../config.js'
 import { Kysely, PostgresDialect, RawBuilder, sql } from 'kysely'
 import pg from 'pg'
 import { Database } from './database.js'

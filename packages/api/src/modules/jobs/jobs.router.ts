@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { procedure, router } from '@api/core/trpc.js'
-import { db } from '@api/database/client.js'
+import { procedure, router } from '../../core/trpc.js'
+import { db } from '../../database/client.js'
 import { getJobsInQueue, queueRedditCrawl } from './jobs.service.js'
 
 const crawlRedditInput = z.object({

@@ -8,5 +8,9 @@
     "moduleResolution": "NodeNext",
     "target": "ESNext",
     "lib": ["ESNext", "DOM"]
+  },
+  "ts-node": {
+    "esm": true,
+    "swc": true
   }
 }

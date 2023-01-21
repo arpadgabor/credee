@@ -5,7 +5,7 @@
   "types": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec \"ts-node --esm\" ./src/server -e ts,js,cjs,mjs",
+    "dev": "nodemon  -e ts,js,cjs,mjs --exec ts-node ./src/server.ts",
     "start": "node dist/server.js",
     "build": "node build.cjs"
   },
@@ -25,10 +25,10 @@
     "zod": "^3.20.2"
   },
   "devDependencies": {
-    "@types/bull": "^4.10.0",
     "@types/convict": "^6.1.1",
     "@types/pg": "^8.6.6",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.3"
+    "esbuild": "^0.17.3",
+    "tsconfig-paths": "^4.1.2"
   }
 }

@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec \"ts-node --esm\" ./src/workers -e ts,js,cjs,mjs",
+    "dev": "nodemon  -e ts,js,cjs,mjs --exec ts-node ./src/workers",
     "start": "node dist/workers.js",
     "build": "node build.cjs",
     "playwright": "playwright"
