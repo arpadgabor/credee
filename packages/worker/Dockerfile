@@ -24,6 +24,7 @@ COPY --from=init /app/out/full/ ./
 COPY turbo.json turbo.json
 RUN pnpm run build
 
+VOLUME /app/packages/worker/screenshots
 WORKDIR /app/packages/worker
 
 CMD node dist/workers.js
