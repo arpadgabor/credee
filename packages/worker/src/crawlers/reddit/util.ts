@@ -2,8 +2,8 @@ import type playwright from 'playwright'
 import type { Post, Comment } from '@credee/shared/reddit/types.js'
 
 export interface EmittedEvents {
-  screenshot: { post: Post; screenshot: Buffer }
-  'post-data': { post: Post; comments: Comment[] }
+  // screenshot: { post: Post; screenshot: Buffer }
+  'post-data': { post: Post; comments: Comment[]; screenshot: Buffer }
   done: void
 }
 

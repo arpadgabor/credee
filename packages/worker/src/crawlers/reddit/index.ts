@@ -23,18 +23,20 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
   const collection = new Map<string, RedditCrawledPost>()
 
-  const isPostDone = (id: string) => collection.get(id)?.title && collection.get(id)?.screenshotPath
-
-  subredditSpider.on('post-data', async ({ post, comments }) => {
+  subredditSpider.on('post-data', async ({ post, comments, screenshot }) => {
     const isSelfPost = post.media.type === 'rtjson'
     const isCrossPost = !!post.crosspostParentId
     const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
     const isImage = post.media.type === 'image'
     const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
 
+    const screenshotPath = `${post.id}_${Date.now()}.png`
+    await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), screenshot)
+
     const result: RedditCrawledPost = {
       id: post.id,
       createdAt: new Date(post.created).toISOString(),
+      screenshotPath,
 
       title: post.title,
       subreddit: options.subreddit,
@@ -82,25 +84,16 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       })),
     }
 
-    const existingPost = collection.get(post.id) ?? ({} as RedditCrawledPost)
-    collection.set(post.id, { ...existingPost, ...result })
+    collection.set(post.id, result)
 
-    if (isPostDone(post.id)) {
-      options.notifications?.emit('progress', {
-        post: collection.get(post.id),
-        progress: collection.size / options.endAfter.count,
-      })
-    }
-  })
+    console.log({
+      count: collection.size,
+      screenshot: screenshotPath,
+    })
 
-  subredditSpider.on('screenshot', async data => {
-    const post = collection.get(data.post.id) ?? ({} as RedditCrawledPost)
-    const screenshotPath = `${data.post.id}_${Date.now()}.png`
-    await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), data.screenshot)
-
-    collection.set(data.post.id, {
-      ...post,
-      screenshotPath,
+    options.notifications?.emit('progress', {
+      post: collection.get(post.id),
+      progress: collection.size / options.endAfter.count,
     })
   })
 

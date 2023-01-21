@@ -5,7 +5,7 @@
   "types": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon  -e ts,js,cjs,mjs --exec ts-node ./src/server.ts",
+    "dev": "tsx watch --clear-screen=false ./src/server.ts",
     "start": "node dist/server.js",
     "build": "node build.cjs"
   },

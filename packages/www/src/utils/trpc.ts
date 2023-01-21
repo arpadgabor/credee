@@ -2,8 +2,8 @@ import type { AppRouter } from '@credee/api'
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
 
-const baseUrl = import.meta.env.API_URL
-
+const baseUrl = import.meta.env.VITE_API_URL
+console.log({ baseUrl })
 export const api = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
   links: [

@@ -16,6 +16,28 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit, limi
 
   const eventQueue = new EventEmitter()
 
+  //#region prepare page
+  async function interceptPostsList() {
+    page.on('response', async function intercept(response) {
+      const url = response.url()
+      if (!url.includes('gateway.reddit.com')) return
+      if (!url.includes('subreddits')) return
+
+      const data = await response.json().catch(error => {
+        console.log(error)
+        return {}
+      })
+
+      if (!('posts' in data)) return
+
+      const posts: Post[] = Object.values(data.posts)
+
+      posts
+        .filter(post => !(post.isSurveyAd || post.isCreatedFromAdsUi || post.isSponsored))
+        .forEach(post => queue.set(post.id, { post }))
+    })
+  }
+
   /**
    * **Loads and prepares the page for crawling.**
    *
@@ -30,7 +52,7 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit, limi
    */
   async function prepare(selectors: (string | ((page: playwright.Page) => Promise<void>))[] = []): Promise<void> {
     await page.goto(`${baseUrl}${subreddit}`)
-    page.on('response', interceptor)
+    await interceptPostsList()
 
     for await (const selector of selectors) {
       if (typeof selector === 'string') {
@@ -43,57 +65,30 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit, limi
       }
     }
   }
+  //#endregion
 
-  /** Intercepts get requests from reddit's API */
-  async function interceptor(response: playwright.Response) {
-    if (!crawling) return
+  async function awaitPostData() {
+    return await new Promise<{ post: Post; comments: Comment[] }>(async (resolve, reject) => {
+      page.on('response', async function intercept(response) {
+        const url = response.url()
+        if (!url.includes('gateway.reddit.com')) return
+        if (!url.includes('postcomments')) return
+        // handle post with comments
+        const data = await response.json()
 
-    const url = response.url()
-    if (!url.includes('gateway.reddit.com')) return
+        if (!('comments' in data)) return reject(new Error('No comments were found.'))
 
-    // handle post with comments
-    if (url.includes('postcomments')) {
-      const data = await response.json().catch(error => {
-        console.info('This error should be fine, the browser is closing.')
-        console.info(error)
+        const [post]: Post[] = Object.values(data.posts)
+        const comments: Comment[] = Object.values(data.comments)
 
-        return {}
+        page.off('response', intercept)
+        resolve({ post, comments })
       })
-
-      if (!('comments' in data)) return
-
-      const [post]: Post[] = Object.values(data.posts)
-      const comments: Comment[] = Object.values(data.comments)
-
-      eventQueue.emit('post-data', { post, comments })
-      ++count
-      if (count === limit) {
-        crawling = false
-      }
-      return
-    }
-
-    // handle subreddit posts
-    if (url.includes('subreddits')) {
-      const data = await response.json().catch(error => {
-        console.log(error)
-        return {}
-      })
-
-      if (!('posts' in data)) return
-
-      const posts: Post[] = Object.values(data.posts)
-      posts.forEach(post => {
-        if (post.isSurveyAd || post.isCreatedFromAdsUi || post.isSponsored) return
-
-        queue.set(post.id, { post })
-        return
-      })
-    }
+    })
   }
 
-  async function scrape(postId: string, post: Post) {
-    const elems = await page.$$(`[id="${post.postId}"]`)
+  async function scrape(postId: string) {
+    const elems = await page.$$(`[id="${postId}"]`)
 
     if (elems.length !== 1) {
       // Probably a cross-post.
@@ -109,13 +104,19 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit, limi
 
     // open post
     // wait until it's loaded, then interceptor is called with the data from the post's comments
-    await postElement.click()
+    postElement.click()
+    const { post, comments } = await awaitPostData()
     await page.waitForSelector(`[id="overlayScrollContainer"]`)
     // close the post
     await page.mouse.click(5, 200, { delay: 250 })
 
-    eventQueue.emit('screenshot', { screenshot, post })
+    eventQueue.emit('post-data', { screenshot, post, comments })
     queue.delete(postId)
+
+    count++
+    if (count === limit) {
+      crawling = false
+    }
   }
 
   async function crawler() {
@@ -131,13 +132,13 @@ export function createSubredditSpider({ page: _page, subreddit: _subreddit, limi
       return
     }
 
-    for await (const [id, { post }] of queue) {
+    for await (const [id] of queue) {
       if (!crawling) {
         resolveTask?.()
         return
       }
 
-      await scrape(id, post)
+      await scrape(id)
     }
 
     remainingEmptyLoops = 25

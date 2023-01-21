@@ -1,8 +1,8 @@
 import { useReddit } from '@credee/shared/reddit/queue.js'
 import { CrawlInput, CrawlOutput } from '@credee/shared/reddit/queue.types.js'
 import { Job } from 'bullmq'
-import { config } from '../../../config.js'
-import { db, json } from '../../../database/client.js'
+import { config } from '@api/config.js'
+import { db, json } from '@api/database/client.js'
 
 const Reddit = useReddit({
   redisConnection: {

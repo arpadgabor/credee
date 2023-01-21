@@ -11,6 +11,9 @@
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "paths": {
+      "@api/*": ["./*"]
+    }
   }
 }
