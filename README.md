@@ -20,5 +20,5 @@ The repository is structured as a **TypeScript** mono-repo, using `pnpm` and `tu
 
 `Turbo` allows us to build all packages in parallel while also building all dependent packages in the right order. You can just run `pnpm build` and all will work magically✨. Additionally, commands for building all docker images are provided with `pnpm build:api`, `pnpm build:www` and `pnpm build:worker`.
 
-> **Info**
+> **Note**
 > The `shared` folder was created for a special purpose. Because we want to keep type-safety various types or utilities are shared, same went for the `Queue` instance of BullMQ. When building the `api` docker image we hit a problem where `playwright` was also installed in the `api` even though it's only used by the `worker`. As such, we moved some dependencies to a `shared` packages so `api` no longer depends on `worker`.
