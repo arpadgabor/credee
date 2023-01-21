@@ -1,6 +1,5 @@
 import type playwright from 'playwright'
-import type { Post } from './subreddit.types.js'
-import type { Comment } from './comment.types.js'
+import type { Post, Comment } from '@credee/shared/reddit/types.js'
 
 export interface EmittedEvents {
   screenshot: { post: Post; screenshot: Buffer }

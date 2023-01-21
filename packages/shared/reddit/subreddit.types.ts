@@ -1,13 +1,13 @@
-import type { RichTextJSONSegment } from './rich-text.js'
+import type { RichTextJSONSegment } from './rich-text.types.js'
 
 export interface SubredditResponse {
-  authorFlair: AuthorFlair
+  authorFlair: Record<string, Record<string, Applied | null>>
   postIds: string[]
   posts: Posts
   profiles: Record<string, unknown>
-  subreddits: Subreddits
+  subreddits: Record<string, SubredditInfo>
   postFlair: PostFlair
-  postInstances: { [key: string]: string[] }
+  postInstances: Record<string, string[]>
   token: string
   dist: number
   account: Account
@@ -101,10 +101,6 @@ export interface Account {
   snoovatarFullBodyAsset: string
   isBlocked: boolean
   suspensionExpirationUtc: null
-}
-
-export interface AuthorFlair {
-  [key: string]: { [key: string]: Applied | null }
 }
 
 export interface Applied {
@@ -278,10 +274,22 @@ export interface Post {
   isOriginalContent: boolean
   contentCategories: null
   isScoreHidden: boolean
-  allAwardings?: AllAwarding[]
+  allAwardings?: Award[]
 }
 
-export interface AllAwarding {
+export interface Media {
+  obfuscated: null
+  content: string
+  type: string
+  width: number
+  height: number | null
+  provider: string
+  richtextContent: RichTextJSONSegment
+  mediaMetadata: unknown
+  rteMode: RTEMode
+}
+
+export interface Award {
   awardType: AwardType
   awardSubType: AwardSubType
   coinPrice: number
@@ -311,76 +319,59 @@ export interface AllAwarding {
   count: number
 }
 
-export enum AwardSubType {
+enum AwardSubType {
   Global = 'GLOBAL',
 }
 
-export enum AwardType {
+enum AwardType {
   Global = 'global',
 }
 
-export interface Preview {
+interface Preview {
   url: string
   width: number | null
   height: number | null
 }
 
-export interface BelongsTo {
+interface BelongsTo {
   id: string
   type: BelongsToType
 }
 
-export enum BelongsToType {
+enum BelongsToType {
   Profile = 'profile',
   Subreddit = 'subreddit',
 }
 
-export interface Gildings {
+interface Gildings {
   gid1: number
   gid2: number
   gid3: number
 }
 
-export interface T37W17SuMedia {
-  richtextContent: RichtextContent
-  rteMode: RTEMode
-}
-
-export interface RichtextContent {
+interface RichtextContent {
   document: Document[]
 }
 
-export interface Document {
+interface Document {
   [key: string]: unknown
 }
 
-export enum RTEMode {
+enum RTEMode {
   Richtext = 'richtext',
 }
 
-export interface Event {
+interface Event {
   url: string
   type: number
 }
 
-export interface Source {
+interface Source {
   displayText: string
   url: string
 }
 
-export interface Media {
-  obfuscated: null
-  content: string
-  type: string
-  width: number
-  height: number | null
-  provider: string
-  richtextContent: RichTextJSONSegment
-  mediaMetadata: unknown
-  rteMode: RTEMode
-}
-
-export interface AllowedPostTypes {
+interface AllowedPostTypes {
   links: boolean
   images: boolean
   videos: boolean
@@ -391,11 +382,7 @@ export interface AllowedPostTypes {
   talks: boolean
 }
 
-export interface Subreddits {
-  [key: string]: SubredditInfo
-}
-
-export interface SubredditInfo {
+interface SubredditInfo {
   id: string
   acceptFollowers: boolean
   allowChatPostCreation: boolean
@@ -419,25 +406,25 @@ export interface SubredditInfo {
   allowTalks: boolean
 }
 
-export interface UserFlair {
+interface UserFlair {
   [key: string]: UserFlairData
 }
 
-export interface UserFlairData {
-  displaySettings: FluffyDisplaySettings
-  permissions: FluffyPermissions
+interface UserFlairData {
+  displaySettings: FlairDisplaySettings
+  permissions: FlairPermissions
   applied: Applied
-  templates: { [key: string]: Template }
+  templates: Record<string, Template>
   templateIds: string[]
 }
 
-export interface FluffyDisplaySettings {
+interface FlairDisplaySettings {
   isUserEnabled: boolean
   isEnabled: boolean
   position: string
 }
 
-export interface FluffyPermissions {
+interface FlairPermissions {
   canUserChange: boolean
   canAssignOwn: boolean
 }

@@ -10,6 +10,7 @@
     "playwright": "playwright"
   },
   "dependencies": {
+    "@credee/shared": "workspace:*",
     "bullmq": "^3.5.9",
     "convict": "^6.2.4",
     "zod": "^3.20.2",

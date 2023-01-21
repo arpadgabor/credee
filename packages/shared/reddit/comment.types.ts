@@ -1,4 +1,4 @@
-import type { RichTextJSONSegment } from './rich-text.js'
+import type { RichTextJSONSegment } from './rich-text.types.js'
 
 export interface Comments {
   comments: Comment[]
@@ -44,25 +44,13 @@ export interface Comment {
   profileOver18?: boolean
 }
 
-export interface Media {
+interface Media {
   richtextContent: RichTextJSONSegment
-  type: MediaType
-  rteMode: RTEMode
+  type: 'rtjson'
+  rteMode: 'richtext'
 }
 
-export enum RTEMode {
-  Richtext = 'richtext',
-}
-
-export enum MediaType {
-  Rtjson = 'rtjson',
-}
-
-export interface Next {
+interface Next {
   id: string
-  type: NextType
-}
-
-export enum NextType {
-  Comment = 'comment',
+  type: 'comment'
 }

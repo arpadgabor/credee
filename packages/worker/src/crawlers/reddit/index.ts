@@ -1,9 +1,8 @@
 import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
 import playwright from 'playwright'
-
-import type { RedditCrawledPost, RedditCrawlerOptions } from './reddit.crawler.types.js'
-import { createSubredditSpider } from './spiders/subreddit/index.js'
+import { createSubredditSpider } from './spider.js'
+import type { RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
 
 let browser: playwright.Browser | null = null
 export async function crawlReddit(options: RedditCrawlerOptions) {

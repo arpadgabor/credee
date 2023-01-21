@@ -1,11 +1,15 @@
-import { EventEmitter } from 'node:events'
+import { useReddit } from '@credee/shared/reddit/queue.js'
+import type { CrawlInput, CrawlOutput } from '@credee/shared/reddit/types.js'
 import { Worker } from 'bullmq'
-import { CrawlInput, CrawlOutput } from './types.js'
-import { crawlReddit } from '../../crawlers/index.js'
-import { queueName } from './constants.js'
-import { redisConnection } from '../../redis.js'
+import { EventEmitter } from 'node:events'
+import { crawlReddit } from '../crawlers/index.js'
+import { redisConnection } from '../redis.js'
 
 const notifications = new EventEmitter()
+
+const { queueName } = useReddit({
+  redisConnection,
+})
 
 export const worker = new Worker<CrawlInput, CrawlOutput>(
   queueName,

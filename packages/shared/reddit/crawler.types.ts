@@ -1,5 +1,6 @@
-import type { EventEmitter } from 'events'
-import { Media, RichTextJSONSegment } from './spiders/subreddit/index.js'
+import type { EventEmitter } from 'node:events'
+import { RichTextJSONSegment } from './rich-text.types.js'
+import { Media } from './subreddit.types.js'
 
 export interface RedditCrawledPost {
   id: string

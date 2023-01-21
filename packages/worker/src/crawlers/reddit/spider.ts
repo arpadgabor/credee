@@ -1,7 +1,6 @@
 import { EventEmitter } from 'node:events'
 import playwright from 'playwright'
-import type { Comment } from './comment.types.js'
-import type { Post } from './subreddit.types.js'
+import type { Post, Comment } from '@credee/shared/reddit/types.js'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
 
 export function createSubredditSpider({ page: _page, subreddit: _subreddit, limit }: SubredditSpiderInit) {

@@ -2,14 +2,11 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "paths": {
-      "@api/*": ["./*"]
-    }
+    "lib": ["ESNext", "DOM"]
   }
 }

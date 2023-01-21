@@ -1,43 +1,4 @@
-// import testJson from './rich-text-test.json' assert { type: 'json' }
-
-enum TextStyle {
-  None = 0, // added by us
-  Bold = 1,
-  Italic = 2,
-  BoldItalic = 3,
-  // striketrough, spoiler, underline, sub/superscript
-  Code = 64,
-}
-type StartIndex = number
-type Length = number
-
-export interface RichTextJSONSegment {
-  e:
-    | 'text'
-    | 'spoilertext'
-    | 'raw'
-    | 'link'
-    | 'img'
-    | 'blockquote'
-    | 'par'
-    | 'h'
-    | 'list'
-    | 'li'
-    | 'code'
-    | 'u/'
-    | 'r/'
-    | 'hr'
-    | 'table'
-  o?: boolean
-  l?: number
-  id?: string
-  t?: string
-  f?: Array<[TextStyle, StartIndex, Length]>
-  c?: RichTextJSONSegment[]
-  u?: string
-  h?: RichTextJSONSegment[]
-  a?: 'C'
-}
+import { RichTextJSONSegment, TextStyle } from '@credee/shared/reddit/types.js'
 
 export function richTextToHtml(docs: RichTextJSONSegment[], rawElem?: string): string {
   return docs

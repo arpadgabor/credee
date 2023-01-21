@@ -1,1 +1,1 @@
-export { crawlReddit } from './reddit.crawler.js'
+export { crawlReddit } from './reddit/index.js'

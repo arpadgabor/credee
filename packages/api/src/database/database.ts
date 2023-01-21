@@ -1,5 +1,5 @@
-import { Generated } from 'kysely'
-import type { RichTextJSONSegment, Media } from '@credee/worker/src/crawlers/spiders/subreddit/index.js'
+import type { Generated } from 'kysely'
+import type { RichTextJSONSegment, Media } from '@credee/shared/reddit/types.js'
 
 export interface RedditPost {
   id: Generated<number>

@@ -1,0 +1,11 @@
+{
+  "name": "@credee/shared",
+  "version": "0.1.0",
+  "main": "src",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bull": "^4.10.0"
+  }
+}

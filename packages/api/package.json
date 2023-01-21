@@ -10,7 +10,7 @@
     "build": "node build.cjs"
   },
   "dependencies": {
-    "@credee/worker": "workspace:*",
+    "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.0",
     "@trpc/server": "^10.9.0",
     "bullmq": "^3.5.9",

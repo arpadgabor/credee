@@ -30,7 +30,7 @@ importers:
 
   packages/api:
     specifiers:
-      '@credee/worker': workspace:*
+      '@credee/shared': workspace:*
       '@fastify/cors': ^8.2.0
       '@trpc/server': ^10.9.0
       '@types/bull': ^4.10.0
@@ -49,7 +49,7 @@ importers:
       wink-nlp: ^1.13.0
       zod: ^3.20.2
     dependencies:
-      '@credee/worker': link:../worker
+      '@credee/shared': link:../shared
       '@fastify/cors': 8.2.0
       '@trpc/server': 10.9.0
       bullmq: 3.5.9
@@ -69,8 +69,15 @@ importers:
       dotenv: 16.0.3
       esbuild: 0.17.3
 
+  packages/shared:
+    specifiers:
+      '@types/bull': ^4.10.0
+    devDependencies:
+      '@types/bull': 4.10.0
+
   packages/worker:
     specifiers:
+      '@credee/shared': workspace:*
       '@types/bull': ^4.10.0
       '@types/convict': ^6.1.1
       bullmq: ^3.5.9
@@ -80,6 +87,7 @@ importers:
       playwright: ^1.29.2
       zod: ^3.20.2
     dependencies:
+      '@credee/shared': link:../shared
       bullmq: 3.5.9
       convict: 6.2.4
       playwright: 1.29.2
