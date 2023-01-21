@@ -28,7 +28,7 @@ RUN pnpm run build
 
 WORKDIR /app/packages/www
 
-FROM nginx AS server
+FROM nginx:alpine AS server
 
 COPY --from=installer /app/packages/www/dist /usr/share/nginx/html
 COPY --from=installer /app/packages/www/nginx.conf /etc/nginx/conf.d/default.conf

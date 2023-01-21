@@ -10,7 +10,7 @@ COPY . .
 RUN turbo prune --scope=@credee/api --docker
 
 # INSTALLER
-FROM node:16.19 AS installer
+FROM node:16.19-slim AS installer
 
 RUN npm i -g pnpm@7.25.1
 WORKDIR /app
