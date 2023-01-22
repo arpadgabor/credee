@@ -87,7 +87,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
         if (!url.includes('gateway.reddit.com')) return
         if (!url.includes('postcomments')) return
         // handle post with comments
-        const data = await response.json().catch()
+        const data = await response.json().catch(() => null)
 
         if (!('comments' in data)) return reject(new Error('No comments were found.'))
 
