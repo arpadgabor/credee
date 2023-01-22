@@ -14,6 +14,7 @@ const styles = cva('w-full', {
     },
   },
 })
+
 type TableVariants = VariantProps<typeof styles>
 
 interface DataTableProps<T extends unknown> extends TableVariants {

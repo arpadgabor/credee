@@ -2,7 +2,6 @@ import { EventEmitter } from 'node:events'
 import playwright, { Response } from 'playwright'
 import type { Post, Comment } from '@credee/shared/reddit/types.js'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
-import { nullable } from 'zod'
 
 export function createSubredditCrawler({ page: _page, subreddit: _subreddit, limit }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
@@ -34,6 +33,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
         : json?.data?.subredditInfoByName?.elements?.edges?.map(edge => edge?.node)
 
       if (!posts) return
+      if (posts.length === 1) return
 
       posts
         .filter(post => !(post?.isSurveyAd || post?.isCreatedFromAdsUi || post?.isSponsored) && post?.title)
@@ -61,7 +61,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
    * ])
    */
   async function prepare(selectors: (string | ((page: playwright.Page) => Promise<void>))[] = []): Promise<void> {
-    await page.goto(`${baseUrl}${subreddit}`)
+    await page.goto(`${baseUrl}${subreddit}/top`)
     await interceptPostsList()
 
     for await (const selector of selectors) {
@@ -82,10 +82,12 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
       let done = false
       async function intercept(response: Response) {
         const url = response.url()
+        // console.log(url)
+
         if (!url.includes('gateway.reddit.com')) return
         if (!url.includes('postcomments')) return
         // handle post with comments
-        const data = await response.json()
+        const data = await response.json().catch()
 
         if (!('comments' in data)) return reject(new Error('No comments were found.'))
 
@@ -99,6 +101,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
 
       page.on('response', intercept)
       setTimeout(() => {
+        page.off('response', intercept)
         if (!done) reject()
       }, 10 * 1000)
     })
@@ -138,9 +141,14 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     // open post
     // wait until it's loaded, then interceptor is called with the data from the post's comments
     console.info(`SCRAPE ${postId}: Opening post`)
-    postElement.click()
+    await postElement.click().catch(error => {
+      console.error(error)
+    })
+
+    const waitPostData = awaitPostData()
     console.info(`SCRAPE ${postId}: Waiting for data`)
-    const { post, comments } = await awaitPostData().catch(() => ({ post: null, comments: null }))
+    const { post, comments } = await waitPostData.catch(() => ({ post: null, comments: null }))
+
     if (!post || !comments) {
       console.info(`SCRAPE ${postId}: No data for ${queue.get(postId).post.title}`)
       queue.delete(postId)
@@ -198,5 +206,6 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     prepare,
     crawl,
     on: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.on(key, cb),
+    off: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.off(key, cb),
   }
 }

@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { createSubredditCrawler } from './crawler.js'
-import type { RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
+import type { Comment, Post, RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
 import { browser } from '../browser.js'
 
 export async function crawlReddit(options: RedditCrawlerOptions) {
@@ -14,10 +14,11 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     page: await context.newPage(),
     limit: options.endAfter.count || 5,
   })
-  await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
-  const collection = new Map<string, RedditCrawledPost>()
 
-  subredditSpider.on('post-data', async ({ post, comments, screenshot }) => {
+  await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
+  const collection: RedditCrawledPost[] = []
+
+  async function handlePostData({ post, comments, screenshot }: { post: Post; comments: Comment[]; screenshot: Buffer }) {
     const isSelfPost = post.media.type === 'rtjson'
     const isCrossPost = !!post.crosspostParentId
     const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
@@ -78,16 +79,20 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       })),
     }
 
-    collection.set(post.id, result)
+    collection.push(result)
 
     options.notifications?.emit('progress', {
-      post: collection.get(post.id),
-      progress: collection.size,
+      // post: collection.get(post.id),
+      progress: collection.length,
     })
-  })
+  }
+
+  subredditSpider.on('post-data', handlePostData)
 
   await subredditSpider.crawl()
   await context?.close()
+
+  subredditSpider.off('post-data', handlePostData)
 
   return Array.from(collection.values()).filter(post => post.id && post.screenshotPath)
 }
