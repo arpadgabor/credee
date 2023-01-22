@@ -38,6 +38,7 @@ const OverviewLayout: Component = () => {
           <NavGroupHeader>Reddit</NavGroupHeader>
           <NavLink href='/dashboard/reddit/jobs'>Crawl Jobs</NavLink>
           <NavLink href='/dashboard/reddit/dataset'>Dataset</NavLink>
+          <NavLink href='/dashboard/reddit/detailed'>Detailed data</NavLink>
         </nav>
       </aside>
 

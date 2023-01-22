@@ -1,3 +1,4 @@
+import { sql } from 'kysely'
 import { db } from '../../database/client.js'
 import type { RedditPost } from '../../database/database.js'
 interface RedditListOptions {
@@ -39,4 +40,21 @@ export async function list({ limit, offset, order }: RedditListOptions = { limit
   ])
 
   return { data, count: count?.count }
+}
+
+export async function groupById({}) {
+  return await db
+    .selectFrom('reddit_posts')
+    .groupBy(['post_id', 'title', 'flair'])
+    .select([
+      'post_id',
+      'title',
+      'flair',
+      eb => sql`max(${eb.ref('inserted_at')})`.as('inserted_at'),
+      eb => sql`max(${eb.ref('score')})`.as('score'),
+      eb => sql`max(${eb.ref('gold_count')})`.as('gold_count'),
+      eb => sql`count(${eb.ref('post_id')})`.as('scrape_count'),
+    ])
+    .orderBy('inserted_at', 'desc')
+    .execute()
 }

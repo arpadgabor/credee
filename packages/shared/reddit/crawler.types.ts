@@ -12,6 +12,7 @@ export interface RedditCrawledPost {
   subreddit: string
   author: string
   permalink: string
+  flair?: string
 
   domain: string
   url: string

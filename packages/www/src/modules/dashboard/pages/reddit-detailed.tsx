@@ -13,21 +13,21 @@ const Page: Component = () => {
     pageSize: 15,
   })
 
-  const results = createQuery(() => ['results_reddit', pagination, sorting], {
+  const results = createQuery(() => ['detailed_reddit', pagination, sorting], {
     keepPreviousData: true,
     initialData: {
       meta: { count: 0 },
       data: [],
     },
     queryFn: () => {
-      return api.jobs.redditResults.query({
-        limit: pagination.pageSize,
-        offset: pagination.pageIndex * pagination.pageSize,
-        order: sorting?.map(({ id, desc }) => ({
-          column: id as any,
-          sort: desc ? 'desc' : 'asc',
-        })),
-      })
+      return api.jobs.redditByPostId.query()
+      // limit: pagination.pageSize,
+      // offset: pagination.pageIndex * pagination.pageSize,
+      // order: sorting?.map(({ id, desc }) => ({
+      //   column: id as any,
+      //   sort: desc ? 'desc' : 'asc',
+      // })),
+      // })
     },
   })
 
@@ -35,38 +35,38 @@ const Page: Component = () => {
 
   const col = createColumnHelper<Result>()
   const columns = [
+    col.accessor('post_id', {
+      header: 'Post id',
+      cell: StringCell,
+      size: 64,
+    }),
     col.accessor('title', {
-      header: 'Post',
-      cell: cell => {
-        const row = cell.row.original
-        return (
-          <RedditPostInfoCell
-            author={row.author}
-            permalink={row.permalink}
-            postId={row.post_id}
-            subreddit={row.subreddit}
-            title={cell.getValue()}
-            createdAt={row.created_at}
-            screenshotFilename={row.screenshot_filename}
-          />
-        )
-      },
-      size: Infinity,
+      header: 'Title',
+      cell: StringCell,
+      size: 512,
     }),
     col.accessor('score', {
       header: 'Score',
       cell: StringCell,
+      size: 64,
     }),
-    col.accessor('ratio', {
-      header: 'Ratio',
+    col.accessor('flair', {
+      header: 'Flair',
       cell: StringCell,
+      size: 64,
     }),
-    col.accessor('nr_of_comments', {
-      header: 'Comments',
+    col.accessor('gold_count', {
+      header: 'Award count',
       cell: StringCell,
+      size: 64,
+    }),
+    col.accessor('scrape_count', {
+      header: 'Scrape count',
+      cell: StringCell,
+      size: 64,
     }),
     col.accessor('inserted_at', {
-      header: 'Inserted',
+      header: 'Last scrape',
       cell: DateCell,
     }),
   ]
@@ -76,29 +76,29 @@ const Page: Component = () => {
     get data() {
       return results.data?.data
     },
-    state: {
-      get pagination() {
-        return pagination
-      },
-      get sorting() {
-        return sorting
-      },
-    },
-    manualPagination: true,
+    // state: {
+    //   get pagination() {
+    //     return pagination
+    //   },
+    //   get sorting() {
+    //     return sorting
+    //   },
+    // },
+    // manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    get pageCount() {
-      return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
-    },
+    // onPaginationChange: setPagination,
+    // onSortingChange: setSorting,
+    // get pageCount() {
+    //   return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
+    // },
   })
 
   return (
     <section class='max-w-full'>
       <PageHeader
-        title='Dataset'
-        description='This page contains the original dataset, all data that is scraped in a cut-down format, but no aggregation.'
+        title='Detailed data'
+        description='This page contains aggregated data of the dataset. The posts are grouped by their ID.'
       />
       <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' />
     </section>

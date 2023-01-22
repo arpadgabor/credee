@@ -14,6 +14,10 @@ export const OverviewRoutes: RouteDefinition[] = [
         path: '/reddit/dataset',
         component: lazy(() => import('./pages/reddit-dataset')),
       },
+      {
+        path: '/reddit/detailed',
+        component: lazy(() => import('./pages/reddit-detailed')),
+      },
     ],
   },
 ]

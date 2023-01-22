@@ -37,6 +37,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       subreddit: options.subreddit,
       author: post.author,
       permalink: post.permalink,
+      flair: post?.flair?.[0]?.text,
 
       score: post.score,
       ratio: post.upvoteRatio,

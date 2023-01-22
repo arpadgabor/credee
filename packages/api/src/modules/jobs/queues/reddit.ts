@@ -38,6 +38,7 @@ Reddit.queueEvents.on('completed', async ({ jobId }, id) => {
           permalink: post.permalink,
           author: post.author,
           subreddit: job.data.subreddit,
+          flair: post.flair,
 
           nr_of_comments: post.nrOfComments,
           comments_raw: json(post.comments),

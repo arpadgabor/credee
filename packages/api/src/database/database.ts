@@ -12,6 +12,7 @@ export interface RedditPost {
   subreddit: string
   author: string
   permalink: string
+  flair?: string
 
   domain: string
   url: string

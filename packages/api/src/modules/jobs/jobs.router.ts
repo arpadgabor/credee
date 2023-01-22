@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { db } from '../../database/client.js'
 import { getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
-import { list } from './reddit.service.js'
+import { groupById, list } from './reddit.service.js'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),
@@ -38,6 +38,20 @@ export const JobsRouter = router({
     })
   }),
 
+  list: procedure.query(async () => {
+    return await getJobsInQueue()
+  }),
+
+  remove: procedure
+    .input(
+      z.object({
+        jobId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await removeJob(input.jobId)
+    }),
+
   redditResults: procedure
     .input(getRedditResultsInput)
     .output(z.any())
@@ -56,17 +70,12 @@ export const JobsRouter = router({
       }
     }),
 
-  list: procedure.query(async () => {
-    return await getJobsInQueue()
-  }),
+  redditByPostId: procedure.query(async () => {
+    const result = await groupById({})
 
-  remove: procedure
-    .input(
-      z.object({
-        jobId: z.string(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      await removeJob(input.jobId)
-    }),
+    return {
+      data: result,
+      meta: {},
+    }
+  }),
 })

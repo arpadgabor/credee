@@ -7,7 +7,7 @@ import {
   getPaginationRowModel,
 } from '@tanstack/solid-table'
 import { Component, Switch, Match } from 'solid-js'
-import { Button, DataTable, DateCell, FormRow, Input, StringCell } from '../../../components/ui'
+import { Button, DataTable, DateCell, FormRow, Input, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { createForm, Form, Field, required } from '@modular-forms/solid'
 
@@ -148,6 +148,10 @@ const Overview: Component = () => {
 
   return (
     <div>
+      <PageHeader
+        title='Crawl jobs'
+        description='Here you can add a new crawl job for a subreddit. The scraped data will be available after completed on the Dataset page.'
+      />
       <div class='flex justify-between items-center'>
         <Form of={jobForm} onSubmit={onSubmit} class='flex space-x-4 mb-4'>
           <FormRow>
