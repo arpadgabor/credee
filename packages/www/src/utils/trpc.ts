@@ -3,7 +3,9 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
 
 const baseUrl = import.meta.env.VITE_API_URL
-console.log({ baseUrl })
+
+export const uploadsPath = (name: string) => `${baseUrl}/uploads/${name}`
+
 export const api = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
   links: [

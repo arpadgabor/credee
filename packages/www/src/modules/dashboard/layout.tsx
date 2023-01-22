@@ -1,8 +1,9 @@
 import { A, Outlet } from '@solidjs/router'
 import { cva } from 'class-variance-authority'
-import { Component } from 'solid-js'
+import { children, Component, ParentComponent } from 'solid-js'
 
-const NavLink: Component<{ href: string; label: string }> = props => {
+const NavLink: ParentComponent<{ href: string }> = props => {
+  const slot = children(() => props.children)
   const linkClass = cva([
     'w-full py-3 px-3',
     'font-semibold text-gray-500',
@@ -13,9 +14,16 @@ const NavLink: Component<{ href: string; label: string }> = props => {
 
   return (
     <A href={props.href} end activeClass={activeClass()} class={linkClass()}>
-      {props.label}
+      {slot()}
     </A>
   )
+}
+
+const NavGroupHeader: ParentComponent = props => {
+  const slot = children(() => props.children)
+  const linkClass = cva(['w-full py-1 px-3', 'font-semibold uppercase text-sm text-gray-400'])
+
+  return <h2 class={linkClass()}>{slot()}</h2>
 }
 
 const OverviewLayout: Component = () => {
@@ -26,9 +34,10 @@ const OverviewLayout: Component = () => {
           <h1 class='font-bold text-2xl text-blue-700'>Credee</h1>
         </div>
 
-        <nav class='flex flex-col space-y-2 px-4 py-4'>
-          <NavLink href='/overview' label='Crawl Tasks' />
-          <NavLink href='/overview/results/reddit' label='Results from Reddit' />
+        <nav class='flex flex-col px-4 py-4'>
+          <NavGroupHeader>Reddit</NavGroupHeader>
+          <NavLink href='/dashboard/reddit/jobs'>Crawl Jobs</NavLink>
+          <NavLink href='/dashboard/reddit/dataset'>Dataset</NavLink>
         </nav>
       </aside>
 

@@ -1,6 +1,6 @@
 import { RouteDefinition } from '@solidjs/router'
 import { lazy } from 'solid-js'
-import { OverviewRoutes } from './modules/overview'
+import { OverviewRoutes } from './modules/dashboard'
 
 export const routes: RouteDefinition[] = [
   ...OverviewRoutes,

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { db } from '../../database/client.js'
 import { getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
+import { list } from './reddit.service.js'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),
@@ -41,40 +42,16 @@ export const JobsRouter = router({
     .input(getRedditResultsInput)
     .output(z.any())
     .query(async ({ input }) => {
-      let query = db
-        .selectFrom('reddit_posts')
-        .select([
-          'id',
-          'post_id',
-          'title',
-          'author',
-          'subreddit',
-          'created_at',
-          'inserted_at',
-          'score',
-          'ratio',
-          'nr_of_comments',
-          'permalink',
-          'domain',
-          'url',
-          'url_title',
-        ])
-        .limit(input?.limit ?? 10)
-        .offset(input?.offset ?? 0)
-
-      input?.order?.forEach(order => {
-        query = query.orderBy(order.column as any, order.sort)
+      const { data, count } = await list({
+        limit: input.limit,
+        offset: input.offset,
+        order: input.order as any,
       })
-
-      const [data, count] = await Promise.all([
-        query.execute(),
-        db.selectFrom('reddit_posts').select(db.fn.count<number>('id').as('count')).executeTakeFirst(),
-      ])
 
       return {
         data,
         meta: {
-          count: Number(count!.count) || 0,
+          count: count || 0,
         },
       }
     }),
