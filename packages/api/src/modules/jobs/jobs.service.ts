@@ -12,9 +12,13 @@ export async function getJobsInQueue() {
       createdAt: job.timestamp,
       startedAt: job.processedOn,
       completedAt: job.finishedOn,
-      progress: job.progress,
+      progress: `${job.progress}/${job.data.stopsAfterCount}`,
     }))
   )
+}
+
+export async function removeJob(jobId: string) {
+  await Reddit.queue.remove(jobId)
 }
 
 export async function queueRedditCrawl(data: CrawlInput) {

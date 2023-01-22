@@ -1,23 +1,17 @@
 import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
-import playwright from 'playwright'
-import { createSubredditSpider } from './spider.js'
+import { createSubredditCrawler } from './crawler.js'
 import type { RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
+import { browser } from '../browser.js'
 
-let browser: playwright.Browser | null = null
 export async function crawlReddit(options: RedditCrawlerOptions) {
-  browser =
-    browser ??
-    (await playwright.chromium.launch({
-      headless: true,
-      args: ['--blink-settings=mainFrameClipsContent=false'],
-    }))
+  const context = await browser.newContext({
+    viewport: { height: 800, width: 1600 },
+  })
 
-  const subredditSpider = createSubredditSpider({
+  const subredditSpider = createSubredditCrawler({
     subreddit: options.subreddit,
-    page: await browser.newPage({
-      viewport: { height: 800, width: 1600 },
-    }),
+    page: await context.newPage(),
     limit: options.endAfter.count || 5,
   })
   await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
@@ -86,29 +80,14 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     collection.set(post.id, result)
 
-    console.log({
-      count: collection.size,
-      screenshot: screenshotPath,
-    })
-
     options.notifications?.emit('progress', {
       post: collection.get(post.id),
-      progress: collection.size / options.endAfter.count,
+      progress: collection.size,
     })
   })
 
   await subredditSpider.crawl()
-  await browser?.close()
-  browser = null
+  await context?.close()
 
   return Array.from(collection.values()).filter(post => post.id && post.screenshotPath)
 }
-
-async function cleanup() {
-  console.log('Closing browser...')
-  await browser?.close()
-  process.exit(1)
-}
-
-process.on('SIGINT', cleanup)
-process.on('SIGTERM', cleanup)

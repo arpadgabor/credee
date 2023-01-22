@@ -29,15 +29,15 @@ function TableHeaderCell<T>(header: Header<T, unknown>) {
     header.column.getCanSort() ? 'cursor-pointer' : '',
   ])
   return (
-    <th
-      class={style()}
-      style={{ width: `${header.column.getSize()}px` }}
-      onClick={header.column.getToggleSortingHandler()}
-    >
+    <th class={style()} style={{ width: `${header.column.getSize()}px` }} onClick={header.column.getToggleSortingHandler()}>
       <div class='flex'>
         {flexRender(header.column.columnDef.header, header.getContext())}
-        <Show when={header.column.getIsSorted() === 'desc'}><PhArrowDown /></Show>
-        <Show when={header.column.getIsSorted() === 'asc'}><PhArrowUp /></Show>
+        <Show when={header.column.getIsSorted() === 'desc'}>
+          <PhArrowDown />
+        </Show>
+        <Show when={header.column.getIsSorted() === 'asc'}>
+          <PhArrowUp />
+        </Show>
       </div>
     </th>
   )
@@ -50,8 +50,10 @@ function TableHeaderGroup<T>(headerGroup: HeaderGroup<T>) {
   )
 }
 function TableCell<T>(cell: Cell<T, unknown>) {
+  // @ts-ignore
+  const noStyle: boolean = cell.column.columnDef.meta?.noStyle
   return (
-    <td class='py-3 px-3' style={{ width: `${cell.column.getSize()}px` }}>
+    <td class={noStyle ? '' : 'py-3 px-3'} style={{ width: `${cell.column.getSize()}px` }}>
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </td>
   )

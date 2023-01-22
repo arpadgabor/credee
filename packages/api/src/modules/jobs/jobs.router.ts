@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { procedure, router } from '@api/core/trpc.js'
-import { db } from '@api/database/client.js'
-import { getJobsInQueue, queueRedditCrawl } from './jobs.service.js'
+import { procedure, router } from '../../core/trpc.js'
+import { db } from '../../database/client.js'
+import { getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),
@@ -37,46 +37,59 @@ export const JobsRouter = router({
     })
   }),
 
-  redditResults: procedure.input(getRedditResultsInput).query(async ({ input }) => {
-    let query = db
-      .selectFrom('reddit_posts')
-      .select([
-        'id',
-        'post_id',
-        'title',
-        'author',
-        'subreddit',
-        'created_at',
-        'inserted_at',
-        'score',
-        'ratio',
-        'nr_of_comments',
-        'permalink',
-        'domain',
-        'url',
-        'url_title',
+  redditResults: procedure
+    .input(getRedditResultsInput)
+    .output(z.any())
+    .query(async ({ input }) => {
+      let query = db
+        .selectFrom('reddit_posts')
+        .select([
+          'id',
+          'post_id',
+          'title',
+          'author',
+          'subreddit',
+          'created_at',
+          'inserted_at',
+          'score',
+          'ratio',
+          'nr_of_comments',
+          'permalink',
+          'domain',
+          'url',
+          'url_title',
+        ])
+        .limit(input?.limit ?? 10)
+        .offset(input?.offset ?? 0)
+
+      input?.order?.forEach(order => {
+        query = query.orderBy(order.column as any, order.sort)
+      })
+
+      const [data, count] = await Promise.all([
+        query.execute(),
+        db.selectFrom('reddit_posts').select(db.fn.count<number>('id').as('count')).executeTakeFirst(),
       ])
-      .limit(input?.limit ?? 10)
-      .offset(input?.offset ?? 0)
 
-    input?.order?.forEach(order => {
-      query = query.orderBy(order.column as any, order.sort)
-    })
-
-    const [data, count] = await Promise.all([
-      query.execute(),
-      db.selectFrom('reddit_posts').select(db.fn.count<number>('id').as('count')).executeTakeFirst(),
-    ])
-
-    return {
-      data,
-      meta: {
-        count: Number(count!.count) || 0,
-      },
-    }
-  }),
+      return {
+        data,
+        meta: {
+          count: Number(count!.count) || 0,
+        },
+      }
+    }),
 
   list: procedure.query(async () => {
     return await getJobsInQueue()
   }),
+
+  remove: procedure
+    .input(
+      z.object({
+        jobId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await removeJob(input.jobId)
+    }),
 })

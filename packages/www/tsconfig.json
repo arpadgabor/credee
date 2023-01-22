@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",
@@ -13,5 +12,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "lib": ["DOM", "ESNext"]
-  }
+  },
+  "exclude": ["node_modules"],
+  "include": [".", "../api"]
 }

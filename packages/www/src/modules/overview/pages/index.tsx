@@ -38,11 +38,22 @@ const Overview: Component = () => {
     }
   )
 
+  const remove = createMutation(
+    async (input: { jobId: string }) => {
+      return await api.jobs.remove.mutate(input)
+    },
+    {
+      onSuccess() {
+        jobs.refetch()
+      },
+    }
+  )
+
   async function onSubmit(values: JobForm) {
     await crawl.mutateAsync(values)
   }
 
-  type Job = NonNullable<typeof jobs['data']>[number]
+  type Job = NonNullable<(typeof jobs)['data']>[number]
 
   const col = createColumnHelper<Job>()
   const table = createSolidTable<Job>({
@@ -73,7 +84,21 @@ const Overview: Component = () => {
       }),
       col.accessor('progress', {
         header: 'Progress',
-        cell: StringCell,
+        cell: cell => {
+          const [done, total] = cell.getValue().split('/')
+
+          return (
+            <div class='flex items-center'>
+              {cell.getValue()}
+              <div class='h-2 w-full rounded relative bg-gray-100'>
+                <div
+                  class='absolute left-0 h-full rounded bg-green-500'
+                  style={{ width: `${(Number(done) / Number(total)) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+          )
+        },
       }),
       col.accessor('createdAt', {
         header: 'Created at',
@@ -86,6 +111,26 @@ const Overview: Component = () => {
       col.accessor('completedAt', {
         header: 'Completed at',
         cell: DateCell,
+      }),
+      col.display({
+        id: 'actions',
+        header: '',
+        meta: {
+          noStyle: true,
+        },
+        cell: cell => {
+          return (
+            <div>
+              <Button
+                size='sm'
+                onClick={() => remove.mutateAsync({ jobId: cell.row.original.id! })}
+                disabled={remove.isLoading}
+              >
+                Remove
+              </Button>
+            </div>
+          )
+        },
       }),
     ],
     getCoreRowModel: getCoreRowModel(),
