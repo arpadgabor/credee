@@ -1,7 +1,7 @@
 import playwright from 'playwright'
 
 export const browser = await playwright.chromium.launch({
-  headless: false,
+  headless: true,
   args: ['--blink-settings=mainFrameClipsContent=false'],
 })
 

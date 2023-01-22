@@ -29,6 +29,7 @@ ENV PORT=3000
 
 EXPOSE $PORT
 
+VOLUME /app/packages/api/uploads
 WORKDIR /app/packages/api
 
 CMD node dist/server.js
