@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "@credee/shared": "workspace:*",
-    "bullmq": "^3.5.9",
+    "bullmq": "^3.5.11",
     "convict": "^6.2.4",
-    "zod": "^3.20.2",
-    "playwright": "^1.29.2"
+    "playwright": "^1.30.0",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@types/bull": "^4.10.0",
     "@types/convict": "^6.1.1",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.3"
+    "esbuild": "^0.17.5"
   }
 }

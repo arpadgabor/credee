@@ -86,7 +86,7 @@ const Page: Component = () => {
     // },
     // manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    // getSortedRowModel: getSortedRowModel(),
     // onPaginationChange: setPagination,
     // onSortingChange: setSorting,
     // get pageCount() {
@@ -100,7 +100,7 @@ const Page: Component = () => {
         title='Detailed data'
         description='This page contains aggregated data of the dataset. The posts are grouped by their ID.'
       />
-      <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' />
+      <DataTable table={table} loading={results.isLoading} error={results.isError} />
     </section>
   )
 }

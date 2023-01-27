@@ -12,15 +12,15 @@
   "dependencies": {
     "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.0",
-    "@fastify/static": "^6.6.1",
+    "@fastify/static": "^6.7.0",
     "@trpc/server": "^10.9.0",
-    "bullmq": "^3.5.9",
+    "bullmq": "^3.5.11",
     "convict": "^6.2.4",
-    "fastify": "^4.11.0",
+    "fastify": "^4.12.0",
     "kysely": "^0.23.4",
-    "pg": "^8.8.0",
+    "pg": "^8.9.0",
     "pino-pretty": "^9.1.1",
-    "redis": "^4.5.1",
+    "redis": "^4.6.2",
     "superjson": "^1.12.2",
     "wink-eng-lite-web-model": "^1.4.3",
     "wink-nlp": "^1.13.0",
@@ -30,7 +30,7 @@
     "@types/convict": "^6.1.1",
     "@types/pg": "^8.6.6",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.3",
+    "esbuild": "^0.17.5",
     "tsconfig-paths": "^4.1.2"
   }
 }
