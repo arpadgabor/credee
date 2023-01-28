@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@credee/api": "workspace:*",
-    "@kobalte/core": "^0.4.0",
+    "@kobalte/core": "^0.5.0",
     "@modular-forms/solid": "^0.10.0",
     "@solidjs/router": "^0.7.0",
     "@tanstack/solid-query": "^4.22.4",
@@ -29,7 +29,7 @@
     "tailwindcss": "^3.2.4",
     "typescript": "^4.9.4",
     "unplugin-auto-import": "^0.12.2",
-    "unplugin-icons": "^0.15.1",
+    "unplugin-icons": "^0.15.2",
     "vite": "^4.0.4",
     "vite-plugin-solid": "^2.5.0"
   }

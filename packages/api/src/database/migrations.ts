@@ -4,6 +4,7 @@ import { db } from './client.js'
 import * as _001 from './migrations/001-reddit-posts.js'
 import * as _002 from './migrations/002-reddit-posts-screenshot.js'
 import * as _003 from './migrations/003-reddit-posts-flair.js'
+import * as _004 from './migrations/004-survey.js'
 
 class Migrations implements MigrationProvider {
   async getMigrations(): Promise<Record<string, Migration>> {
@@ -11,6 +12,7 @@ class Migrations implements MigrationProvider {
       '001_reddit_posts': _001,
       '002-reddit-posts-screenshot': _002,
       '003-reddit-posts-flair': _003,
+      '004-survey': _004,
     }
   }
 }
