@@ -9,14 +9,14 @@ export const formSample: Survey = {
       id: 'name',
       title: 'Your name',
       description: `We'll keep it a secret.`,
-      validator: z.string().min(1),
+      validator: z.string().min(1).optional(),
     },
     {
       type: 'scale',
       id: 'credibility',
       title: 'Without looking it up, do believe what this post is saying?',
       description: 'Please avoid looking the post up on the internet.',
-      validator: z.number(),
+      validator: z.number().optional(),
       media: [{ type: 'image', href: '', alt: '' }],
       options: [
         { value: 1, label: `I don't believe it at all`, icon: 'face' },

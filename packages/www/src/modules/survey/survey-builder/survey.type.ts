@@ -1,9 +1,11 @@
+export type SurveyField = SurveyShortTextField | SurveyScaleField
+
 export interface Survey {
   title: string
-  fields: (SurveyShortTextField | SurveyScaleField)[]
+  fields: SurveyField[]
 }
 
-interface SurveyField {
+interface SurveyFieldBase {
   type: string
   id: string
   title: string
@@ -12,11 +14,11 @@ interface SurveyField {
   media?: { type: 'image'; href: string; alt: string }[]
 }
 
-interface SurveyShortTextField extends SurveyField {
+interface SurveyShortTextField extends SurveyFieldBase {
   type: 'short-text'
 }
 
-interface SurveyScaleField extends SurveyField {
+interface SurveyScaleField extends SurveyFieldBase {
   type: 'scale'
   options: { value: number; label: string; icon?: string }[]
 }
