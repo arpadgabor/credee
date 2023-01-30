@@ -1,13 +1,15 @@
 export interface FormFields {
   'short-text': FormShortTextField
   scale: FormScaleField
+  'multi-select': FormMultiSelectField
+  dropdown: FormDropdownField
 }
 
-export type FormField = FormFields[keyof FormFields]
+export type FormField<Keys = string> = { id: Keys } & FormFields[keyof FormFields]
 
-export interface FormData {
+export interface FormData<Keys extends string = string> {
   title: string
-  fields: FormField[]
+  fields: FormField<Keys>[]
 }
 
 export interface Media {
@@ -18,7 +20,6 @@ export interface Media {
 
 interface FormFieldBase {
   type: keyof FormFields
-  id: string
   title: string
   description?: string
   validator: Zod.Schema
@@ -32,4 +33,15 @@ export interface FormShortTextField extends FormFieldBase {
 export interface FormScaleField extends FormFieldBase {
   type: 'scale'
   options: { value: number; label: string; icon?: string }[]
+}
+
+export interface FormMultiSelectField extends FormFieldBase {
+  type: 'multi-select'
+  options: { value: string; label: string; icon?: string }[]
+}
+
+export interface FormDropdownField extends FormFieldBase {
+  type: 'dropdown'
+  placeholder?: string
+  options: { value: string; label: string }[]
 }

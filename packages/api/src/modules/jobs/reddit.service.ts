@@ -36,10 +36,10 @@ export async function list({ limit, offset, order }: RedditListOptions = { limit
 
   const [data, count] = await Promise.all([
     query.execute(),
-    db.selectFrom('reddit_posts').select(db.fn.count<number>('id').as('count')).executeTakeFirst(),
+    db.selectFrom('reddit_posts').select(db.fn.count('id').as('count')).executeTakeFirst(),
   ])
 
-  return { data, count: count?.count }
+  return { data, count: Number(count?.count) }
 }
 
 export async function groupById({}) {

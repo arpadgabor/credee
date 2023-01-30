@@ -10,7 +10,7 @@ const NavLink: ParentComponent<{ href: string }> = props => {
     'transition duration-300 ease-in-out',
     'rounded hover:bg-gray-50',
   ])
-  const activeClass = cva('text-blue-500 hover:bg-blue-50 bg-gradient-to-r from-blue-50 to-blue-100/10')
+  const activeClass = cva('text-accent-500 hover:bg-accent-50 bg-gradient-to-r from-accent-50 to-accent-100/10')
 
   return (
     <A href={props.href} end activeClass={activeClass()} class={linkClass()}>
@@ -31,7 +31,7 @@ const OverviewLayout: Component = () => {
     <div class='w-screen max-h-screen flex'>
       <aside class='flex flex-col h-screen w-80 border-r border-gray-200'>
         <div class='py-6 px-6 border-b border-gray-200'>
-          <h1 class='font-bold text-2xl text-blue-700'>Credee</h1>
+          <h1 class='font-bold text-2xl text-accent-700'>Credee</h1>
         </div>
 
         <nav class='flex flex-col px-4 py-4'>

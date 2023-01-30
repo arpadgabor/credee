@@ -2,24 +2,19 @@ import { A } from '@solidjs/router'
 import { cva, VariantProps } from 'class-variance-authority'
 import { children, JSX, ParentComponent, splitProps } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
+import { focus, formGroup } from './style-utils'
 
 const button = cva(
-  [
-    'flex items-center justify-center rounded border font-normal transition',
-    'group-[.formrow]:!rounded-none group-[.formrow]:!border-y group-[.formrow]:!border-x-0',
-    'group-[.formrow]:first:!rounded-l group-[.formrow]:last:!rounded-r',
-    'group-[.formrow]:!border-l group-[.formrow]:last:!border-r',
-  ],
+  ['flex items-center justify-center rounded border font-normal transition shadow-sm hover:shadow', focus, formGroup],
   {
     variants: {
       size: {
-        lg: 'h-12 px-4 rounded-md group-[.formrow]:first:!rounded-l-md group-[.formrow]:last:!rounded-r-md',
-        default: 'h-10 px-4',
+        default: 'h-12 px-4',
         sm: 'h-8 px-3 text-sm',
       },
       theme: {
-        main: 'bg-amber-400 border-amber-500 hover:bg-amber-500 active:bg-amber-600 text-gray-900',
-        accent: 'bg-blue-500 border-blue-600 hover:bg-blue-600 active:bg-blue-700 text-white',
+        main: 'bg-main-400 border-main-500 hover:bg-main-500 active:bg-main-600 text-gray-900',
+        accent: 'bg-accent-500 border-accent-600 hover:bg-accent-600 active:bg-accent-700 text-white',
         default: 'bg-white border-gray-200 hover:bg-gray-100 active:bg-gray-200 text-gray-900',
         disabled: 'bg-gray-100 border-gray-200 text-gray-400',
       },

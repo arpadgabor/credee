@@ -32,7 +32,7 @@ export function RedditPostInfoCell(row: {
     <div>
       <p class={'font-normal mb-1 text-gray-400 space-x-4'}>
         <small>
-          <a class='text-blue-500 underline' href={row.permalink}>
+          <a class='text-accent-500 underline' href={row.permalink}>
             {row.postId}
           </a>
         </small>

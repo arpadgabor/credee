@@ -1,9 +1,12 @@
-import { Alert, RadioGroup, Image } from '@kobalte/core'
-import { createForm, Field, FieldState, Form, FormState, setValue, zodForm } from '@modular-forms/solid'
+import { Alert, Image } from '@kobalte/core'
+import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
 import { For, Match, ParentComponent, Show, Switch } from 'solid-js'
 import { z } from 'zod'
 import { Button } from '../../../components/ui'
-import { Media, FormData, FormField, FormFields } from './form.type'
+import { FieldMultiSelect } from './fields/multi-select'
+import { FieldScale } from './fields/scale'
+import { FieldShortText } from './fields/short-text'
+import { FormData, FormField, FormFields, Media } from './form.type'
 
 interface Props {
   survey: FormData
@@ -68,20 +71,27 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
           </Show>
           <div class='h-4'></div>
 
-          <Switch>
+          <Switch fallback={<p>Could not render field.</p>}>
             <Match when={$.formField.type === 'short-text'}>
-              {
-                <FieldShortText
-                  form={$.form}
-                  field={f}
-                  formField={$.formField as FormFields['short-text']}
-                  required={!isOptional}
-                />
-              }
+              <FieldShortText
+                form={$.form}
+                field={f}
+                formField={$.formField as FormFields['short-text']}
+                required={!isOptional}
+              />
             </Match>
 
             <Match when={$.formField.type === 'scale'}>
-              {<FieldScale form={$.form} field={f} formField={$.formField as FormFields['scale']} required={!isOptional} />}
+              <FieldScale form={$.form} field={f} formField={$.formField as FormFields['scale']} required={!isOptional} />
+            </Match>
+
+            <Match when={$.formField.type === 'multi-select'}>
+              <FieldMultiSelect
+                form={$.form}
+                field={f}
+                formField={$.formField as FormFields['multi-select']}
+                required={!isOptional}
+              />
             </Match>
           </Switch>
 
@@ -93,53 +103,6 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
         </fieldset>
       )}
     </Field>
-  )
-}
-
-interface SurveyFieldProps<T extends keyof FormFields> {
-  form: FormState<any>
-  field: FieldState<any, any>
-  formField: FormFields[T]
-  required: boolean
-}
-function FieldShortText($: SurveyFieldProps<'short-text'>) {
-  return (
-    <input
-      type='text'
-      {...$.field.props}
-      id={$.field.name}
-      value={$.field.value}
-      required={$.required}
-      class='h-12 px-3 flex items-center border rounded-md border-gray-300 bg-white shadow-sm hover:shadow transition'
-      aria-invalid={!!$.field.error}
-      aria-describedby={!!$.formField.description ? `${$.field.name}-description` : undefined}
-      aria-labelledby={`${$.field.name}-label`}
-    />
-  )
-}
-
-function FieldScale($: SurveyFieldProps<'scale'>) {
-  function onChange(value: string) {
-    setValue($.form, $.field.name, Number(value))
-  }
-
-  return (
-    <RadioGroup.Root name={$.field.name} onValueChange={onChange} class='space-y-2' aria-labelledby={`${$.field.name}-label`}>
-      <For each={$.formField.options}>
-        {option => (
-          <RadioGroup.Item
-            value={String(option.value)}
-            class='flex focus-within:ring-2 focus-within:ring-blue-500 py-3 px-2 items-center group hover:bg-gray-100 transition rounded-md'
-          >
-            <RadioGroup.ItemInput />
-            <RadioGroup.ItemControl class='relative w-6 h-6 bg-white border border-gray-300 shadow-sm group-hover:shadow rounded-full flex items-center justify-center p-0 m-0 mr-2 transition'>
-              <RadioGroup.ItemIndicator class='w-3 h-3 bg-blue-500 rounded-full absolute' />
-            </RadioGroup.ItemControl>
-            <RadioGroup.ItemLabel class='radio__label'>{option.label}</RadioGroup.ItemLabel>
-          </RadioGroup.Item>
-        )}
-      </For>
-    </RadioGroup.Root>
   )
 }
 

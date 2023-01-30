@@ -1,8 +1,8 @@
 import { Cell, flexRender, Header, HeaderGroup, Row, Table as TableInstance } from '@tanstack/solid-table'
 import { cva, VariantProps } from 'class-variance-authority'
 import { createMemo, For, Show } from 'solid-js'
-import { Button } from '../Button'
-import { FormRow } from '../FormRow'
+import { Button } from '../button'
+import { FormRow } from '../form-row'
 import PhArrowDown from '~icons/ph/arrow-down'
 import PhArrowUp from '~icons/ph/arrow-up'
 
