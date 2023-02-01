@@ -1,11 +1,11 @@
-import { createListSchema } from 'core/zod.js'
+import { createListSchema as listOf } from '../../core/zod.js'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { countSurveys, createSurvey, listSurveys } from './survey.service.js'
 
 const surveyCreate = z.object({
   title: z.string(),
-  endsAt: z.date(),
+  endsAt: z.date().nullish(),
 })
 
 const surveySchema = surveyCreate.and(
@@ -14,7 +14,8 @@ const surveySchema = surveyCreate.and(
   })
 )
 
-const list = procedure.output(createListSchema(surveySchema)).query(async () => {
+const listSchema = listOf(surveySchema)
+const list = procedure.output(listSchema).query(async () => {
   const surveys = await listSurveys()
 
   const dto = surveys.map(s => ({
@@ -24,7 +25,7 @@ const list = procedure.output(createListSchema(surveySchema)).query(async () => 
   }))
 
   return {
-    data: dto ?? [],
+    data: (dto ?? []) as z.infer<typeof surveySchema>[],
     meta: {
       count: await countSurveys(),
     },

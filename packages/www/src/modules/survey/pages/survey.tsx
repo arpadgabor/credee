@@ -1,25 +1,40 @@
 import { createPostCredibilityForm } from '../forms/post-credibility.form'
 import { SurveyRenderer } from '../form-builder'
-import { uploadsPath } from '../../../utils/trpc'
+import { api, uploadsPath } from '../../../utils/trpc'
 import { useParams, useSearchParams } from '@solidjs/router'
 import { createSignal, onMount, Show } from 'solid-js'
 import { z } from 'zod'
 import { createStore } from 'solid-js/store'
 import { Alert } from '@kobalte/core'
-import { createOnboardingForm } from '../forms/onboarding.form'
+import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
+import { createMutation } from '@tanstack/solid-query'
 
 const queryParams = z.object({
   referrer: z.enum(['prolific']),
   participant_id: z.string(),
 })
+type Query = z.infer<typeof queryParams>
 
 export default function Survey() {
   const params = useParams<{ id: string }>()
   const [query] = useSearchParams()
 
-  // @ts-expect-error we want it to be empty
-  const [surveyInfo, setSurveyInfo] = createStore<z.infer<typeof queryParams>>({})
+  // @ts-ignore
+  const [surveyInfo, setSurveyInfo] = createStore<Query | undefined>()
   const [invalidSession, setInvalidSession] = createSignal(false)
+
+  const onboard = createMutation({
+    mutationFn: async (data: OnboardingFields) => {
+      return api.participants.onboard.mutate({
+        externalParticipantId: surveyInfo?.participant_id!,
+        externalPlatform: surveyInfo?.referrer!,
+        surveyId: Number(params.id),
+        academicStatus: data.academicStatus,
+        ageRange: data.ageRange,
+        gender: data.gender,
+      })
+    },
+  })
 
   onMount(() => {
     const result = queryParams.safeParse(query)
@@ -30,8 +45,12 @@ export default function Survey() {
     }
   })
 
-  function onSubmit(data: any) {
-    console.log(data)
+  async function onSubmit(data: OnboardingFields) {
+    await onboard.mutateAsync(data)
+    if (onboard.isSuccess) {
+      console.log(onboard.data!.id)
+      localStorage.setItem('onboarded', String(onboard.data!.id))
+    }
   }
 
   const postCredibilityForm = createOnboardingForm({
@@ -45,7 +64,9 @@ export default function Survey() {
           <Alert.Root class='text-red-600 font-bold'>Sorry, it looks like you cannot access this survey.</Alert.Root>
         </Show>
 
-        <SurveyRenderer onSubmit={onSubmit} survey={postCredibilityForm} />
+        <Show when={!invalidSession()}>
+          <SurveyRenderer onSubmit={onSubmit} survey={postCredibilityForm} loading={onboard.isLoading} />
+        </Show>
       </section>
     </div>
   )

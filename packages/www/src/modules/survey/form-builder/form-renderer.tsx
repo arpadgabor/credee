@@ -1,5 +1,6 @@
 import { Alert, Image } from '@kobalte/core'
 import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
+import { cx } from 'class-variance-authority'
 import { For, Match, ParentComponent, Show, Switch } from 'solid-js'
 import { z } from 'zod'
 import { Button } from '../../../components/ui'
@@ -10,6 +11,7 @@ import { FormData, FormField, FormFields, Media } from './form.type'
 
 interface Props {
   survey: FormData
+  loading?: boolean
   onSubmit: (values: any) => void
 }
 
@@ -31,12 +33,12 @@ export function SurveyRenderer(props: Props) {
     <Form of={form} onSubmit={props.onSubmit}>
       <h1 class='font-bold text-2xl mb-8'>{props.survey.title}</h1>
 
-      <div class='flex flex-col space-y-8 mb-8'>
+      <div class='flex flex-col space-y-4 mb-8'>
         <For each={props.survey.fields}>{field => <FormFieldMapper formField={field} form={form} />}</For>
       </div>
 
       <div class='flex justify-end'>
-        <Button type='submit' size='lg' theme='accent'>
+        <Button type='submit' theme='accent' disabled={props.loading}>
           Submit!
         </Button>
       </div>
@@ -51,16 +53,21 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
 
   return (
     <Field of={$.form} name={$.formField.id}>
-      {f => (
-        <fieldset class='flex flex-col p-0'>
-          <legend class='font-semibold text-lg text-gray-800 mb-2'>
-            <label id={`${f.name}-label`} for={f.name}>
+      {field => (
+        <fieldset
+          class={cx(
+            'flex flex-col p-4 rounded-lg border border-transparent',
+            field.error ? 'border-red-200 bg-gradient-to-b from-red-100 via-white' : ''
+          )}
+        >
+          <legend class='font-semibold text-lg text-gray-800 mb-2 bg-white/5 backdrop:blur-xl px-2 -ml-2'>
+            <label id={`${field.name}-label`} for={field.name} class='pt-8'>
               {$.formField.title}
             </label>
           </legend>
 
           <Show when={$.formField.description}>
-            <p id={`${f.name}-description`} class='text-gray-600'>
+            <p id={`${field.name}-description`} class='text-gray-600'>
               {$.formField.description}
             </p>
           </Show>
@@ -69,35 +76,36 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
             <div class='h-4'></div>
             <FormMedia media={$.formField.media!} />
           </Show>
+
           <div class='h-4'></div>
 
           <Switch fallback={<p>Could not render field.</p>}>
             <Match when={$.formField.type === 'short-text'}>
               <FieldShortText
                 form={$.form}
-                field={f}
+                field={field}
                 formField={$.formField as FormFields['short-text']}
                 required={!isOptional}
               />
             </Match>
 
             <Match when={$.formField.type === 'scale'}>
-              <FieldScale form={$.form} field={f} formField={$.formField as FormFields['scale']} required={!isOptional} />
+              <FieldScale form={$.form} field={field} formField={$.formField as FormFields['scale']} required={!isOptional} />
             </Match>
 
             <Match when={$.formField.type === 'multi-select'}>
               <FieldMultiSelect
                 form={$.form}
-                field={f}
+                field={field}
                 formField={$.formField as FormFields['multi-select']}
                 required={!isOptional}
               />
             </Match>
           </Switch>
 
-          <Show when={f.error}>
+          <Show when={field.error}>
             <Alert.Root class='mt-2' aria-live='assertive'>
-              <p class='text-sm text-red-600'>{f.error}</p>
+              <p class='text-sm text-red-600'>{field.error}</p>
             </Alert.Root>
           </Show>
         </fieldset>

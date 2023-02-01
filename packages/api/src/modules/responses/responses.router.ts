@@ -1,4 +1,3 @@
-import { createListSchema } from 'core/zod.js'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createCredibilityResponse } from './responses.service.js'
@@ -16,23 +15,6 @@ const credibilityResponse = credibilityResponseCreate.and(
     id: z.number(),
   })
 )
-
-// const list = procedure.output(createListSchema(surveySchema)).query(async () => {
-//   const surveys = await listSurveys()
-
-//   const dto = surveys.map(s => ({
-//     id: s.id,
-//     title: s.title,
-//     endsAt: s.ends_at,
-//   }))
-
-//   return {
-//     data: dto ?? [],
-//     meta: {
-//       count: await countSurveys(),
-//     },
-//   }
-// })
 
 const addCredibility = procedure
   .input(credibilityResponseCreate)

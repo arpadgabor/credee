@@ -7,6 +7,10 @@ export const OverviewRoutes: RouteDefinition[] = [
     component: lazy(() => import('./layout')),
     children: [
       {
+        component: lazy(() => import('./pages/reddit-surveys')),
+        path: '/reddit/surveys',
+      },
+      {
         component: lazy(() => import('./pages/reddit-jobs')),
         path: '/reddit/jobs',
       },

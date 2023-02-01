@@ -1,6 +1,6 @@
 import { db } from '../../database/client.js'
-import { Participants } from 'database/database.js'
-import { findSurvey } from 'modules/survey/survey.service.js'
+import { Participants } from '../../database/database.js'
+import { findSurvey } from '../../modules/survey/survey.service.js'
 
 export async function createParticipant(data: Omit<Participants, 'id' | 'created_at'>) {
   const survey = await findSurvey(data.survey_id)

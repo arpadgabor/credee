@@ -1,6 +1,6 @@
 import { db } from '../../database/client.js'
-import { ResponsesCredibility } from 'database/database.js'
-import { findSurvey } from 'modules/survey/survey.service.js'
+import { ResponsesCredibility } from '../../database/database.js'
+import { findSurvey } from '../../modules/survey/survey.service.js'
 
 export async function createCredibilityResponse(data: Omit<ResponsesCredibility, 'id'>) {
   const survey = await findSurvey(data.survey_id)

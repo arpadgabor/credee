@@ -60,7 +60,7 @@ export interface RedditPost {
 export interface Survey {
   id: Generated<number>
   title: string
-  ends_at: Date
+  ends_at?: Date | null
 }
 
 export const ExternalPlatform = {

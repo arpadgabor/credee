@@ -1,4 +1,4 @@
-import { Survey } from 'database/database.js'
+import { Survey } from '../../database/database.js'
 import { db } from '../../database/client.js'
 
 export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'>) {

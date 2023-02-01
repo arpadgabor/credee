@@ -1,5 +1,4 @@
-import { createListSchema } from 'core/zod.js'
-import { ExternalPlatform, ExternalPlatforms } from 'database/database.js'
+import { ExternalPlatform, ExternalPlatforms } from '../../database/database.js'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createParticipant } from './participants.service.js'
@@ -24,23 +23,6 @@ const participant = participantCreate.and(
     createdAt: z.date(),
   })
 )
-
-// const list = procedure.output(createListSchema(surveySchema)).query(async () => {
-//   const surveys = await listSurveys()
-
-//   const dto = surveys.map(s => ({
-//     id: s.id,
-//     title: s.title,
-//     endsAt: s.ends_at,
-//   }))
-
-//   return {
-//     data: dto ?? [],
-//     meta: {
-//       count: await countSurveys(),
-//     },
-//   }
-// })
 
 const addParticipant = procedure
   .input(participantCreate)

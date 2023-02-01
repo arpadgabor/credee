@@ -1,3 +1,4 @@
+import { createForm, Field, Form, required } from '@modular-forms/solid'
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import {
   createColumnHelper,
@@ -6,10 +7,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from '@tanstack/solid-table'
-import { Component, Switch, Match } from 'solid-js'
+import { Component, Match, Switch } from 'solid-js'
+import IconSearch from '~icons/lucide/search'
 import { Button, DataTable, DateCell, FormRow, Input, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import { createForm, Form, Field, required } from '@modular-forms/solid'
 
 type JobForm = {
   subreddit: string
@@ -165,7 +166,7 @@ const Overview: Component = () => {
 
             <Button type='submit' theme='main' disabled={crawl.isLoading}>
               Crawl
-              <IconPhFileSearch class='ml-2' />
+              <IconSearch class='ml-2' />
             </Button>
           </FormRow>
         </Form>
