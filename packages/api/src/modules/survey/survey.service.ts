@@ -1,5 +1,5 @@
-import { Survey } from '../../database/database.js'
 import { db } from '../../database/client.js'
+import { Survey } from '../../database/database.js'
 
 export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'>) {
   const [survey] = await db

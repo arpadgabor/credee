@@ -1,11 +1,11 @@
+import { createForm, Field, Form, reset as resetForm, zodForm } from '@modular-forms/solid'
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel } from '@tanstack/solid-table'
 import { Component, createSignal } from 'solid-js'
+import { z } from 'zod'
+import IconAdd from '~icons/lucide/file-plus'
 import { Button, DataTable, DateCell, Input, PageHeader, Panel, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import IconAdd from '~icons/lucide/file-plus'
-import { createForm, Field, Form, zodForm, reset as resetForm } from '@modular-forms/solid'
-import { z } from 'zod'
 
 const formValidator = z.object({
   title: z.string(),
@@ -79,7 +79,16 @@ const Page: Component = () => {
     <Panel
       title='New Survey'
       trigger={PanelTrigger}
-      description='Start a new survey using reddit posts.'
+      description={
+        <>
+          <p>Start a new survey using reddit posts. It will be accessible at the URL:</p>
+          <div class='mt-2'>
+            <p class='bg-gray-100 px-3 py-2 rounded border border-gray-200'>
+              {location.protocol}//{location.hostname}/surveys/{'<id>'}
+            </p>
+          </div>
+        </>
+      }
       isOpen={isPanelOpen()}
       onOpen={setPanelOpen}
     >
@@ -119,7 +128,7 @@ const Page: Component = () => {
         <CreateSurveyPanel />
       </div>
 
-      <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' />
+      <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' hideFooter={true} />
     </section>
   )
 }

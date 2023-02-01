@@ -1,10 +1,10 @@
 import { Cell, flexRender, Header, HeaderGroup, Row, Table as TableInstance } from '@tanstack/solid-table'
 import { cva, VariantProps } from 'class-variance-authority'
 import { createMemo, For, Show } from 'solid-js'
-import { Button } from '../button'
-import { FormRow } from '../form-row'
 import PhArrowDown from '~icons/ph/arrow-down'
 import PhArrowUp from '~icons/ph/arrow-up'
+import { Button } from '../button'
+import { FormRow } from '../form-row'
 
 const styles = cva('w-full', {
   variants: {
@@ -22,6 +22,7 @@ interface DataTableProps<T extends unknown> extends TableVariants {
 
   loading: boolean
   error: boolean
+  hideFooter?: boolean
 }
 
 function TableHeaderCell<T>(header: Header<T, unknown>) {
@@ -116,26 +117,28 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
           </Show>
         </tbody>
 
-        <tfoot class='bg-gray-100'>
-          <tr>
-            <td class='px-3 py-3' colspan='100%'>
-              <div class='flex justify-between w-full items-center'>
-                <div class='text-sm'>
-                  Page {table().getState().pagination.pageIndex + 1} of {pageCount()}
-                </div>
+        <Show when={!props.hideFooter}>
+          <tfoot class='bg-gray-100'>
+            <tr>
+              <td class='px-3 py-3' colspan='100%'>
+                <div class='flex justify-between w-full items-center'>
+                  <div class='text-sm'>
+                    Page {table().getState().pagination.pageIndex + 1} of {pageCount()}
+                  </div>
 
-                <FormRow>
-                  <Button size='sm' theme='default' onClick={table().previousPage} disabled={!table().getCanPreviousPage()}>
-                    Previous page
-                  </Button>
-                  <Button size='sm' theme='default' onClick={table().nextPage} disabled={!table().getCanNextPage()}>
-                    Next page
-                  </Button>
-                </FormRow>
-              </div>
-            </td>
-          </tr>
-        </tfoot>
+                  <FormRow>
+                    <Button size='sm' theme='default' onClick={table().previousPage} disabled={!table().getCanPreviousPage()}>
+                      Previous page
+                    </Button>
+                    <Button size='sm' theme='default' onClick={table().nextPage} disabled={!table().getCanNextPage()}>
+                      Next page
+                    </Button>
+                  </FormRow>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </Show>
       </table>
     </div>
   )

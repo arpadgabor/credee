@@ -1,6 +1,5 @@
 import { Dialog } from '@kobalte/core'
-import { children, ParentComponent } from 'solid-js'
-import { JSX, Show } from 'solid-js'
+import { children, JSX, ParentComponent, Show } from 'solid-js'
 import IconClose from '~icons/lucide/x'
 
 interface Props {
