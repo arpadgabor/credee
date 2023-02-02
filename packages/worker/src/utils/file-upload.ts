@@ -1,11 +1,11 @@
-import { S3Client, ListBucketsCommand, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { config } from '../config.js'
 import { writeFile } from 'fs/promises'
 import path from 'path'
 
 const s3 = new S3Client({
   region: 'auto',
-  endpoint: config.get('s3.endpoint'), //`https://${}.r2.cloudflarestorage.com`,
+  endpoint: config.get('s3.endpoint'),
   credentials: config.get('s3.accessKeyId')
     ? {
         accessKeyId: config.get('s3.accessKeyId'),
