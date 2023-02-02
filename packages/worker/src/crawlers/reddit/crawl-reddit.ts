@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { createSubredditCrawler } from './crawler.js'
+import { createSubredditCrawler } from './create-subreddit-spider.js'
 import type { Comment, Post, RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
-import { browser } from '../browser.js'
+import { browser } from '../../utils/browser.js'
+import { uploadFile } from '../../utils/file-upload.js'
 
 export async function crawlReddit(options: RedditCrawlerOptions) {
   const context = await browser.newContext({
@@ -26,12 +27,15 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
 
     const screenshotPath = `${post.id}_${Date.now()}.png`
-    await fs.writeFile(resolve(process.cwd(), 'screenshots', screenshotPath), screenshot)
+    const uploadPath = await uploadFile({ filename: screenshotPath, data: screenshot }).catch(error => {
+      console.log(error)
+      throw error
+    })
 
     const result: RedditCrawledPost = {
       id: post.id,
       createdAt: new Date(post.created).toISOString(),
-      screenshotPath,
+      screenshotPath: uploadPath,
 
       title: post.title,
       subreddit: options.subreddit,
@@ -82,8 +86,9 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
 
     collection.push(result)
 
+    console.log(`Collection length: ${collection.length}`)
+
     options.notifications?.emit('progress', {
-      // post: collection.get(post.id),
       progress: collection.length,
     })
   }

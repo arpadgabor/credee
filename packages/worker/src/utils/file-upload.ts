@@ -1,0 +1,33 @@
+import { S3Client, ListBucketsCommand, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
+import { config } from '../config.js'
+import { writeFile } from 'fs/promises'
+import path from 'path'
+
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: config.get('s3.endpoint'), //`https://${}.r2.cloudflarestorage.com`,
+  credentials: config.get('s3.accessKeyId')
+    ? {
+        accessKeyId: config.get('s3.accessKeyId'),
+        secretAccessKey: config.get('s3.secretAccessKey'),
+      }
+    : undefined,
+})
+
+export async function uploadFile(params: { filename: string; data: Buffer | string }): Promise<string> {
+  if (!config.get('s3.bucket')) {
+    const filePath = path.resolve(process.cwd(), 'screenshots', params.filename)
+    await writeFile(filePath, params.data)
+
+    return `uploads/${params.filename}`
+  }
+
+  const command = new PutObjectCommand({
+    Bucket: config.get('s3.bucket'),
+    Key: params.filename,
+    Body: params.data,
+  })
+
+  await s3.send(command)
+  return `${config.get('s3.publicUrl')}/${params.filename}`
+}

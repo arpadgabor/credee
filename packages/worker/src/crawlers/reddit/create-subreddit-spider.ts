@@ -109,7 +109,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
 
   async function scrape(postId: string) {
     console.info('-------------------------')
-    console.info(`SCRAPE ${postId}: Started`)
+    console.info(`SCRAPE ${count} ${postId}: Started`)
     const elems = await page.$$(`[id="${postId}"]`).catch(e => [])
 
     if (elems.length !== 1) {
@@ -120,52 +120,56 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     }
 
     // wait until the post is loaded and scroll to it for screenshot
-    console.info(`SCRAPE ${postId}: Getting element`)
+    console.info(`SCRAPE ${count} ${postId}: Getting element`)
     const postElement = await page.waitForSelector(`[id="${postId}"]`, { timeout: 5000 }).catch(e => {
       console.error(e)
       return
     })
 
     if (!postElement) {
-      console.info(`SCRAPE ${postId}: Didn't find element with title ${queue.get(postId).post.title}`)
+      console.info(`SCRAPE ${count} ${postId}: Didn't find element with title ${queue.get(postId).post.title}`)
       queue.delete(postId)
       return
     }
 
-    console.info(`SCRAPE ${postId}: Scrolling into view`)
+    console.info(`SCRAPE ${count} ${postId}: Scrolling into view`)
     await postElement.scrollIntoViewIfNeeded()
-    // await page.mouse.wheel(0, 200)
-    console.info(`SCRAPE ${postId}: Screenshotting`)
-    const screenshot = await postElement.screenshot({ type: 'png' })
 
     // open post
     // wait until it's loaded, then interceptor is called with the data from the post's comments
-    console.info(`SCRAPE ${postId}: Opening post`)
+    console.info(`SCRAPE ${count} ${postId}: Opening post`)
     await postElement.click().catch(error => {
       console.error(error)
     })
 
+    const expandedPost = page.locator(`#overlayScrollContainer #${postId}`).first()
+
+    console.info(`SCRAPE ${count} ${postId}: Waiting for data`)
     const waitPostData = awaitPostData()
-    console.info(`SCRAPE ${postId}: Waiting for data`)
+
+    console.info(`SCRAPE ${count} ${postId}: Screenshotting`)
+    const screenshot = await expandedPost.screenshot({ type: 'png' })
+
     const { post, comments } = await waitPostData.catch(() => ({ post: null, comments: null }))
 
     if (!post || !comments) {
-      console.info(`SCRAPE ${postId}: No data for ${queue.get(postId).post.title}`)
+      console.info(`SCRAPE ${count} ${postId}: No data for ${queue.get(postId).post.title}`)
       queue.delete(postId)
-      await page.mouse.click(5, 200, { delay: 250 })
+      await page.mouse.click(5, 200)
       return
     }
 
     // close the post
-    console.info(`SCRAPE ${postId}: Closing post`)
-    await page.mouse.click(5, 200, { delay: 250 })
-
+    await page.mouse.click(5, 200)
     eventQueue.emit('post-data', { screenshot, post, comments })
+    console.info(`SCRAPE ${count} ${postId}: Closing post`)
+    count++
     queue.delete(postId)
 
-    count++
     if (count === limit) {
-      crawling = false
+      setTimeout(() => {
+        crawling = false
+      })
     }
   }
 

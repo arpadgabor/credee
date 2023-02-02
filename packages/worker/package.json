@@ -10,6 +10,7 @@
     "playwright": "playwright"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.262.0",
     "@credee/shared": "workspace:*",
     "bullmq": "^3.5.11",
     "convict": "^6.2.4",
