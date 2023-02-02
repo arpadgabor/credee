@@ -7,7 +7,7 @@ require('esbuild')
     target: 'node16',
     platform: 'node',
     sourcemap: true,
-    external: ['playwright', 'bullmq', 'dotenv', 'convict'],
+    external: ['playwright', 'pg-native', 'bullmq', 'kysely', 'fastify', '@trpc/server', 'dotenv', 'convict', '@aws-sdk/*'],
     logLevel: 'debug',
     banner: {
       js: [
