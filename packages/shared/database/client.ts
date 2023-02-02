@@ -1,6 +1,6 @@
-import { config } from '../config.js'
 import { Kysely, PostgresDialect, RawBuilder, sql } from 'kysely'
 import pg from 'pg'
+import { config } from '../config.js'
 import { Database } from './database.js'
 
 const pool = new pg.Pool({

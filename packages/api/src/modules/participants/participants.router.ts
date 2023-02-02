@@ -1,4 +1,4 @@
-import { ExternalPlatform, ExternalPlatforms } from '../../database/database.js'
+import { ExternalPlatform, ExternalPlatforms } from '@credee/shared/database'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createParticipant } from './participants.service.js'

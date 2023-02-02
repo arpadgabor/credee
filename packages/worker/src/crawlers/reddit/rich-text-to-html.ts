@@ -1,4 +1,4 @@
-import { RichTextJSONSegment, TextStyle } from '@credee/shared/reddit/types.js'
+import { RichTextJSONSegment, TextStyle } from '@credee/shared/reddit/types'
 
 export function richTextToHtml(docs: RichTextJSONSegment[], rawElem?: string): string {
   return docs

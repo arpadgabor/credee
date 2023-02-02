@@ -15,6 +15,7 @@ import { api } from '../../../utils/trpc'
 type JobForm = {
   subreddit: string
   stopsAfterCount: number
+  every: number
 }
 
 const Overview: Component = () => {
@@ -22,6 +23,7 @@ const Overview: Component = () => {
     initialValues: {
       subreddit: '/r/science',
       stopsAfterCount: 5,
+      every: 60, // in minutes
     },
   })
   const jobs = createQuery(() => ['jobs'], {
@@ -30,7 +32,12 @@ const Overview: Component = () => {
   })
   const crawl = createMutation(
     async (input: JobForm) => {
-      return await api.jobs.redditCrawl.mutate(input)
+      return await api.jobs.redditCrawl.mutate({
+        ...input,
+        repeat: {
+          every: input.every * (60 * 1000), // in ms
+        },
+      })
     },
     {
       onSuccess() {
@@ -58,66 +65,30 @@ const Overview: Component = () => {
 
   const col = createColumnHelper<Job>()
   const columns = [
-    col.accessor('state', {
-      cell: cell => (
-        <Switch>
-          <Match when={cell.getValue() === 'completed'}>✅</Match>
-          <Match when={cell.getValue() === 'failed'}>❌</Match>
-          <Match when={cell.getValue() === 'active'}>⌛</Match>
-        </Switch>
-      ),
-      header: '',
-      size: 32,
-    }),
-    col.accessor('id', {
-      header: 'Id',
+    // col.accessor('name', {
+    //   cell: cell => (
+    //     <Switch>
+    //       <Match when={cell.getValue() === 'completed'}>✅</Match>
+    //       <Match when={cell.getValue() === 'failed'}>❌</Match>
+    //       <Match when={cell.getValue() === 'active'}>⌛</Match>
+    //     </Switch>
+    //   ),
+    //   header: '',
+    //   size: 32,
+    // }),
+    col.accessor('subreddit', {
       cell: StringCell,
       sortDescFirst: true,
       size: 32,
     }),
-    col.accessor('subreddit', {
-      header: 'Subreddit',
-      size: 512,
-      cell: StringCell,
-    }),
-    col.accessor('progress', {
-      header: 'Progress',
-      size: 256,
-      meta: {
-        noStyle: true,
-      },
-      cell: cell => {
-        const [done, total] = cell.getValue().split('/')
-
-        return (
-          <div class='flex items-center justify-center relative px-3'>
-            <span class='absolute mx-auto px-2 py-1 text-sm bg-white/75 rounded-full border border-green-500 z-10 backdrop-blur-sm'>
-              {cell.getValue()}
-            </span>
-            <div class='h-2 w-full rounded relative bg-gray-100'>
-              <div
-                class='absolute left-0 h-full rounded bg-green-500'
-                style={{ width: `${(Number(done) / Number(total)) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-        )
-      },
-    }),
-    col.accessor('createdAt', {
-      header: 'Created at',
-      size: 200,
+    col.accessor('next', {
+      size: 128,
       cell: DateCell,
     }),
-    col.accessor('startedAt', {
-      header: 'Started at',
-      size: 200,
-      cell: DateCell,
-    }),
-    col.accessor('completedAt', {
-      header: 'Completed at',
-      size: 200,
-      cell: DateCell,
+    col.accessor('pattern', {
+      header: 'Repeats every',
+      size: 128,
+      cell: cell => <div>{Number(cell.getValue()) / (60 * 1000)}m</div>,
     }),
     col.display({
       id: 'actions',
@@ -128,12 +99,36 @@ const Overview: Component = () => {
       },
       cell: cell => (
         <div class='flex justify-end pr-1'>
-          <Button size='sm' onClick={() => remove.mutateAsync({ jobId: cell.row.original.id! })} disabled={remove.isLoading}>
+          <Button size='sm' onClick={() => remove.mutateAsync({ jobId: cell.row.original.key! })} disabled={remove.isLoading}>
             Remove
           </Button>
         </div>
       ),
     }),
+    // col.accessor('progress', {
+    //   header: 'Progress',
+    //   size: 256,
+    //   meta: {
+    //     noStyle: true,
+    //   },
+    //   cell: cell => {
+    //     const [done, total] = cell.getValue().split('/')
+
+    //     return (
+    //       <div class='flex items-center justify-center relative px-3'>
+    //         <span class='absolute mx-auto px-2 py-1 text-sm bg-white/75 rounded-full border border-green-500 z-10 backdrop-blur-sm'>
+    //           {cell.getValue()}
+    //         </span>
+    //         <div class='h-2 w-full rounded relative bg-gray-100'>
+    //           <div
+    //             class='absolute left-0 h-full rounded bg-green-500'
+    //             style={{ width: `${(Number(done) / Number(total)) * 100}%` }}
+    //           ></div>
+    //         </div>
+    //       </div>
+    //     )
+    //   },
+    // }),
   ]
 
   const table = createSolidTable<Job>({
@@ -162,6 +157,9 @@ const Overview: Component = () => {
 
             <Field of={jobForm} name='stopsAfterCount'>
               {f => <Input {...f.props} value={f.value} type='number' placeholder='Posts to scrape (5)' class='w-20' />}
+            </Field>
+            <Field of={jobForm} name='every'>
+              {f => <Input {...f.props} value={f.value} type='number' step={1} placeholder='Every (M)' class='w-40' />}
             </Field>
 
             <Button type='submit' theme='main' disabled={crawl.isLoading}>

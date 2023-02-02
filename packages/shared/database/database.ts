@@ -1,4 +1,4 @@
-import type { Media, RichTextJSONSegment } from '@credee/shared/reddit/types.js'
+import type { Media, RichTextJSONSegment } from '../reddit/types.js'
 import type { Generated } from 'kysely'
 
 export interface RedditPost {

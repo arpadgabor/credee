@@ -1,17 +1,7 @@
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
-import { getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
+import { getActiveJobs, getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
 import { groupById, list as listRedditPosts } from './reddit.service.js'
-
-const crawlRedditInput = z.object({
-  subreddit: z.string().startsWith('/r/'),
-  stopsAfterCount: z.number().max(100).optional().default(25),
-  stopsAfterSeconds: z
-    .number()
-    .max(60 * 5)
-    .optional(),
-})
-export type CrawlRedditInput = z.infer<typeof crawlRedditInput>
 
 const getRedditResultsInput = z
   .object({
@@ -55,12 +45,30 @@ const redditResults = procedure
     }
   })
 
+const crawlRedditInput = z.object({
+  subreddit: z.string().startsWith('/r/'),
+  stopsAfterCount: z.number().max(100).optional().default(5),
+  repeat: z
+    .object({
+      every: z.number().optional(),
+      pattern: z.string().optional(),
+      immediately: z.boolean().optional(),
+      count: z.number().optional(),
+      prevMillis: z.number().optional(),
+      offset: z.number().optional(),
+    })
+    .optional(),
+})
+export type CrawlRedditInput = z.infer<typeof crawlRedditInput>
+
 const redditCrawl = procedure.input(crawlRedditInput).mutation(async ({ input }) => {
-  await queueRedditCrawl({
-    subreddit: input.subreddit as any,
-    stopsAfterCount: input.stopsAfterCount,
-    stopsAfterSeconds: input.stopsAfterSeconds,
-  })
+  await queueRedditCrawl(
+    {
+      subreddit: input.subreddit as any,
+      stopsAfterCount: input.stopsAfterCount,
+    },
+    input.repeat ?? { every: 1_000 * 60 * 60 }
+  )
 })
 
 const remove = procedure
@@ -74,7 +82,7 @@ const remove = procedure
   })
 
 const list = procedure.query(async () => {
-  return await getJobsInQueue()
+  return await getActiveJobs()
 })
 
 export const JobsRouter = router({

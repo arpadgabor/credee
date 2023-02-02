@@ -1,5 +1,5 @@
-import { db } from '../../database/client.js'
-import { ResponsesCredibility } from '../../database/database.js'
+import { db } from '@credee/shared/database'
+import type { ResponsesCredibility } from '@credee/shared/database'
 import { findSurvey } from '../../modules/survey/survey.service.js'
 
 export async function createCredibilityResponse(data: Omit<ResponsesCredibility, 'id'>) {

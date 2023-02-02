@@ -1,5 +1,5 @@
-import { db } from '../../database/client.js'
-import { Survey } from '../../database/database.js'
+import { db } from '@credee/shared/database'
+import type { Survey } from '@credee/shared/database'
 
 export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'>) {
   const [survey] = await db

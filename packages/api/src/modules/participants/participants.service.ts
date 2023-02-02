@@ -1,5 +1,5 @@
-import { db } from '../../database/client.js'
-import { Participants } from '../../database/database.js'
+import { db } from '@credee/shared/database'
+import type { Participants } from '@credee/shared/database'
 import { findSurvey } from '../../modules/survey/survey.service.js'
 
 export async function createParticipant(data: Omit<Participants, 'id' | 'created_at'>) {

@@ -57,5 +57,4 @@ export interface RedditCrawledPost {
 export interface RedditCrawlerOptions {
   subreddit: `/r/${string}`
   endAfter: { count: number }
-  notifications?: EventEmitter
 }

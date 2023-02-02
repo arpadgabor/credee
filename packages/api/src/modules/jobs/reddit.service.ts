@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
-import { db } from '../../database/client.js'
-import type { RedditPost } from '../../database/database.js'
+import { db } from '@credee/shared/database'
+import type { RedditPost } from '@credee/shared/database'
 interface RedditListOptions {
   limit?: number
   offset?: number

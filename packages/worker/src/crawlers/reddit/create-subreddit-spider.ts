@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
 import playwright, { Response } from 'playwright'
-import type { Post, Comment } from '@credee/shared/reddit/types.js'
+import type { Post, Comment } from '@credee/shared/reddit/types'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
 
 export function createSubredditCrawler({ page: _page, subreddit: _subreddit, limit }: SubredditSpiderInit) {

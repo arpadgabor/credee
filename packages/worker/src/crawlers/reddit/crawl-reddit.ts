@@ -1,9 +1,8 @@
-import fs from 'node:fs/promises'
-import { resolve } from 'node:path'
-import { createSubredditCrawler } from './create-subreddit-spider.js'
-import type { Comment, Post, RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types.js'
+import type { Comment, Post, RedditCrawledPost, RedditCrawlerOptions } from '@credee/shared/reddit/types'
 import { browser } from '../../utils/browser.js'
 import { uploadFile } from '../../utils/file-upload.js'
+import { createSubredditCrawler } from './create-subreddit-spider.js'
+import { savePost } from './save-post.js'
 
 export async function crawlReddit(options: RedditCrawlerOptions) {
   const context = await browser.newContext({
@@ -17,7 +16,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   })
 
   await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
-  const collection: RedditCrawledPost[] = []
 
   async function handlePostData({ post, comments, screenshot }: { post: Post; comments: Comment[]; screenshot: Buffer }) {
     const isSelfPost = post.media.type === 'rtjson'
@@ -32,7 +30,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
       throw error
     })
 
-    const result: RedditCrawledPost = {
+    await savePost({
       id: post.id,
       createdAt: new Date(post.created).toISOString(),
       screenshotPath: uploadPath,
@@ -82,14 +80,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
         description: award.description,
         icon: award.iconUrl,
       })),
-    }
-
-    collection.push(result)
-
-    console.log(`Collection length: ${collection.length}`)
-
-    options.notifications?.emit('progress', {
-      progress: collection.length,
     })
   }
 
@@ -99,6 +89,4 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
   await context?.close()
 
   subredditSpider.off('post-data', handlePostData)
-
-  return Array.from(collection.values()).filter(post => post.id && post.screenshotPath)
 }
