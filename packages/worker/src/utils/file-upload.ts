@@ -1,7 +1,7 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { config } from '../config.js'
 import { writeFile } from 'fs/promises'
-import path from 'path'
+import { resolve } from 'path'
 
 const s3 = new S3Client({
   region: 'auto',
@@ -16,7 +16,7 @@ const s3 = new S3Client({
 
 export async function uploadFile(params: { filename: string; data: Buffer | string }): Promise<string> {
   if (!config.get('s3.bucket')) {
-    const filePath = path.resolve(process.cwd(), 'screenshots', params.filename)
+    const filePath = resolve(process.cwd(), 'screenshots', params.filename)
     await writeFile(filePath, params.data)
 
     return `uploads/${params.filename}`
