@@ -1,3 +1,4 @@
+import { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import { router } from './core/trpc.js'
 import { JobsRouter } from './modules/jobs/jobs.router.js'
 import { RedditRouter } from './modules/jobs/reddit.router.js'
@@ -13,3 +14,5 @@ export const appRouter = router({
   reddit: RedditRouter,
 })
 export type AppRouter = typeof appRouter
+export type Outputs = inferRouterOutputs<AppRouter>
+export type Inputs = inferRouterInputs<AppRouter>

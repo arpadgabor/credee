@@ -1,9 +1,9 @@
 import { Kysely, sql } from 'kysely'
+import { redditPostsTable } from './001-reddit-posts.js'
 
-const surveysTable = 'surveys'
-const participantsTable = 'participants'
-const responsesTable = 'responses_credibility'
-const redditPostsTable = 'reddit_posts'
+export const surveysTable = 'surveys'
+export const participantsTable = 'participants'
+export const responsesTable = 'responses_credibility'
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema

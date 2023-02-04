@@ -5,6 +5,7 @@ export function createListSchema<T extends z.ZodSchema>(schema: T) {
     data: z.array(schema),
     meta: z.object({
       count: z.number().optional(),
+      next: z.number().optional(),
     }),
   })
 }

@@ -6,6 +6,7 @@ import * as _002 from './migrations/002-reddit-posts-screenshot.js'
 import * as _003 from './migrations/003-reddit-posts-flair.js'
 import * as _004 from './migrations/004-survey.js'
 import * as _005 from './migrations/005-reddit-posts-sentiment.js'
+import * as _006 from './migrations/006-survey-reddit-dataset.js'
 
 class Migrations implements MigrationProvider {
   async getMigrations(): Promise<Record<string, Migration>> {
@@ -15,6 +16,7 @@ class Migrations implements MigrationProvider {
       '003-reddit-posts-flair': _003,
       '004-survey': _004,
       '005-reddit-posts-sentiment': _005,
+      '006-survey-reddit-dataset': _006,
     }
   }
 }

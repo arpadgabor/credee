@@ -50,12 +50,13 @@ const getById = procedure
   })
 
 const create = procedure
-  .input(surveyCreate)
+  .input(surveyCreate.and(z.object({ posts: z.array(z.string()) })))
   .output(surveySchema)
   .mutation(async ({ input }) => {
     const survey = await createSurvey({
       title: input.title,
       ends_at: input.endsAt,
+      postIds: input.posts,
     })
 
     return {

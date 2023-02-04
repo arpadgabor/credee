@@ -1,6 +1,6 @@
-import { Kysely, sql } from 'kysely'
+import { Kysely } from 'kysely'
+import { redditPostsTable } from './001-reddit-posts.js'
 
-const redditPostsTable = 'reddit_posts'
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.alterTable(redditPostsTable).addColumn('flair', 'varchar(255)').execute()
 

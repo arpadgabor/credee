@@ -55,7 +55,6 @@ export default function Survey() {
     await onboard.mutateAsync(data)
     if (onboard.isSuccess) {
       console.log(onboard.data!.id)
-      localStorage.setItem('onboarded', String(onboard.data!.id))
     }
   }
 

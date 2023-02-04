@@ -1,6 +1,6 @@
 import { Kysely, sql } from 'kysely'
 
-const redditPostsTable = 'reddit_posts'
+export const redditPostsTable = 'reddit_posts'
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable(redditPostsTable)

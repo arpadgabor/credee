@@ -92,9 +92,16 @@ export interface ResponsesCredibility {
   credibility: number
 }
 
+export interface SurveyRedditDataset {
+  id: Generated<number>
+  survey_id: number
+  post_variant_id: number
+}
+
 export interface Database {
   reddit_posts: RedditPost
   surveys: Survey
   participants: Participants
   responses_credibility: ResponsesCredibility
+  survey_reddit_dataset: SurveyRedditDataset
 }

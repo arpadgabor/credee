@@ -1,72 +1,95 @@
 import { createForm, Field, Form, reset as resetForm, zodForm } from '@modular-forms/solid'
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel } from '@tanstack/solid-table'
-import { Component, createSignal } from 'solid-js'
+import { Component, createSignal, Show } from 'solid-js'
 import { z } from 'zod'
 import IconAdd from '~icons/lucide/file-plus'
-import { Button, DataTable, DateCell, Input, PageHeader, Panel, StringCell } from '../../../components/ui'
+import {
+  Button,
+  DataTable,
+  DateCell,
+  FieldAlert,
+  FieldLabel,
+  Input,
+  PageHeader,
+  Panel,
+  StringCell,
+} from '../../../components/ui'
 import { api } from '../../../utils/trpc'
+import { PostsForSurveySelect } from '../components/survey-post-select'
 
 const formValidator = z.object({
-  title: z.string(),
-  endDate: z.string().optional(),
+  title: z.string({ required_error: 'The title is required.' }).min(1, 'Please enter a title for the survey.'),
+  endDate: z
+    .string()
+    .optional()
+    .refine(
+      value => {
+        if (!value) return true
+        const date = new Date(value)
+        return date > new Date()
+      },
+      { message: 'The deadline must be at least 1 day in the future.' }
+    ),
+  posts: z.array(z.string()).min(5, 'Please select at leat 5 posts.'),
 })
 
 const Page: Component = () => {
-  const results = createQuery(() => ['reddit_surveys'], {
+  const submitForm = createForm({
+    validate: zodForm(formValidator),
+  })
+
+  type Result = NonNullable<(typeof surveyList)['data']>['data'][number]
+  const surveyList = createQuery(() => ['reddit_surveys'], {
     keepPreviousData: true,
     queryFn: () => {
       return api.surveys.list.query()
     },
   })
+
   const createSurvey = createMutation({
     mutationFn: (data: z.infer<typeof formValidator>) => {
       return api.surveys.create.mutate({
         title: data.title,
         endsAt: data.endDate ? new Date(data.endDate) : undefined,
+        posts: data.posts,
       })
     },
-    onSuccess: () => results.refetch(),
+    onSuccess: () => {
+      surveyList.refetch()
+      setPanelOpen(false)
+      resetForm(submitForm)
+    },
   })
-
-  type Result = NonNullable<(typeof results)['data']>['data'][number]
+  const [isPanelOpen, setPanelOpen] = createSignal<boolean>()
+  function onSubmit(data: z.infer<typeof formValidator>) {
+    createSurvey.mutate(data)
+  }
 
   const col = createColumnHelper<Result>()
-  const columns = [
-    col.accessor('id', {
-      header: 'ID',
-      size: 64,
-      cell: StringCell,
-    }),
-    col.accessor('title', {
-      header: 'Title',
-      cell: StringCell,
-    }),
-    col.accessor('endsAt', {
-      header: 'Deadline',
-      cell: DateCell,
-    }),
-  ]
-
   const table = createSolidTable<Result>({
-    columns,
+    columns: [
+      col.accessor('id', {
+        header: 'ID',
+        size: 64,
+        cell: StringCell,
+      }),
+      col.accessor('title', {
+        header: 'Title',
+        cell: StringCell,
+      }),
+      col.accessor('endsAt', {
+        header: 'Deadline',
+        cell: DateCell,
+      }),
+    ],
     get data() {
-      return results.data?.data ?? []
+      return surveyList.data?.data ?? []
     },
     manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
-
-  const submitForm = createForm({
-    validate: zodForm(formValidator),
-  })
-  const [isPanelOpen, setPanelOpen] = createSignal<boolean>()
-  function onSubmit(data: z.infer<typeof formValidator>) {
-    createSurvey.mutate(data)
-    setPanelOpen(false)
-    resetForm(submitForm)
-  }
 
   const PanelTrigger = (
     <Button>
@@ -96,8 +119,11 @@ const Page: Component = () => {
         <Field of={submitForm} name='title'>
           {field => (
             <label class='w-full'>
-              <p>Title</p>
+              <FieldLabel>Title</FieldLabel>
               <Input {...field.props} class='w-full' />
+              <Show when={field.error}>
+                <FieldAlert type='error'>{field.error}</FieldAlert>
+              </Show>
             </label>
           )}
         </Field>
@@ -105,17 +131,22 @@ const Page: Component = () => {
         <Field of={submitForm} name='endDate'>
           {field => (
             <label class='w-full'>
-              <p>Deadline</p>
+              <FieldLabel>Deadline</FieldLabel>
               <Input {...field.props} type='date' class='w-full' />
+              <Show when={field.error}>
+                <FieldAlert type='error'>{field.error}</FieldAlert>
+              </Show>
             </label>
           )}
         </Field>
 
-        <div class='flex-1 h-full'></div>
+        <PostsForSurveySelect form={submitForm} fieldName='posts' />
 
-        <Button theme='main' disabled={createSurvey.isLoading}>
-          Save
-        </Button>
+        <div class='flex-1 flex items-end'>
+          <Button theme='main' disabled={createSurvey.isLoading}>
+            Save
+          </Button>
+        </div>
       </Form>
     </Panel>
   )
@@ -128,7 +159,7 @@ const Page: Component = () => {
         <CreateSurveyPanel />
       </div>
 
-      <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' hideFooter={true} />
+      <DataTable table={table} loading={surveyList.isLoading} error={surveyList.isError} size='auto' hideFooter={true} />
     </section>
   )
 }

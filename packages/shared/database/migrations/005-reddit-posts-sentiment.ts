@@ -1,4 +1,4 @@
-import { Kysely, sql } from 'kysely'
+import { Kysely } from 'kysely'
 
 const redditPostsTable = 'reddit_posts'
 export async function up(db: Kysely<any>): Promise<void> {

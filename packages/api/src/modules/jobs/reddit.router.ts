@@ -13,6 +13,7 @@ const redditByPostId = procedure
       data: result.data,
       meta: {
         count: result.count,
+        next: (input?.limit ?? 0) + (input?.offset ?? 0),
       },
     }
   })

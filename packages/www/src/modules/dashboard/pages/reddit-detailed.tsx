@@ -4,7 +4,7 @@ import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import { Sparkline } from '../components/Sparkline'
+import { Sparkline } from '../components/sparkline'
 
 const Page: Component = () => {
   const [pagination, setPagination] = createStore({

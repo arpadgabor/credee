@@ -4,7 +4,7 @@ import { Component, Match, Switch } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { DataTable, DateCell, HoverCard, PageHeader, StringCell } from '../../../components/ui'
 import { api, uploadsPath } from '../../../utils/trpc'
-import { RedditPostInfoCell } from '../components/RedditPostInfoCell'
+import { RedditPostInfoCell } from '../components/post-info-cell'
 
 const Page: Component = () => {
   const [sorting, setSorting] = createStore<SortingState>([{ id: 'inserted_at', desc: true }])
