@@ -1,7 +1,8 @@
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createListSchema as listOf } from '../../core/zod.js'
-import { countSurveys, createSurvey, listSurveys } from './survey.service.js'
+import { countSurveys, createSurvey, findSurvey, listSurveys } from './survey.service.js'
 
 const surveyCreate = z.object({
   title: z.string(),
@@ -32,6 +33,22 @@ const list = procedure.output(listSchema).query(async () => {
   }
 })
 
+const getById = procedure
+  .output(surveySchema)
+  .input(z.number())
+  .query(async ({ input }) => {
+    const survey = await findSurvey(input)
+
+    if (!survey) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        cause: 'Could not find survey.',
+      })
+    }
+
+    return survey
+  })
+
 const create = procedure
   .input(surveyCreate)
   .output(surveySchema)
@@ -51,4 +68,5 @@ const create = procedure
 export const SurveyRouter = router({
   create,
   list,
+  getById,
 })

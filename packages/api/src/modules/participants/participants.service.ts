@@ -12,7 +12,17 @@ export async function createParticipant(data: Omit<Participants, 'id' | 'created
     throw new Error('Survey is expired. Sorry.')
   }
 
-  // @ts-expect-error
+  // if a participant tries to start the same survey again, just return their data
+  const participant = await db
+    .selectFrom('participants')
+    .selectAll()
+    .where('survey_id', '=', data.survey_id)
+    .where('external_participant_id', '=', data.external_participant_id)
+    .executeTakeFirst()
+
+  if (participant) return participant
+
+  // @ts-expect-error typescript complains for no reason
   const response = await db
     .insertInto('participants')
     .values({

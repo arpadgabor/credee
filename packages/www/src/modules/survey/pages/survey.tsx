@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { createStore } from 'solid-js/store'
 import { Alert } from '@kobalte/core'
 import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
-import { createMutation } from '@tanstack/solid-query'
+import { createMutation, createQuery } from '@tanstack/solid-query'
 
 const queryParams = z.object({
   referrer: z.enum(['prolific']),
@@ -22,6 +22,12 @@ export default function Survey() {
   // @ts-ignore
   const [surveyInfo, setSurveyInfo] = createStore<Query | undefined>()
   const [invalidSession, setInvalidSession] = createSignal(false)
+
+  const survey = createQuery(() => [params.id], {
+    queryFn: async () => {
+      return api.surveys.getById.query(Number(params.id))
+    },
+  })
 
   const onboard = createMutation({
     mutationFn: async (data: OnboardingFields) => {
@@ -60,11 +66,11 @@ export default function Survey() {
   return (
     <div>
       <section class='max-w-2xl mx-auto pt-32 pb-12 px-4'>
-        <Show when={invalidSession()}>
+        <Show when={invalidSession() || survey.isError}>
           <Alert.Root class='text-red-600 font-bold'>Sorry, it looks like you cannot access this survey.</Alert.Root>
         </Show>
 
-        <Show when={!invalidSession()}>
+        <Show when={!invalidSession() || survey.isSuccess}>
           <SurveyRenderer onSubmit={onSubmit} survey={postCredibilityForm} loading={onboard.isLoading} />
         </Show>
       </section>
