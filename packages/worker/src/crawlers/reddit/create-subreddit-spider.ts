@@ -210,6 +210,6 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     prepare,
     crawl,
     on: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.on(key, cb),
-    off: <T extends keyof EmittedEvents>(key: T, cb: (data: EmittedEvents[T]) => any) => eventQueue.off(key, cb),
+    removeAllListeners: eventQueue.removeAllListeners,
   }
 }

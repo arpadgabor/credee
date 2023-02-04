@@ -20,7 +20,7 @@ const Page: Component = () => {
       data: [],
     },
     queryFn: () => {
-      return api.jobs.redditResults.query({
+      return api.reddit.redditResults.query({
         limit: pagination.pageSize,
         offset: pagination.pageIndex * pagination.pageSize,
         order: sorting?.map(({ id, desc }) => ({

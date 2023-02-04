@@ -1,33 +1,28 @@
 import { createQuery } from '@tanstack/solid-query'
-import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel, SortingState } from '@tanstack/solid-table'
-import { Component, Match, Switch } from 'solid-js'
+import { createColumnHelper, createSolidTable, getCoreRowModel, getPaginationRowModel } from '@tanstack/solid-table'
+import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DataTable, DateCell, HoverCard, PageHeader, StringCell } from '../../../components/ui'
-import { api, uploadsPath } from '../../../utils/trpc'
-import { RedditPostInfoCell } from '../components/RedditPostInfoCell'
+import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
+import { api } from '../../../utils/trpc'
+import { Sparkline } from '../components/Sparkline'
 
 const Page: Component = () => {
-  const [sorting, setSorting] = createStore<SortingState>([{ id: 'inserted_at', desc: true }])
   const [pagination, setPagination] = createStore({
     pageIndex: 0,
-    pageSize: 15,
+    pageSize: 10,
   })
 
-  const results = createQuery(() => ['detailed_reddit', pagination, sorting], {
+  const results = createQuery(() => ['detailed_reddit', pagination], {
     keepPreviousData: true,
     initialData: {
       meta: { count: 0 },
       data: [],
     },
     queryFn: () => {
-      return api.jobs.redditByPostId.query()
-      // limit: pagination.pageSize,
-      // offset: pagination.pageIndex * pagination.pageSize,
-      // order: sorting?.map(({ id, desc }) => ({
-      //   column: id as any,
-      //   sort: desc ? 'desc' : 'asc',
-      // })),
-      // })
+      return api.reddit.redditByPostId.query({
+        limit: pagination.pageSize,
+        offset: pagination.pageIndex * pagination.pageSize,
+      })
     },
   })
 
@@ -43,31 +38,30 @@ const Page: Component = () => {
     col.accessor('title', {
       header: 'Title',
       cell: StringCell,
-      size: 512,
+      size: 700,
     }),
-    col.accessor('score', {
-      header: 'Score',
-      cell: StringCell,
-      size: 64,
+    col.accessor('created_at', {
+      header: 'Posted at',
+      cell: DateCell,
+      size: 128,
     }),
     col.accessor('flair', {
       header: 'Flair',
       cell: StringCell,
       size: 64,
     }),
-    col.accessor('gold_count', {
-      header: 'Award count',
-      cell: StringCell,
-      size: 64,
-    }),
-    col.accessor('scrape_count', {
-      header: 'Scrape count',
-      cell: StringCell,
-      size: 64,
-    }),
-    col.accessor('inserted_at', {
-      header: 'Last scrape',
-      cell: DateCell,
+    col.accessor('history', {
+      header: 'Score history',
+      size: 196,
+      cell: cell => {
+        const id = cell.row.original.post_id
+        const history = cell.getValue().map(item => ({
+          ...item,
+          inserted_at: new Date(item.inserted_at),
+        }))
+
+        return <Sparkline id={id} dataset={history} labelField='inserted_at' valueFields={['gold', 'score']} />
+      },
     }),
   ]
 
@@ -76,22 +70,19 @@ const Page: Component = () => {
     get data() {
       return results.data?.data
     },
-    // state: {
-    //   get pagination() {
-    //     return pagination
-    //   },
-    //   get sorting() {
-    //     return sorting
-    //   },
-    // },
-    // manualPagination: true,
+    state: {
+      get pagination() {
+        return pagination
+      },
+    },
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
-    // getSortedRowModel: getSortedRowModel(),
-    // onPaginationChange: setPagination,
-    // onSortingChange: setSorting,
-    // get pageCount() {
-    //   return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
-    // },
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    enableSorting: false,
+    get pageCount() {
+      return results.data.meta.count ? Math.ceil(results.data.meta.count / pagination.pageSize) : 0
+    },
   })
 
   return (

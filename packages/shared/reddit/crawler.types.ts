@@ -1,4 +1,3 @@
-import type { EventEmitter } from 'node:events'
 import { RichTextJSONSegment } from './rich-text.types.js'
 import { Media } from './subreddit.types.js'
 
@@ -6,6 +5,7 @@ export interface RedditCrawledPost {
   id: string
   createdAt: string
   title: string
+  titleSentiment?: number | null
 
   screenshotPath?: string
 
@@ -56,5 +56,6 @@ export interface RedditCrawledPost {
 
 export interface RedditCrawlerOptions {
   subreddit: `/r/${string}`
-  endAfter: { count: number }
+  count: number
+  ordering?: 'top' | 'new' | 'hot'
 }

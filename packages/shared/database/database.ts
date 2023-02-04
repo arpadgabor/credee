@@ -8,6 +8,7 @@ export interface RedditPost {
   screenshot_filename: string
   created_at: Date
   title: string
+  title_sentiment: number | null
 
   subreddit: string
   author: string

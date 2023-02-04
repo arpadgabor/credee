@@ -24,7 +24,7 @@ export async function getActiveJobs() {
   return Promise.all(
     jobs.map(async job => {
       const data = await redis.hGetAll(`data:${job.key}`)
-      console.log(data)
+
       return {
         ...job,
         subreddit: data.subreddit,

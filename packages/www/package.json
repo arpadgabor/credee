@@ -17,6 +17,7 @@
     "@tanstack/solid-query": "^4.24.4",
     "@tanstack/solid-table": "^8.7.9",
     "@trpc/client": "^10.9.1",
+    "chart.js": "^4.2.0",
     "solid-js": "^1.6.10",
     "superjson": "^1.12.2",
     "zod": "^3.20.2"

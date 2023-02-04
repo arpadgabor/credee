@@ -8,6 +8,7 @@ export async function savePost(post: RedditCrawledPost) {
       post_id: post.id,
       title: post.title,
       screenshot_filename: post.screenshotPath!,
+      title_sentiment: post.titleSentiment,
 
       domain: post.domain,
       url: post.url,
