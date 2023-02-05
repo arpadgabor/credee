@@ -49,7 +49,7 @@ export function Select<T extends Option>($: InputProps<T>) {
       <_Select.Portal>
         <_Select.Content class='bg-white rounded focus-within:outline-none shadow-lg z-[999]'>
           <_Select.Listbox class='focus-within:outline-none'>
-            <For each={$.options}>
+            <For each={$.options || []}>
               {option => (
                 <_Select.Item
                   value={option.value}
