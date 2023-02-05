@@ -9,7 +9,7 @@ const button = cva(
   {
     variants: {
       size: {
-        default: 'h-12 px-4',
+        default: 'h-10 px-4',
         sm: 'h-8 px-3 text-sm',
       },
       theme: {

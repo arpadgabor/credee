@@ -2,13 +2,12 @@ import { Checkbox } from '@kobalte/core'
 import { Field, FieldValues, FormState, getError } from '@modular-forms/solid'
 import { createInfiniteQuery } from '@tanstack/solid-query'
 import { cx } from 'class-variance-authority'
-import { createSignal, For, JSX, Show } from 'solid-js'
+import { ErrorBoundary, For, Show } from 'solid-js'
 import CheckIcon from '~icons/lucide/check'
-import { Button, FieldAlert, FieldLabel, Input } from '../../../components/ui'
+import { Button, FieldAlert, FieldLabel } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import { InfoTag } from './info-tag'
 import { PostTags } from './post-tags'
-import { SentimentMeter } from './sentiment-meter'
+import { createRedditFilters, RedditFilters } from './reddit-filters'
 
 interface Props<FORM extends FieldValues> {
   form: FormState<FORM>
@@ -16,18 +15,17 @@ interface Props<FORM extends FieldValues> {
 }
 
 export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
-  const [search, setSearch] = createSignal<string>()
-  const onTypeSearch: JSX.EventHandlerUnion<HTMLInputElement, Event> = e => {
-    setSearch(e.currentTarget.value)
-  }
+  const { filterBy, props } = createRedditFilters()
 
   const posts = createInfiniteQuery({
-    queryKey: () => [search()],
+    queryKey: () => [filterBy],
     queryFn: ({ pageParam }) => {
       return api.reddit.redditByPostId.query({
         limit: 10,
         offset: pageParam ?? 0,
-        flair: search(),
+        flair: filterBy.flair || undefined,
+        subreddit: filterBy.subreddit || undefined,
+        title: filterBy.title,
       })
     },
     getNextPageParam: lastPage => {
@@ -38,9 +36,7 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
   return (
     <div>
       <FieldLabel>Select posts to be included survey</FieldLabel>
-      <div class='flex mb-2'>
-        <Input type='text' value={search()} onInput={onTypeSearch} name='search' placeholder='Search by flair' />
-      </div>
+      <RedditFilters {...props} />
 
       <div class='flex flex-col space-y-1'>
         <For each={posts.data?.pages || []}>

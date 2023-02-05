@@ -7,8 +7,8 @@ const input = cva(
   {
     variants: {
       size: {
-        default: 'h-12 px-3',
-        sm: 'h-10 px-3',
+        default: 'h-10 px-3',
+        sm: 'h-9 px-3',
       },
       theme: {
         default: 'border-gray-300 hover:border-gray-400 text-gray-900 focus:border-accent-500',

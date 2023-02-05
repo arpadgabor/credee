@@ -5,6 +5,7 @@ import { createStore } from 'solid-js/store'
 import { Button, DataTable, DateCell, Input, PageHeader, Select, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { PostTags } from '../components/post-tags'
+import { createRedditFilters, RedditFilters } from '../components/reddit-filters'
 import { Sparkline } from '../components/sparkline'
 
 const sparklineColors = {
@@ -20,24 +21,7 @@ const Page: Component = () => {
     pageIndex: 0,
     pageSize: 25,
   })
-  const [filterBy, setFilter] = createStore({
-    subreddit: '' as string,
-    flair: '' as string,
-    title: '' as string,
-  })
-  function clearFilters() {
-    setFilter('flair', '')
-    setFilter('subreddit', '')
-    setFilter('title', '')
-  }
-
-  const filters = createQuery(() => ['detailed_reddit_fitlers'], {
-    queryFn: async () => {
-      return await api.reddit.redditFilters.query()
-    },
-  })
-  const subreddits = () => [{ label: 'Any', value: '' }, ...(filters.data?.subreddits.map(s => ({ label: s, value: s })) ?? [])]
-  const flairs = () => [{ label: 'Any', value: '' }, ...(filters.data?.flairs.map(s => ({ label: s, value: s })) ?? [])]
+  const { filterBy, props } = createRedditFilters()
 
   const results = createQuery(() => ['detailed_reddit', pagination, filterBy], {
     keepPreviousData: true,
@@ -142,30 +126,9 @@ const Page: Component = () => {
           </>
         }
       />
-      <div class='flex mb-2 flex-row gap-2'>
-        <Select
-          options={subreddits()}
-          value={filterBy.subreddit}
-          label='Subreddits'
-          name='subreddits'
-          class='w-64'
-          placeholder='Select subreddit'
-          onSelect={e => setFilter('subreddit', e)}
-        />
-        <Select
-          options={flairs()}
-          value={filterBy.flair}
-          label='Flair'
-          name='flair'
-          class='w-64'
-          placeholder='Select flair'
-          onSelect={e => setFilter('flair', e)}
-        />
-        <Input placeholder='Search by title' onInput={e => setFilter('title', e.currentTarget.value)} value={filterBy.title} />
-        <Button theme='ghost' onClick={clearFilters}>
-          Clear
-        </Button>
-      </div>
+
+      <RedditFilters {...props} />
+
       <DataTable table={table} loading={results.isLoading} error={results.isError} />
     </section>
   )

@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
-      main: ['Fira Code'],
+      main: ['Inter'],
       mono: ['Fira Code'],
     },
     fontWeight: {

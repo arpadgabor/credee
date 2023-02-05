@@ -1,5 +1,5 @@
 import { Select as _Select } from '@kobalte/core'
-import { For, JSX } from 'solid-js'
+import { For, JSX, Show } from 'solid-js'
 import UpDown from '~icons/lucide/chevrons-up-down'
 import Check from '~icons/lucide/check'
 import { cva, cx, VariantProps } from 'class-variance-authority'
@@ -9,7 +9,7 @@ const selectOuter = cva(
   ['flex items-center rounded border font-normal transition bg-white shadow-sm hover:shadow relative', focus, formGroup],
   {
     variants: {
-      size: { default: 'h-12 px-3' },
+      size: { default: 'h-10 px-3' },
       theme: {
         default: 'border-gray-300 hover:border-gray-400 text-gray-900 focus:border-accent-500',
       },
@@ -47,7 +47,7 @@ export function Select<T extends Option>($: InputProps<T>) {
       </_Select.Trigger>
 
       <_Select.Portal>
-        <_Select.Content class='bg-white rounded focus-within:outline-none shadow-lg'>
+        <_Select.Content class='bg-white rounded focus-within:outline-none shadow-lg z-[999]'>
           <_Select.Listbox class='focus-within:outline-none'>
             <For each={$.options}>
               {option => (
