@@ -3,12 +3,12 @@ import { db } from '@credee/shared/database'
 import type { RedditPost } from '@credee/shared/database'
 import { z } from 'zod'
 
+//#region listRedditResults
 interface RedditListOptions {
   limit?: number
   offset?: number
   order?: { column: keyof RedditPost; sort: 'asc' | 'desc' }[]
 }
-
 export async function listRedditResults({ limit, offset, order }: RedditListOptions = { limit: 25, offset: 0 }) {
   let query = db
     .selectFrom('reddit_posts')
@@ -43,13 +43,16 @@ export async function listRedditResults({ limit, offset, order }: RedditListOpti
 
   return { data, count: Number(count?.count) }
 }
+//#endregion
 
+//#region groupById
 export const groupByIdQuerySchema = z.object({
   limit: z.number().optional(),
   offset: z.number().optional(),
   flair: z.string().optional(),
+  subreddit: z.string().optional(),
+  title: z.string().optional(),
 })
-
 export const groupByIdItem = z.object({
   post_id: z.string(),
   title: z.string(),
@@ -70,10 +73,9 @@ export const groupByIdItem = z.object({
     })
   ),
 })
-
 type GroupByIdItem = z.infer<typeof groupByIdItem>
 
-export async function groupById({ limit, offset, flair }: z.infer<typeof groupByIdQuerySchema>) {
+export async function groupById({ limit, offset, flair, subreddit, title }: z.infer<typeof groupByIdQuerySchema>) {
   let countQuery = db.selectFrom('reddit_posts').select(db.fn.count('post_id').distinct().as('count'))
   let query = db
     .selectFrom('reddit_posts')
@@ -86,8 +88,8 @@ export async function groupById({ limit, offset, flair }: z.infer<typeof groupBy
       'subreddit',
       'domain',
       'permalink',
-      $ => sql`max(${$.ref('title_sentiment')})`.as('title_sentiment'),
       'url',
+      $ => sql`max(${$.ref('title_sentiment')})`.as('title_sentiment'),
       $ =>
         sql<GroupByIdItem['history']>`jsonb_agg(
           json_build_object(
@@ -104,8 +106,16 @@ export async function groupById({ limit, offset, flair }: z.infer<typeof groupBy
     .offset(offset ?? 0)
 
   if (flair) {
-    query = query.where('flair', 'ilike', flair + '%')
-    countQuery = countQuery.where('flair', 'ilike', flair + '%')
+    query = query.where('flair', '=', flair)
+    countQuery = countQuery.where('flair', '=', flair)
+  }
+  if (subreddit) {
+    query = query.where('subreddit', '=', subreddit)
+    countQuery = countQuery.where('subreddit', '=', subreddit)
+  }
+  if (title) {
+    query = query.where('title', 'ilike', '%' + title + '%')
+    countQuery = countQuery.where('title', 'ilike', '%' + title + '%')
   }
 
   const [data, count] = await Promise.all([query.execute(), countQuery.executeTakeFirst()])
@@ -115,3 +125,23 @@ export async function groupById({ limit, offset, flair }: z.infer<typeof groupBy
     count: Number(count?.count),
   }
 }
+//#endregion
+
+//#region getRedditFilters
+export const redditFiltersResult = z.object({
+  subreddits: z.array(z.string()),
+  flairs: z.array(z.string()),
+})
+
+export async function getRedditFilters() {
+  const [subreddits, flairs] = await Promise.all([
+    db.selectFrom('reddit_posts').distinct().select('subreddit').execute(),
+    db.selectFrom('reddit_posts').distinct().select('flair').execute(),
+  ])
+
+  return {
+    subreddits: subreddits.map(item => item.subreddit),
+    flairs: flairs.map(item => item.flair).filter(Boolean) as string[],
+  }
+}
+//#endregion

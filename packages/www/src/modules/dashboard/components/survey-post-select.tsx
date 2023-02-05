@@ -1,15 +1,14 @@
 import { Checkbox } from '@kobalte/core'
-import { FormState, getError, Field, FieldValues } from '@modular-forms/solid'
-import { createEffect, createSignal, For, JSX, Show } from 'solid-js'
-import CheckIcon from '~icons/lucide/check'
-import { api } from '../../../utils/trpc'
+import { Field, FieldValues, FormState, getError } from '@modular-forms/solid'
 import { createInfiniteQuery } from '@tanstack/solid-query'
-import { Button, FieldAlert, FieldLabel, Input } from '../../../components/ui'
 import { cx } from 'class-variance-authority'
-import { SentimentMeter } from './sentiment-meter'
+import { createSignal, For, JSX, Show } from 'solid-js'
+import CheckIcon from '~icons/lucide/check'
+import { Button, FieldAlert, FieldLabel, Input } from '../../../components/ui'
+import { api } from '../../../utils/trpc'
 import { InfoTag } from './info-tag'
-import { Outputs } from '@credee/api'
-import { debounce } from 'lodash-es'
+import { PostTags } from './post-tags'
+import { SentimentMeter } from './sentiment-meter'
 
 interface Props<FORM extends FieldValues> {
   form: FormState<FORM>
@@ -35,11 +34,6 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
       return lastPage.meta.next! >= lastPage.meta.count! ? undefined : lastPage.meta.next
     },
   })
-
-  type Post = Outputs['reddit']['redditByPostId']['data'][number]
-  const latestHistory = (post: Post): Post['history'][number] => {
-    return post.history[post.history.length - 1]
-  }
 
   return (
     <div>
@@ -77,20 +71,7 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
 
                         <Checkbox.Label class='text-gray-800 text-sm'>{post.title}</Checkbox.Label>
 
-                        <div class='flex text-xs text-gray-700 mt-2 space-x-4'>
-                          <Show when={Number.isFinite(post.title_sentiment)}>
-                            <SentimentMeter sentiment={post.title_sentiment!} />
-                          </Show>
-
-                          <InfoTag label='Upvotes' icon='arrowUp' value={latestHistory(post).score} />
-
-                          <InfoTag label='Ratio' icon='upDown' value={latestHistory(post).ratio * 100 + '%'} />
-
-                          <InfoTag label='Comments' icon='message' value={latestHistory(post).comments} />
-
-                          <InfoTag label='Awards' icon='coin' value={latestHistory(post).gold} />
-                          <InfoTag label='Scrape times' icon='files' value={post.history.length} />
-                        </div>
+                        <PostTags post={post} />
                       </div>
 
                       <div class='flex items-start'>

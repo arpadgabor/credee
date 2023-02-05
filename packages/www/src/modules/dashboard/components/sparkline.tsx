@@ -8,6 +8,7 @@ interface Props<T extends Record<string, ValidData>> {
   dataset: T[]
   labelField: keyof T
   valueFields: (keyof T)[]
+  colors?: Record<keyof T, string>
 }
 
 export const Sparkline = <T extends Record<string, ValidData>>(props: Props<T>) => {
@@ -22,6 +23,8 @@ export const Sparkline = <T extends Record<string, ValidData>>(props: Props<T>) 
           data: props.dataset.map(d => d[field]),
           label: String(field),
           fill: true,
+          borderColor: props.colors?.[field],
+          backgroundColor: props.colors?.[field] ? `${props.colors?.[field]}10` : undefined,
         })),
       },
       options: {
@@ -37,7 +40,7 @@ export const Sparkline = <T extends Record<string, ValidData>>(props: Props<T>) 
           },
         },
         layout: {
-          padding: 2,
+          padding: 0,
         },
         elements: {
           line: {
@@ -46,8 +49,9 @@ export const Sparkline = <T extends Record<string, ValidData>>(props: Props<T>) 
             tension: 0.5,
           },
           point: {
-            radius: 2,
+            radius: 1,
             backgroundColor: '#000',
+            drawActiveElementsOnTop: true,
           },
         },
         scales: {

@@ -1,7 +1,14 @@
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createListSchema } from '../../core/zod.js'
-import { groupById, groupByIdItem, groupByIdQuerySchema, listRedditResults } from './reddit.service.js'
+import {
+  getRedditFilters,
+  groupById,
+  groupByIdItem,
+  groupByIdQuerySchema,
+  listRedditResults,
+  redditFiltersResult,
+} from './reddit.service.js'
 
 const redditByPostId = procedure
   .input(groupByIdQuerySchema.optional())
@@ -51,7 +58,14 @@ const redditResults = procedure
     }
   })
 
+const redditFilters = procedure.output(redditFiltersResult).query(async () => {
+  const filters = await getRedditFilters()
+
+  return filters
+})
+
 export const RedditRouter = router({
   redditResults,
   redditByPostId,
+  redditFilters,
 })

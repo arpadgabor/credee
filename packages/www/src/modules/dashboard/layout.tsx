@@ -37,9 +37,9 @@ const OverviewLayout: Component = () => {
         <nav class='flex flex-col px-4 py-4'>
           <NavGroupHeader>Reddit</NavGroupHeader>
           <NavLink href='/dashboard/reddit/surveys'>Surveys</NavLink>
-          <NavLink href='/dashboard/reddit/jobs'>Crawl Jobs</NavLink>
-          <NavLink href='/dashboard/reddit/dataset'>Dataset</NavLink>
-          <NavLink href='/dashboard/reddit/detailed'>Detailed data</NavLink>
+          <NavLink href='/dashboard/reddit/detailed'>Detailed Data</NavLink>
+          <NavLink href='/dashboard/reddit/jobs'>Scrape Jobs</NavLink>
+          <NavLink href='/dashboard/reddit/dataset'>Scrape Results</NavLink>
         </nav>
       </aside>
 

@@ -28,13 +28,14 @@ interface InputProps<Options extends Option> extends StyleProps {
   name: string
   label: string
   placeholder?: string
+  value?: string
   options: Options[]
   onSelect?: (value: string) => void
 }
 
 export function Select<T extends Option>($: InputProps<T>) {
   return (
-    <_Select.Root name={$.name} onValueChange={$.onSelect}>
+    <_Select.Root name={$.name} onValueChange={$.onSelect} value={$.value}>
       <_Select.Trigger class={selectOuter({ class: $.class })} aria-label={$.label}>
         <_Select.Value placeholder={$.placeholder} class='pr-8 flex-1 text-left' />
 
