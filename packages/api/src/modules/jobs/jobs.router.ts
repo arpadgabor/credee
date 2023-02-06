@@ -23,7 +23,7 @@ const redditCrawl = procedure.input(crawlRedditInput).mutation(async ({ input })
   await queueRedditCrawl(
     {
       subreddit: input.subreddit as any,
-      stopsAfterCount: input.stopsAfterCount,
+      count: input.stopsAfterCount,
     },
     input.repeat ?? { every: 1_000 * 60 * 60 }
   )

@@ -18,6 +18,7 @@ require('esbuild')
       'convict',
       '@aws-sdk/*',
       'natural',
+      'got',
     ],
     logLevel: 'debug',
     banner: {

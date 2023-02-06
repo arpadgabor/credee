@@ -17,6 +17,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
   const eventQueue = new EventEmitter()
 
   //#region prepare page
+  /** @private */
   async function interceptPostsList() {
     page.on('response', async response => {
       const url = response.url()
@@ -59,6 +60,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
    *   '[href="/"]',
    *   (page) => { ... }
    * ])
+   * @public
    */
   async function prepare(selectors: (string | ((page: playwright.Page) => Promise<void>))[] = []): Promise<void> {
     await page.goto(`${baseUrl}${subreddit}/top`)
@@ -77,6 +79,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
   }
   //#endregion
 
+  /** @private */
   async function awaitPostData() {
     return await new Promise<{ post: Post; comments: Comment[] }>(async (resolve, reject) => {
       let done = false
@@ -107,6 +110,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     })
   }
 
+  /** @private */
   async function scrape(postId: string) {
     console.info('-------------------------')
     console.info(`SCRAPE ${count} ${postId}: Started`)
@@ -173,6 +177,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     }
   }
 
+  /** @private */
   async function crawler() {
     if (remainingEmptyLoops === 0) {
       resolveTask()
@@ -199,6 +204,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
     if (crawling) setTimeout(crawler, 100)
   }
 
+  /** @public */
   async function crawl() {
     await new Promise(async resolve => {
       resolveTask = resolve

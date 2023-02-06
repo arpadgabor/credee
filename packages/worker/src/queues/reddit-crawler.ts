@@ -1,10 +1,10 @@
-import { useReddit } from '@credee/shared/reddit/queue'
+import { useRedditCrawler } from '@credee/shared/reddit/queue'
 import type { CrawlInput } from '@credee/shared/reddit/types'
 import { Worker } from 'bullmq'
 import { crawlReddit } from '../crawlers/index.js'
 import { redisConnection } from '../redis.js'
 
-const { queueName } = useReddit({
+const { queueName } = useRedditCrawler({
   redisConnection,
 })
 
@@ -15,12 +15,11 @@ export const worker = new Worker<CrawlInput>(
 
     await crawlReddit({
       subreddit: job.data.subreddit,
-      endAfter: { count: job.data.stopsAfterCount ?? 5 },
+      count: job.data.count ?? 5,
     }).catch(e => {
       console.log(e)
       throw e
     })
-    console.log('Done!')
   },
   { autorun: false, connection: redisConnection }
 )

@@ -3,7 +3,7 @@ import { RedditCrawledPost } from './crawler.types.js'
 
 export interface CrawlInput {
   subreddit: `/r/${string}`
-  stopsAfterCount?: number
+  count?: number
 }
 
 export interface CrawlOutput {

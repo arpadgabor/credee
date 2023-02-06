@@ -1,11 +1,11 @@
-import { useReddit } from '@credee/shared/reddit/queue'
+import { useRedditCrawler, useRedditUpdater } from '@credee/shared/reddit/queue'
 import { config } from '../../../config.js'
 
-const Reddit = useReddit({
-  redisConnection: {
-    host: config.get('redis.host'),
-    port: config.get('redis.port'),
-  },
-})
+const redisConnection = {
+  host: config.get('redis.host'),
+  port: config.get('redis.port'),
+}
+const RedditCrawler = useRedditCrawler({ redisConnection })
+const RedditUpdater = useRedditUpdater({ redisConnection })
 
-export { Reddit }
+export { RedditCrawler, RedditUpdater }
