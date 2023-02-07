@@ -1,18 +1,18 @@
-import { db, json } from '@credee/shared/database'
+import { db, json, sql } from '@credee/shared/database'
 import { Post, RedditCrawledPost, Comment } from '@credee/shared/reddit/types'
 
 export function parsePost({ post, comments }: { post: Post; comments: Comment[] }) {
-  const isSelfPost = post.media.type === 'rtjson'
+  const isSelfPost = post.media?.type === 'rtjson'
   const isCrossPost = !!post.crosspostParentId
   const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
-  const isImage = post.media.type === 'image'
+  const isImage = post.media?.type === 'image'
   const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
   const comms = comments
     .filter(com => !(com.isAdmin || com.isMod))
     .map(com => ({
       id: com.id,
       author: com.author,
-      content: com.media.richtextContent,
+      content: com.media?.richtextContent,
       createdAt: new Date(com.created).toISOString(),
       editedAt: com.editedAt ? new Date(com.editedAt).toISOString() : null,
       gildings: com.gildings,
@@ -82,4 +82,16 @@ export async function savePost(post: RedditCrawledPost) {
 export async function getPost(postId: string) {
   const post = await db.selectFrom('reddit_posts').selectAll().where('post_id', '=', postId).executeTakeFirst()
   return post
+}
+
+const MAX_SCRAPES = 6
+export async function listPostsForUpdate() {
+  const posts = await db
+    .selectFrom('reddit_posts')
+    .select(['post_id', 'permalink', 'subreddit'])
+    .groupBy(['post_id', 'permalink', 'subreddit'])
+    .having(b => sql`count(${b.ref('post_id')})`, '<', MAX_SCRAPES)
+    .execute()
+
+  return posts
 }

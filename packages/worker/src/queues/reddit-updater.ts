@@ -4,16 +4,15 @@ import { updatePostData } from '../crawlers/reddit/update-post-data.js'
 import { redisConnection } from '../redis.js'
 import { browser } from '../utils/browser.js'
 
-const { queueName } = useRedditUpdater({
+const { queueName, queue } = useRedditUpdater({
   redisConnection,
 })
 
 export const worker = new Worker<{ postId: string }>(
   queueName,
-  async job => {
-    await updatePostData(job.data.postId, browser).catch(e => {
+  async () => {
+    await updatePostData(browser).catch(e => {
       console.log(e)
-      throw e
     })
   },
   { autorun: false, connection: redisConnection }

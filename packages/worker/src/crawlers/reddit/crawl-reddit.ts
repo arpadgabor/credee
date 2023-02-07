@@ -7,10 +7,6 @@ import { sentiment } from '../../utils/sentiment.js'
 import { createSubredditCrawler } from './create-subreddit-spider.js'
 import { getPost, parsePost, savePost } from './post-actions.js'
 
-const MINUTE = 1000 * 60
-
-const { queue: redditUpdater } = useRedditUpdater({ redisConnection })
-
 export async function crawlReddit(options: RedditCrawlerOptions) {
   const context = await browser.newContext({
     viewport: { height: 800, width: 1600 },
@@ -73,18 +69,6 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
         comments: comms,
         awards,
       })
-
-      await redditUpdater.add(
-        post.id,
-        { postId: post.id },
-        {
-          jobId: post.id,
-          repeat: {
-            limit: 24,
-            every: 120 * MINUTE,
-          },
-        }
-      )
     } catch (error) {
       console.log('Errored in reddit scraper', error)
     }

@@ -1,5 +1,6 @@
 import type { Media, RichTextJSONSegment } from '../reddit/types.js'
 import type { Generated } from 'kysely'
+import { sql } from 'kysely'
 
 export interface RedditPost {
   id: Generated<number>
@@ -105,3 +106,5 @@ export interface Database {
   responses_credibility: ResponsesCredibility
   survey_reddit_dataset: SurveyRedditDataset
 }
+
+export { sql }

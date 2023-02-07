@@ -15,7 +15,7 @@ export function useRedditUpdater({ redisConnection }: { redisConnection: Connect
   const queueName = 'reddit-updater'
   return {
     queueName,
-    queue: new Queue<{ postId: string }>(queueName, { connection: redisConnection }),
+    queue: new Queue<null>(queueName, { connection: redisConnection }),
     queueEvents: new QueueEvents(queueName, { connection: redisConnection }),
   }
 }
