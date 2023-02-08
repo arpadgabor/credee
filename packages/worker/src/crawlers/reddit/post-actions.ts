@@ -84,7 +84,7 @@ export async function getPost(postId: string) {
   return post
 }
 
-const MAX_SCRAPES = 6
+const MAX_SCRAPES = 24
 export async function listPostsForUpdate() {
   const posts = await db
     .selectFrom('reddit_posts')
