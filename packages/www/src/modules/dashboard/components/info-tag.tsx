@@ -1,16 +1,15 @@
-import { Match, Switch } from 'solid-js'
 import ArrowUp from '~icons/lucide/arrow-up'
 import ArrowUpDown from '~icons/lucide/arrow-up-down'
 import Message from '~icons/lucide/message-square'
 import Coin from '~icons/lucide/coins'
-import Files from '~icons/lucide/files'
+import Photo from '~icons/lucide/camera'
 
 const icons = {
   arrowUp: ArrowUp,
   upDown: ArrowUpDown,
   message: Message,
   coin: Coin,
-  files: Files,
+  scrape: Photo,
 } as const
 
 export function InfoTag(props: { value: any; label: string; icon: keyof typeof icons }) {

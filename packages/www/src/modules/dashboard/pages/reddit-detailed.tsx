@@ -2,7 +2,7 @@ import { createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getPaginationRowModel } from '@tanstack/solid-table'
 import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { Button, DataTable, DateCell, Input, PageHeader, Select, StringCell } from '../../../components/ui'
+import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { PostTags } from '../components/post-tags'
 import { createRedditFilters, RedditFilters } from '../components/reddit-filters'
@@ -51,16 +51,24 @@ const Page: Component = () => {
         return (
           <div class='flex flex-col'>
             <div class='flex space-x-2 text-xs text-gray-500 mb-1'>
-              <span>
-                {post.subreddit}/{post.post_id}
-              </span>
+              <span>{post.subreddit}</span>
+              <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
+                {post.post_id}
+              </a>
             </div>
             <p class='mb-2'>{cell.getValue()}</p>
-            <PostTags post={post} />
           </div>
         )
       },
       size: 700,
+    }),
+    col.display({
+      id: 'tags',
+      header: 'Features',
+      cell: cell => {
+        const post = cell.row.original
+        return <PostTags post={post} />
+      },
     }),
     col.accessor('created_at', {
       header: 'Posted at',

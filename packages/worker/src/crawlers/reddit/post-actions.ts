@@ -1,5 +1,6 @@
 import { db, json, sql } from '@credee/shared/database'
 import { Post, RedditCrawledPost, Comment } from '@credee/shared/reddit/types'
+import { subDays } from 'date-fns'
 
 export function parsePost({ post, comments }: { post: Post; comments: Comment[] }) {
   const isSelfPost = post.media?.type === 'rtjson'
@@ -84,13 +85,14 @@ export async function getPost(postId: string) {
   return post
 }
 
-const MAX_SCRAPES = 24
+const MAX_SCRAPES = 36
 export async function listPostsForUpdate() {
   const posts = await db
     .selectFrom('reddit_posts')
-    .select(['post_id', 'permalink', 'subreddit'])
-    .groupBy(['post_id', 'permalink', 'subreddit'])
+    .select(['post_id', 'permalink', 'subreddit', 'created_at'])
+    .groupBy(['post_id', 'permalink', 'subreddit', 'created_at'])
     .having(b => sql`count(${b.ref('post_id')})`, '<', MAX_SCRAPES)
+    .having('created_at', '>', subDays(new Date(), 3))
     .execute()
 
   return posts

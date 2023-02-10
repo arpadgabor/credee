@@ -8,11 +8,20 @@ import { Button, FieldAlert, FieldLabel } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { PostTags } from './post-tags'
 import { createRedditFilters, RedditFilters } from './reddit-filters'
+import { Sparkline } from './sparkline'
 
 interface Props<FORM extends FieldValues> {
   form: FormState<FORM>
   fieldName: keyof FORM
 }
+
+const sparklineColors = {
+  gold: '#FCAB10',
+  score: '#000000',
+  comments: '#84DCCF',
+  ratio: '#aaaaaa',
+  inserted_at: '',
+} as const
 
 export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
   const { filterBy, props } = createRedditFilters()
@@ -48,7 +57,7 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
                     <Checkbox.Root
                       isChecked={(field.value as string[])?.includes(post.post_id)}
                       class={cx([
-                        'flex py-3 px-2 border border-gray-300 rounded hover:bg-gray-50 hover:border-gray-400 transition',
+                        'flex py-2 px-2 border border-gray-300 rounded hover:bg-gray-50 hover:border-gray-400 transition',
                         'data-[checked]:border-accent-500 focus-within:ring-2 focus-within:ring-accent-400 focus-within:border-gray-400',
                       ])}
                     >
@@ -58,16 +67,32 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
                         value={post.post_id}
                         checked={(field.value as string[])?.includes(post.post_id)}
                       />
-                      <div class='flex-1'>
-                        <div class='flex space-x-2 text-xs text-gray-500 mb-1'>
-                          <span>
-                            {post.subreddit}/{post.post_id}
-                          </span>
+                      <div class='flex-1 flex space-x-2'>
+                        <div class='w-64 rounded bg-gray-50 border '>
+                          <Sparkline
+                            id={post.post_id}
+                            dataset={post.history.map(item => ({
+                              ...item,
+                              inserted_at: new Date(item.inserted_at),
+                            }))}
+                            labelField='inserted_at'
+                            valueFields={['gold', 'score', 'comments', 'ratio']}
+                            colors={sparklineColors}
+                          />
                         </div>
 
-                        <Checkbox.Label class='text-gray-800 text-sm'>{post.title}</Checkbox.Label>
+                        <div class='flex flex-col flex-1'>
+                          <div class='flex space-x-2 text-xs text-gray-500 mb-1'>
+                            <span>{post.subreddit}</span>
+                            <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
+                              {post.post_id}
+                            </a>
+                          </div>
 
-                        <PostTags post={post} />
+                          <Checkbox.Label class='text-gray-800 text-sm'>{post.title}</Checkbox.Label>
+
+                          <PostTags post={post} />
+                        </div>
                       </div>
 
                       <div class='flex items-start'>

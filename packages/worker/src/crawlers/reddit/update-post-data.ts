@@ -13,7 +13,7 @@ export async function updatePostData(browser: Browser) {
   if (!posts.length) return
 
   const context = await browser.newContext({
-    viewport: { height: 800, width: 1600 },
+    viewport: { height: 1000, width: 1920 },
   })
   const page = await context.newPage()
 
@@ -47,7 +47,7 @@ export async function updatePostData(browser: Browser) {
         throw error
       })
 
-      const result = await savePost({
+      await savePost({
         id: postData.postId,
         createdAt: new Date(postData.created).toISOString(),
         screenshotPath,

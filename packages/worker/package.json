@@ -14,6 +14,7 @@
     "@credee/shared": "workspace:*",
     "bullmq": "^3.5.11",
     "convict": "^6.2.4",
+    "date-fns": "^2.29.3",
     "got": "^12.5.3",
     "natural": "^6.1.4",
     "playwright": "^1.30.0",
