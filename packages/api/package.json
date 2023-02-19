@@ -12,23 +12,23 @@
   "dependencies": {
     "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.0",
-    "@fastify/static": "^6.7.0",
-    "@trpc/server": "^10.9.0",
-    "bullmq": "^3.5.11",
+    "@fastify/static": "^6.9.0",
+    "@trpc/server": "^10.12.0",
+    "bullmq": "^3.7.0",
     "convict": "^6.2.4",
-    "fastify": "^4.12.0",
-    "pino-pretty": "^9.1.1",
-    "redis": "^4.6.3",
+    "fastify": "^4.13.0",
+    "pino-pretty": "^9.3.0",
+    "redis": "^4.6.4",
     "superjson": "^1.12.2",
-    "trpc-panel": "^1.2.6",
+    "trpc-panel": "^1.2.8",
     "wink-eng-lite-web-model": "^1.4.3",
     "wink-nlp": "^1.13.0",
-    "zod": "^3.20.2"
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@types/convict": "^6.1.1",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.5",
+    "esbuild": "^0.17.9",
     "pino": "^8.10.0",
     "tsconfig-paths": "^4.1.2"
   }
