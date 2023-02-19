@@ -33,23 +33,25 @@ interface InputProps<Options extends Option> extends StyleProps {
   onSelect?: (value: string) => void
 }
 
-export function Select<T extends Option>($: InputProps<T>) {
+export function Select<T extends Option>(props: InputProps<T>) {
   return (
-    <_Select.Root name={$.name} onValueChange={$.onSelect} value={$.value}>
-      <_Select.Trigger class={selectOuter({ class: $.class })} aria-label={$.label}>
-        <_Select.Value placeholder={$.placeholder} class='pr-8 flex-1 text-left' />
+    <_Select.Root name={props.name} onValueChange={props.onSelect} value={props.value}>
+      <_Select.Trigger class={selectOuter({ class: props.class })} aria-label={props.label}>
+        <_Select.Value placeholder={props.placeholder} class='pr-8 flex-1 text-left' />
 
         <_Select.Icon
-          class={'absolute right-0 h-full px-3 flex items-center justify-center bg-gradient-to-l from-white via-white r-0'}
+          class={
+            'absolute right-0 h-full px-3 flex items-center justify-center bg-gradient-to-l from-white via-white r-0 rounded'
+          }
         >
           <UpDown />
         </_Select.Icon>
       </_Select.Trigger>
 
       <_Select.Portal>
-        <_Select.Content class='bg-white rounded focus-within:outline-none shadow-lg z-[999]'>
+        <_Select.Content class='bg-white rounded focus-within:outline-none shadow-lg z-[999] max-h-96 overflow-auto'>
           <_Select.Listbox class='focus-within:outline-none'>
-            <For each={$.options || []}>
+            <For each={props.options || []}>
               {option => (
                 <_Select.Item
                   value={option.value}
