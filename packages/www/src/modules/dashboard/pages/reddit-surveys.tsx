@@ -34,16 +34,27 @@ const Page: Component = () => {
     columns: [
       col.accessor('id', {
         header: 'ID',
-        size: 64,
+        size: 32,
         cell: StringCell,
       }),
       col.accessor('title', {
         header: 'Title',
         cell: StringCell,
+        size: 900,
+      }),
+      col.display({
+        id: 'url',
+        header: 'URL',
+        cell: cell => (
+          <a class='underline decoration-dotted text-accent-500' href={`${location.origin}/survey/${cell.row.original.id}`}>
+            Access link
+          </a>
+        ),
       }),
       col.accessor('endsAt', {
         header: 'Deadline',
         cell: DateCell,
+        size: 128,
       }),
     ],
     get data() {

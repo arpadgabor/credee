@@ -3,7 +3,7 @@ import { Component } from 'solid-js'
 
 const Layout: Component = () => {
   return (
-    <div class='w-screen'>
+    <div>
       <Outlet></Outlet>
     </div>
   )

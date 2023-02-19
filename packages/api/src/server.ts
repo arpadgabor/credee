@@ -1,36 +1,14 @@
 import cors from '@fastify/cors'
-import { fastifyStatic } from '@fastify/static'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import { fastify } from 'fastify'
-import { resolve } from 'node:path'
 import { migrateToLatest } from '@credee/shared/database'
 import { config } from './config.js'
 import { appRouter } from './router.js'
-// @ts-ignore
-import { renderTrpcPanel } from 'trpc-panel'
-
-const logsByEnv = {
-  development: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
-        colorize: true,
-      },
-    },
-  },
-  production: true,
-} as const
+import { serverLogging } from './core/logger.js'
 
 const server = fastify({
   maxParamLength: 5000,
-  logger: logsByEnv[config.get('env') as keyof typeof logsByEnv] || true,
-})
-
-server.register(fastifyStatic, {
-  root: resolve(process.cwd(), 'uploads'),
-  prefix: '/uploads/',
+  logger: serverLogging.development,
 })
 
 server.register(cors, {
@@ -45,15 +23,6 @@ server.register(fastifyTRPCPlugin, {
     onError: (ctx: any) => {
       console.log(ctx?.error?.cause)
     },
-  },
-})
-
-server.route({
-  method: 'GET',
-  url: '/panel',
-  handler: (req, reply) => {
-    reply.header('content-type', 'text/html')
-    reply.send(renderTrpcPanel(appRouter, { url: 'http://localhost:3000/trpc' }))
   },
 })
 

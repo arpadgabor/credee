@@ -2,7 +2,14 @@ import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc.js'
 import { createListSchema as listOf } from '../../core/zod.js'
-import { countSurveys, createSurvey, findSurvey, listSurveys } from './survey.service.js'
+import {
+  countSurveys,
+  createSurvey,
+  findSurvey,
+  getNextSurveyQuestion,
+  listSurveys,
+  nextSurveyQuestion,
+} from './survey.service.js'
 
 const surveyCreate = z.object({
   title: z.string(),
@@ -66,8 +73,18 @@ const create = procedure
     }
   })
 
+const nextQuestion = procedure
+  .input(nextSurveyQuestion.input)
+  .output(nextSurveyQuestion.output)
+  .query(async ({ input }) => {
+    const question = await getNextSurveyQuestion(input)
+
+    return question
+  })
+
 export const SurveyRouter = router({
   create,
   list,
   getById,
+  nextQuestion,
 })

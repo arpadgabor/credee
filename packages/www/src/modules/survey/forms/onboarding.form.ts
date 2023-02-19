@@ -4,6 +4,7 @@ import { FormData } from '../form-builder/form.type'
 export interface OnboardingFields {
   gender: 'male' | 'female' | 'non-binary'
   ageRange: 'under18' | '18to24' | '24to35' | '35to50' | 'over50'
+  usedReddit: boolean
   academicStatus:
     | 'primary-school'
     | 'middle-school'
@@ -24,7 +25,7 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         id: 'gender',
         title: 'What gender do you identify as?',
         description: `You can skip this if you don't want to share.`,
-        validator: z.string(),
+        validator: z.string().optional(),
         options: [
           { value: 'male', label: `Male` },
           { value: 'female', label: `Female` },
@@ -36,7 +37,7 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         id: 'ageRange',
         title: "What's your age?",
         description: "You can skip this if you don't want to share.",
-        validator: z.string(),
+        validator: z.string().optional(),
         options: [
           { value: 'under18', label: `17 or under` },
           { value: '18to24', label: `18-24` },
@@ -45,20 +46,12 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
           { value: 'over50', label: `Over 50` },
         ],
       },
-      // {
-      //   type: 'select',
-      //   id: 'nationality',
-      //   title: 'What is your nationality?',
-      //   description: `You can skip this if you don't want to share.`,
-      //   validator: z.string(),
-      //   options: [],
-      // },
       {
         type: 'multi-select',
         id: 'academicStatus',
         title: 'What is the highest level of studies you graduated?',
         description: `You can skip this if you don't want to share. Eg. if you are currently doing your masters, please choose Undergraduate`,
-        validator: z.string(),
+        validator: z.string().optional(),
         options: [
           { value: 'primary-school', label: `Primary school` },
           { value: 'middle-school', label: `Middle school` },
@@ -68,6 +61,16 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
           { value: 'graduate', label: `Graduate/Masters level` },
           { value: 'doctoral', label: `Doctoral studies` },
           { value: 'post-doctoral', label: `Post-doctoral` },
+        ],
+      },
+      {
+        type: 'multi-select',
+        id: 'usedReddit',
+        title: 'Have you used reddit before?',
+        validator: z.string().transform(v => v === 'true'),
+        options: [
+          { value: 'true', label: 'Yes' },
+          { value: 'false', label: 'No' },
         ],
       },
     ],

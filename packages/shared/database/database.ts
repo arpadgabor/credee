@@ -67,13 +67,14 @@ export interface Survey {
 
 export const ExternalPlatform = {
   prolific: 'prolific',
+  custom: 'custom',
 } as const
 export const ExternalPlatforms = Object.keys(ExternalPlatform)
 export interface Participants {
   id: Generated<number>
   survey_id: number
   external_platform: keyof typeof ExternalPlatform
-  external_participant_id: string
+  external_participant_id?: string | null
   age_range?: string | null
   gender?: string | null
   nationality?: string | null
@@ -81,7 +82,7 @@ export interface Participants {
   academic_status?: string | null
   employment_status?: string | null
   annual_income_level?: string | null
-  onboarding_answers?: Record<string, string> | null
+  onboarding_answers?: Record<string, string | number | boolean> | null
   created_at: Date
 }
 export interface ResponsesCredibility {

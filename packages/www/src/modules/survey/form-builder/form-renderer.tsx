@@ -56,7 +56,7 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
       {field => (
         <fieldset
           class={cx(
-            'flex flex-col p-4 rounded-lg border border-transparent',
+            'flex flex-col p-4 md:p-8 !pt-0 rounded-lg border border-gray-200',
             field.error ? 'border-red-200 bg-gradient-to-b from-red-100 via-white' : ''
           )}
         >

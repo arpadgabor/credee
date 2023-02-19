@@ -5,13 +5,6 @@ export function createPostCredibilityForm(options: { title: string; imageHref: s
   return {
     title: options.title,
     fields: [
-      // {
-      //   type: 'short-text',
-      //   id: 'name',
-      //   title: 'Your name',
-      //   description: `We'll keep it a secret.`,
-      //   validator: z.string().min(1),
-      // },
       {
         type: 'scale',
         id: 'credibility',

@@ -6,7 +6,7 @@ import { createParticipant } from './participants.service.js'
 const participantCreate = z.object({
   surveyId: z.number(),
   externalPlatform: z.enum(ExternalPlatforms as [string, ...string[]]),
-  externalParticipantId: z.string(),
+  externalParticipantId: z.string().nullish(),
   ageRange: z.string().nullish(),
   gender: z.string().nullish(),
   nationality: z.string().nullish(),
@@ -14,7 +14,7 @@ const participantCreate = z.object({
   academicStatus: z.string().nullish(),
   employmentStatus: z.string().nullish(),
   annualIncomeLevel: z.string().nullish(),
-  onboardingAnswers: z.record(z.string()).nullish(),
+  onboardingAnswers: z.record(z.union([z.string(), z.boolean(), z.number()])).nullish(),
 })
 
 const participant = participantCreate.and(
