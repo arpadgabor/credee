@@ -34,6 +34,7 @@ importers:
 
   packages/api:
     specifiers:
+      '@aws-sdk/client-s3': ^3.279.0
       '@credee/shared': workspace:*
       '@fastify/cors': ^8.2.0
       '@fastify/static': ^6.9.0
@@ -54,6 +55,7 @@ importers:
       wink-nlp: ^1.13.0
       zod: ^3.20.6
     dependencies:
+      '@aws-sdk/client-s3': 3.279.0
       '@credee/shared': link:../shared
       '@fastify/cors': 8.2.0
       '@fastify/static': 6.9.0

@@ -10,6 +10,7 @@
     "build": "node build.cjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.279.0",
     "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.0",
     "@fastify/static": "^6.9.0",

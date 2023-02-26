@@ -3,6 +3,7 @@ import { db } from '@credee/shared/database'
 import type { RedditPost } from '@credee/shared/database'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
+import { deleteFile } from '../../core/s3.js'
 
 //#region listRedditResults
 interface RedditListOptions {
@@ -163,7 +164,8 @@ export async function removeRedditResult({ postId }: z.infer<typeof removeReddit
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'This post is used in a survey and it cannot be deleted.' })
   }
 
-  await db.deleteFrom('reddit_posts').where('post_id', '=', postId).execute()
+  const deleted = await db.deleteFrom('reddit_posts').where('post_id', '=', postId).returningAll().execute()
+  await Promise.all(deleted.map(post => deleteFile(post.screenshot_filename)))
 }
 
 export const removeRedditVariantSchema = z.object({
@@ -181,5 +183,7 @@ export async function removeRedditVariant({ variantId }: z.infer<typeof removeRe
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'This post is used in a survey and it cannot be deleted.' })
   }
 
-  await db.deleteFrom('reddit_posts').where('id', '=', variantId).execute()
+  const deleted = await db.deleteFrom('reddit_posts').where('id', '=', variantId).returningAll().execute()
+
+  await Promise.all(deleted.map(post => deleteFile(post.screenshot_filename)))
 }
