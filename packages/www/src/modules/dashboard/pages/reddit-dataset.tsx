@@ -1,9 +1,9 @@
 import { createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel, SortingState } from '@tanstack/solid-table'
-import { Component, Match, Switch } from 'solid-js'
+import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DataTable, DateCell, HoverCard, PageHeader, StringCell } from '../../../components/ui'
-import { api, uploadsPath } from '../../../utils/trpc'
+import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
+import { api } from '../../../utils/trpc'
 import { RedditPostInfoCell } from '../components/post-info-cell'
 
 const Page: Component = () => {
@@ -41,6 +41,7 @@ const Page: Component = () => {
         const row = cell.row.original
         return (
           <RedditPostInfoCell
+            variantId={row.id}
             author={row.author}
             permalink={row.permalink}
             postId={row.post_id}
@@ -48,6 +49,7 @@ const Page: Component = () => {
             title={cell.getValue()}
             createdAt={row.created_at}
             screenshotFilename={row.screenshot_filename}
+            onDelete={results.refetch}
           />
         )
       },

@@ -8,6 +8,10 @@ import {
   groupByIdQuerySchema,
   listRedditResults,
   redditFiltersResult,
+  removeRedditResult,
+  removeRedditSchema,
+  removeRedditVariant,
+  removeRedditVariantSchema,
 } from './reddit.service.js'
 
 const redditByPostId = procedure
@@ -63,9 +67,21 @@ const redditFilters = procedure.output(redditFiltersResult).query(async () => {
 
   return filters
 })
+const removeByPostId = procedure.input(removeRedditSchema).mutation(async ({ input }) => {
+  await removeRedditResult({
+    postId: input.postId,
+  })
+})
+const removeVariantById = procedure.input(removeRedditVariantSchema).mutation(async ({ input }) => {
+  await removeRedditVariant({
+    variantId: input.variantId,
+  })
+})
 
 export const RedditRouter = router({
   redditResults,
   redditByPostId,
   redditFilters,
+  removeByPostId,
+  removeVariantById,
 })

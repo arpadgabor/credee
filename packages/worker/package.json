@@ -10,19 +10,19 @@
     "playwright": "playwright"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.272.0",
+    "@aws-sdk/client-s3": "^3.279.0",
     "@credee/shared": "workspace:*",
-    "bullmq": "^3.7.0",
+    "bullmq": "^3.9.0",
     "convict": "^6.2.4",
     "date-fns": "^2.29.3",
     "got": "^12.5.3",
     "natural": "^6.2.0",
-    "playwright": "^1.30.0",
+    "playwright": "^1.31.1",
     "zod": "^3.20.6"
   },
   "devDependencies": {
     "@types/convict": "^6.1.1",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.9"
+    "esbuild": "^0.17.10"
   }
 }

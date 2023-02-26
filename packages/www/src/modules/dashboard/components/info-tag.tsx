@@ -14,7 +14,7 @@ const icons = {
 
 export function InfoTag(props: { value: any; label: string; icon: keyof typeof icons }) {
   return (
-    <div class='flex items-center space-x-1' title={props.label}>
+    <div class='flex items-center space-x-1 cursor-help' title={props.label}>
       <span>{icons[props.icon]({})}</span>
       <span>{props.value}</span>
     </div>

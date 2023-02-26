@@ -1,19 +1,30 @@
+import { useSearchParams } from '@solidjs/router'
 import { createQuery } from '@tanstack/solid-query'
-import { ErrorBoundary } from 'solid-js'
+import { createEffect, ErrorBoundary } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Button, Input, Select } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 
 export function createRedditFilters() {
+  const [queryString, setSearchParams] = useSearchParams()
+
   const [filterBy, setFilter] = createStore({
     subreddit: '' as string,
     flair: '' as string,
     title: '' as string,
   })
+  const setFilterWrapper = (key: keyof typeof filterBy, value: any) => {
+    setSearchParams({
+      [key]: value,
+    })
+    setFilter(key, value)
+    console.log(queryString)
+  }
+
   function clearFilters() {
-    setFilter('flair', '')
-    setFilter('subreddit', '')
-    setFilter('title', '')
+    setFilterWrapper('flair', '')
+    setFilterWrapper('subreddit', '')
+    setFilterWrapper('title', '')
   }
 
   const query = createQuery(() => ['detailed_reddit_fitlers'], {
@@ -27,7 +38,7 @@ export function createRedditFilters() {
   return {
     filterBy,
     clearFilters,
-    setFilter,
+    setFilter: setFilterWrapper,
     query,
     subreddits,
     flairs,
@@ -35,7 +46,7 @@ export function createRedditFilters() {
       subreddits,
       flairs,
       filterBy,
-      setFilter,
+      setFilter: setFilterWrapper,
       clearFilters,
     },
   }

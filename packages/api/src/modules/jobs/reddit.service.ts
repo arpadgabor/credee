@@ -2,6 +2,7 @@ import { sql } from 'kysely'
 import { db } from '@credee/shared/database'
 import type { RedditPost } from '@credee/shared/database'
 import { z } from 'zod'
+import { TRPCError } from '@trpc/server'
 
 //#region listRedditResults
 interface RedditListOptions {
@@ -145,3 +146,40 @@ export async function getRedditFilters() {
   }
 }
 //#endregion
+
+export const removeRedditSchema = z.object({
+  postId: z.string(),
+})
+
+export async function removeRedditResult({ postId }: z.infer<typeof removeRedditSchema>) {
+  const result = await db
+    .selectFrom('survey_reddit_dataset')
+    .select('post_variant_id')
+    .leftJoin('reddit_posts', 'reddit_posts.id', 'survey_reddit_dataset.post_variant_id')
+    .where('reddit_posts.post_id', '=', postId)
+    .execute()
+
+  if (result.length) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'This post is used in a survey and it cannot be deleted.' })
+  }
+
+  await db.deleteFrom('reddit_posts').where('post_id', '=', postId).execute()
+}
+
+export const removeRedditVariantSchema = z.object({
+  variantId: z.number(),
+})
+
+export async function removeRedditVariant({ variantId }: z.infer<typeof removeRedditVariantSchema>) {
+  const result = await db
+    .selectFrom('survey_reddit_dataset')
+    .select('post_variant_id')
+    .where('post_variant_id', '=', variantId)
+    .executeTakeFirst()
+
+  if (result) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'This post is used in a survey and it cannot be deleted.' })
+  }
+
+  await db.deleteFrom('reddit_posts').where('id', '=', variantId).execute()
+}

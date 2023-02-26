@@ -1,6 +1,10 @@
+import { createMutation } from '@tanstack/solid-query'
+import { TRPCClientError } from '@trpc/client'
 import { Match, Switch } from 'solid-js'
-import { HoverCard } from '../../../components/ui'
-import { uploadsPath } from '../../../utils/trpc'
+import toast from 'solid-toast'
+import { ContextMenu, ContextOptions, HoverCard } from '../../../components/ui'
+import { api, uploadsPath } from '../../../utils/trpc'
+import IconDelete from '~icons/lucide/trash-2'
 
 const dateFormat = new Intl.DateTimeFormat('en-GB', {
   dateStyle: 'short',
@@ -20,6 +24,7 @@ const PreviewImage = (props: { name: string }) => (
 )
 
 export function RedditPostInfoCell(row: {
+  variantId: number
   postId: string
   permalink: string
   subreddit: string
@@ -27,9 +32,36 @@ export function RedditPostInfoCell(row: {
   title: string
   createdAt: string | Date
   screenshotFilename?: string
+  onDelete?: () => void
 }) {
+  const remove = createMutation({
+    mutationFn: async () => {
+      await api.reddit.removeVariantById.mutate({
+        variantId: row.variantId,
+      })
+    },
+    onSuccess() {
+      toast.success('Post variant deleted successfully!')
+      row.onDelete?.()
+    },
+    onError(err) {
+      if (err instanceof TRPCClientError) {
+        toast.error(err?.message)
+      } else {
+        toast.error('Could not delete the post variant.')
+      }
+    },
+  })
+
+  const contextMenu: ContextOptions[] = [
+    {
+      content: <>Delete</>,
+      command: () => remove.mutate(),
+      icon: <IconDelete />,
+    },
+  ]
   return (
-    <div>
+    <ContextMenu options={contextMenu}>
       <p class={'font-normal mb-1 text-gray-400 space-x-4'}>
         <small>
           <a class='text-accent-500 underline' href={row.permalink}>
@@ -47,6 +79,6 @@ export function RedditPostInfoCell(row: {
       <HoverCard content={<PreviewImage name={row.screenshotFilename!} />}>
         <p>{row.title}</p>
       </HoverCard>
-    </div>
+    </ContextMenu>
   )
 }

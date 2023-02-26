@@ -1,12 +1,24 @@
-import { createQuery } from '@tanstack/solid-query'
-import { createColumnHelper, createSolidTable, getCoreRowModel, getPaginationRowModel } from '@tanstack/solid-table'
+import type { Outputs } from '@credee/api'
+import { createMutation, createQuery } from '@tanstack/solid-query'
+import {
+  CellContext,
+  createColumnHelper,
+  createSolidTable,
+  getCoreRowModel,
+  getPaginationRowModel,
+} from '@tanstack/solid-table'
+import { TRPCClientError } from '@trpc/client'
 import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
+import toast from 'solid-toast'
+import IconDelete from '~icons/lucide/trash-2'
+import { ContextMenu, ContextOptions, DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { PostTags } from '../components/post-tags'
 import { createRedditFilters, RedditFilters } from '../components/reddit-filters'
 import { Sparkline } from '../components/sparkline'
+
+type DetailedPost = Outputs['reddit']['redditByPostId']['data'][number]
 
 const sparklineColors = {
   gold: '#FCAB10',
@@ -40,26 +52,11 @@ const Page: Component = () => {
     },
   })
 
-  type Result = NonNullable<(typeof results)['data']>['data'][number]
-
-  const col = createColumnHelper<Result>()
+  const col = createColumnHelper<DetailedPost>()
   const columns = [
     col.accessor('title', {
       header: 'Post',
-      cell: cell => {
-        const post = cell.row.original
-        return (
-          <div class='flex flex-col'>
-            <div class='flex space-x-2 text-xs text-gray-500 mb-1'>
-              <span>{post.subreddit}</span>
-              <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
-                {post.post_id}
-              </a>
-            </div>
-            <p class='mb-2'>{cell.getValue()}</p>
-          </div>
-        )
-      },
+      cell: cell => <PostDataCell cell={cell} onDelete={results.refetch} />,
       size: 700,
     }),
     col.display({
@@ -103,7 +100,7 @@ const Page: Component = () => {
     }),
   ]
 
-  const table = createSolidTable<Result>({
+  const table = createSolidTable<DetailedPost>({
     columns,
     get data() {
       return results.data?.data
@@ -141,5 +138,50 @@ const Page: Component = () => {
     </section>
   )
 }
-
 export default Page
+
+function PostDataCell(props: { cell: CellContext<DetailedPost, any>; onDelete: () => void }) {
+  const post = props.cell.row.original
+
+  const remove = createMutation({
+    mutationFn: async () => {
+      await api.reddit.removeByPostId.mutate({
+        postId: post.post_id,
+      })
+    },
+    onSuccess() {
+      toast.success("Post and it's variants deleted successfully")
+      props.onDelete()
+    },
+    onError(err) {
+      if (err instanceof TRPCClientError) {
+        toast.error(err?.message)
+      } else {
+        toast.error('Could not delete the post')
+      }
+    },
+  })
+
+  const contextMenu: ContextOptions[] = [
+    {
+      content: <>Delete post</>,
+      command: () => remove.mutate(),
+      icon: <IconDelete />,
+    },
+  ]
+
+  return (
+    <ContextMenu options={contextMenu}>
+      <div class='flex flex-col'>
+        <div class='flex space-x-2 text-xs text-gray-500 mb-1 select-none'>
+          <span>{post.subreddit}</span>
+          <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
+            {post.post_id}
+          </a>
+        </div>
+
+        <p class='mb-2 select-none'>{post.title}</p>
+      </div>
+    </ContextMenu>
+  )
+}
