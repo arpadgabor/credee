@@ -11,7 +11,23 @@ interface RedditListOptions {
   offset?: number
   order?: { column: keyof RedditPost; sort: 'asc' | 'desc' }[]
 }
-export async function listRedditResults({ limit, offset, order }: RedditListOptions = { limit: 25, offset: 0 }) {
+
+export const listRedditResultsSchema = z.object({
+  postId: z.string().nullish(),
+  limit: z.number().default(25).optional(),
+  offset: z.number().default(25).optional(),
+  order: z
+    .array(
+      z.object({
+        column: z.enum(['created_at', 'inserted_at', 'score', 'ratio', 'nr_of_comments', 'domain', 'title']).optional(),
+        sort: z.enum(['asc', 'desc']).optional(),
+      })
+    )
+    .optional(),
+})
+export async function listRedditResults(
+  { limit, offset, order, postId }: z.infer<typeof listRedditResultsSchema> = { limit: 25, offset: 0 }
+) {
   let query = db
     .selectFrom('reddit_posts')
     .select([
@@ -33,6 +49,11 @@ export async function listRedditResults({ limit, offset, order }: RedditListOpti
     ])
     .limit(limit ?? 10)
     .offset(offset ?? 0)
+
+  console.log(postId)
+  if (postId) {
+    query = query.where('post_id', '=', postId)
+  }
 
   order?.forEach(order => {
     query = query.orderBy(order.column as any, order.sort)

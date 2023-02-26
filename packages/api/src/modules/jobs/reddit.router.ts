@@ -7,6 +7,7 @@ import {
   groupByIdItem,
   groupByIdQuerySchema,
   listRedditResults,
+  listRedditResultsSchema,
   redditFiltersResult,
   removeRedditResult,
   removeRedditSchema,
@@ -29,29 +30,15 @@ const redditByPostId = procedure
     }
   })
 
-const getRedditResultsInput = z
-  .object({
-    limit: z.number().default(25).optional(),
-    offset: z.number().default(25).optional(),
-    order: z
-      .array(
-        z.object({
-          column: z.enum(['created_at', 'inserted_at', 'score', 'ratio', 'nr_of_comments', 'domain', 'title']).optional(),
-          sort: z.enum(['asc', 'desc']).optional(),
-        })
-      )
-      .optional(),
-  })
-  .optional()
-
 const redditResults = procedure
-  .input(getRedditResultsInput)
+  .input(listRedditResultsSchema)
   .output(z.any())
   .query(async ({ input }) => {
     const { data, count } = await listRedditResults({
       limit: input?.limit,
       offset: input?.offset,
       order: input?.order as any,
+      postId: input?.postId,
     })
 
     return {

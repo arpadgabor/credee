@@ -1,3 +1,4 @@
+import { useSearchParams } from '@solidjs/router'
 import { createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel, SortingState } from '@tanstack/solid-table'
 import { Component } from 'solid-js'
@@ -7,13 +8,14 @@ import { api } from '../../../utils/trpc'
 import { RedditPostInfoCell } from '../components/post-info-cell'
 
 const Page: Component = () => {
+  const [params] = useSearchParams()
   const [sorting, setSorting] = createStore<SortingState>([{ id: 'inserted_at', desc: true }])
   const [pagination, setPagination] = createStore({
     pageIndex: 0,
     pageSize: 15,
   })
 
-  const results = createQuery(() => ['results_reddit', pagination, sorting], {
+  const results = createQuery(() => ['results_reddit', pagination, sorting, params.post_id], {
     keepPreviousData: true,
     initialData: {
       meta: { count: 0 },
@@ -21,6 +23,7 @@ const Page: Component = () => {
     },
     queryFn: () => {
       return api.reddit.redditResults.query({
+        postId: params.post_id,
         limit: pagination.pageSize,
         offset: pagination.pageIndex * pagination.pageSize,
         order: sorting?.map(({ id, desc }) => ({

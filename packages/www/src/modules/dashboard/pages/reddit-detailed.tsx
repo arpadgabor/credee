@@ -12,11 +12,14 @@ import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import toast from 'solid-toast'
 import IconDelete from '~icons/lucide/trash-2'
+import IconList from '~icons/lucide/list'
+import IconClipboard from '~icons/lucide/clipboard'
 import { ContextMenu, ContextOptions, DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
 import { PostTags } from '../components/post-tags'
 import { createRedditFilters, RedditFilters } from '../components/reddit-filters'
 import { Sparkline } from '../components/sparkline'
+import { useNavigate, useSearchParams } from '@solidjs/router'
 
 type DetailedPost = Outputs['reddit']['redditByPostId']['data'][number]
 
@@ -29,11 +32,18 @@ const sparklineColors = {
 } as const
 
 const Page: Component = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [pagination, setPagination] = createStore({
-    pageIndex: 0,
-    pageSize: 25,
+    pageIndex: Number(searchParams.page) || 0,
+    pageSize: Number(searchParams.limit) || 25,
   })
-  const { filterBy, props } = createRedditFilters()
+  const { filterBy, props } = createRedditFilters({
+    defaultFilters: {
+      flair: searchParams.flair,
+      subreddit: searchParams.subreddit,
+      title: searchParams.title,
+    },
+  })
 
   const results = createQuery(() => ['detailed_reddit', pagination, filterBy], {
     keepPreviousData: true,
@@ -42,13 +52,21 @@ const Page: Component = () => {
       data: [],
     },
     queryFn: () => {
-      return api.reddit.redditByPostId.query({
+      const input = {
         limit: pagination.pageSize,
         offset: pagination.pageIndex * pagination.pageSize,
         flair: filterBy.flair || undefined,
         subreddit: filterBy.subreddit || undefined,
         title: filterBy.title,
+      }
+      setSearchParams({
+        page: pagination.pageIndex,
+        limit: input.limit,
+        flair: input.flair,
+        subreddit: input.subreddit,
+        title: input.title,
       })
+      return api.reddit.redditByPostId.query(input)
     },
   })
 
@@ -142,6 +160,7 @@ export default Page
 
 function PostDataCell(props: { cell: CellContext<DetailedPost, any>; onDelete: () => void }) {
   const post = props.cell.row.original
+  const goto = useNavigate()
 
   const remove = createMutation({
     mutationFn: async () => {
@@ -150,19 +169,32 @@ function PostDataCell(props: { cell: CellContext<DetailedPost, any>; onDelete: (
       })
     },
     onSuccess() {
-      toast.success("Post and it's variants deleted successfully")
+      toast.success("Post and it's variants deleted successfully!")
       props.onDelete()
     },
     onError(err) {
       if (err instanceof TRPCClientError) {
         toast.error(err?.message)
       } else {
-        toast.error('Could not delete the post')
+        toast.error('Could not delete the post.')
       }
     },
   })
 
   const contextMenu: ContextOptions[] = [
+    {
+      content: <>View variants</>,
+      command: () => goto(`/dashboard/reddit/dataset?post_id=${post.post_id}`),
+      icon: <IconList />,
+    },
+    {
+      content: <>Copy permalink</>,
+      command: () => {
+        navigator.clipboard.writeText(post.permalink)
+        toast.success('Permalink copied!')
+      },
+      icon: <IconClipboard />,
+    },
     {
       content: <>Delete post</>,
       command: () => remove.mutate(),
