@@ -26,6 +26,7 @@ export async function uploadFile(params: { filename: string; data: Buffer | stri
     Bucket: config.get('s3.bucket'),
     Key: params.filename,
     Body: params.data,
+    ContentType: params.filename.includes('.png') ? 'image/png' : undefined,
   })
 
   await s3.send(command)

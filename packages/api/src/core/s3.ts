@@ -14,7 +14,11 @@ const s3 = new S3Client({
     : undefined,
 })
 
-export async function deleteFile(path: string) {
+export async function deleteFile(path?: string) {
+  if (!path) return
+
+  console.log(`Deleting image: ${path}`)
+
   if (!config.get('s3.bucket')) {
     const filePath = resolve(process.cwd(), path)
     await unlink(filePath)

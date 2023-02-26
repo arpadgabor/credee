@@ -184,6 +184,5 @@ export async function removeRedditVariant({ variantId }: z.infer<typeof removeRe
   }
 
   const deleted = await db.deleteFrom('reddit_posts').where('id', '=', variantId).returningAll().execute()
-
   await Promise.all(deleted.map(post => deleteFile(post.screenshot_filename)))
 }
