@@ -1,6 +1,6 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { config } from '../config.js'
-import { writeFile } from 'fs/promises'
+import { unlink, writeFile } from 'fs/promises'
 import { resolve } from 'path'
 
 const s3 = new S3Client({
@@ -31,4 +31,24 @@ export async function uploadFile(params: { filename: string; data: Buffer | stri
 
   await s3.send(command)
   return `${config.get('s3.publicUrl')}/${params.filename}`
+}
+
+export async function deleteFile(path?: string) {
+  if (!path) return
+
+  console.log(`Deleting image: ${path}`)
+
+  if (!config.get('s3.bucket')) {
+    const filePath = resolve(process.cwd(), path)
+    await unlink(filePath)
+  }
+
+  const key = path.replace(`${config.get('s3.publicUrl')}/`, '')
+
+  const command = new DeleteObjectCommand({
+    Bucket: config.get('s3.bucket'),
+    Key: key,
+  })
+
+  await s3.send(command)
 }

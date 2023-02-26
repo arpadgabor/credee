@@ -3,7 +3,7 @@ import got from 'got'
 import { Browser } from 'playwright'
 import { uploadFile } from '../../utils/file-upload.js'
 import { sentiment } from '../../utils/sentiment.js'
-import { listPostsForUpdate, parsePost, savePost } from './post-actions.js'
+import { listPostsForUpdate, parsePost, removeRedditResult, savePost } from './post-actions.js'
 
 export async function updatePostData(browser: Browser) {
   console.log('Updating Post Data')
@@ -16,19 +16,35 @@ export async function updatePostData(browser: Browser) {
     viewport: { height: 1000, width: 1920 },
   })
   const page = await context.newPage()
+  let acceptedAll = false
 
   for await (const post of posts) {
     try {
+      console.log(`Updating post ${post.post_id} on subreddit ${post.subreddit}.`)
+
       const [response] = await Promise.all([
         await got(`https://gateway.reddit.com/desktopapi/v1/postcomments/${post.post_id}`).json<any>(),
         page.goto(post.permalink, { waitUntil: 'domcontentloaded' }),
       ])
-      console.log('Got page and post data')
+
+      if (!acceptedAll) {
+        const selection = await page.waitForSelector(`//button[contains(., 'Accept all')]`)
+        await selection.click()
+        acceptedAll = true
+      }
 
       const [postData]: Post[] = Object.values(response.posts)
       const comments: Comment[] = Object.values(response.comments)
 
       const expandedPost = page.locator(`#${post.post_id}`).first()
+      const isDeleted = (await expandedPost.getByText('Sorry, this post has been removed').count()) > 0
+
+      if (isDeleted) {
+        console.log('Post was deleted.')
+        await removeRedditResult(postData.postId)
+        continue
+      }
+
       const screenshot = await expandedPost.screenshot({ type: 'png' })
 
       const {
@@ -81,6 +97,7 @@ export async function updatePostData(browser: Browser) {
         comments: comms,
         awards,
       })
+
       console.log('Added post')
     } catch (error) {
       console.log(error)

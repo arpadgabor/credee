@@ -8,6 +8,10 @@ const { queueName, queue } = useRedditUpdater({
   redisConnection,
 })
 
+updatePostData(browser).catch(e => {
+  console.log(e)
+})
+
 export const worker = new Worker<{ postId: string }>(
   queueName,
   async () => {

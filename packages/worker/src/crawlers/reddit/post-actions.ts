@@ -1,6 +1,7 @@
 import { db, json, sql } from '@credee/shared/database'
 import { Post, RedditCrawledPost, Comment } from '@credee/shared/reddit/types'
 import { subDays } from 'date-fns'
+import { deleteFile } from '../../utils/file-upload.js'
 
 export function parsePost({ post, comments }: { post: Post; comments: Comment[] }) {
   const isSelfPost = post.media?.type === 'rtjson'
@@ -8,6 +9,7 @@ export function parsePost({ post, comments }: { post: Post; comments: Comment[] 
   const isVideo = ['Vimeo', 'YouTube', 'Gfycat'].includes(post.media?.provider)
   const isImage = post.media?.type === 'image'
   const isLink = !(isSelfPost || isCrossPost || isVideo || isImage)
+
   const comms = comments
     .filter(com => !(com.isAdmin || com.isMod))
     .map(com => ({
@@ -96,4 +98,20 @@ export async function listPostsForUpdate() {
     .execute()
 
   return posts
+}
+
+export async function removeRedditResult(postId: string) {
+  const result = await db
+    .selectFrom('survey_reddit_dataset')
+    .select('post_variant_id')
+    .leftJoin('reddit_posts', 'reddit_posts.id', 'survey_reddit_dataset.post_variant_id')
+    .where('reddit_posts.post_id', '=', postId)
+    .execute()
+
+  if (result.length) {
+    return
+  }
+
+  const deleted = await db.deleteFrom('reddit_posts').where('post_id', '=', postId).returningAll().execute()
+  await Promise.all(deleted.map(post => deleteFile(post.screenshot_filename)))
 }
