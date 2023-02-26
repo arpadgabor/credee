@@ -20,6 +20,10 @@ export async function createCredibilityResponse(data: Omit<ResponsesCredibility,
       participant_id: data.participant_id,
       post_variant_id: data.post_variant_id,
       survey_id: data.survey_id,
+      content_style: data.content_style,
+      content_style_other: data.content_style_other,
+      content_style_effect: data.content_style_effect,
+      topic_familiarity: data.topic_familiarity,
     })
     .returningAll()
     .executeTakeFirst()

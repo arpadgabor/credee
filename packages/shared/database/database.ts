@@ -92,6 +92,10 @@ export interface ResponsesCredibility {
   post_id: string
   post_variant_id: number
   credibility: number
+  content_style: string
+  content_style_other?: string | null
+  content_style_effect: number
+  topic_familiarity: number
 }
 
 export interface SurveyRedditDataset {

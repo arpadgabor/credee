@@ -3,7 +3,8 @@ import { createMutation, createQuery } from '@tanstack/solid-query'
 import { createSignal, Match, Switch } from 'solid-js'
 import { api } from '../../../utils/trpc'
 import { SurveyRenderer } from '../form-builder'
-import { createPostCredibilityForm } from '../forms/post-credibility.form'
+import { FormData } from '../form-builder/form.type'
+import { createPostCredibilityForm, CredibilityForm } from '../forms/credibility.form'
 
 interface Props {
   surveyId: number
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export function SurveyQuestions(props: Props) {
-  const [formStructure, setFormStructure] = createSignal<ReturnType<typeof createPostCredibilityForm>>()
+  const [formStructure, setFormStructure] = createSignal<FormData<keyof CredibilityForm>>()
   const query = createQuery(() => [], {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -23,19 +24,23 @@ export function SurveyQuestions(props: Props) {
       })
     },
     onSuccess(data) {
-      const structure = createPostCredibilityForm({
-        title: 'Please answer the following:',
-        imageAlt: data?.title!,
-        imageHref: data?.screenshot_filename!,
-      })
-      setFormStructure(structure)
+      setFormStructure(
+        createPostCredibilityForm({
+          title: 'Please answer the following questions',
+          imageAlt: data?.title!,
+          imageHref: data?.screenshot_filename!,
+        })
+      )
     },
   })
 
-  const submit = createMutation<Outputs['responses']['addCredibility'], any, { credibility: number }>({
-    async mutationFn({ credibility }) {
+  const submit = createMutation<Outputs['responses']['addCredibility'], any, CredibilityForm>({
+    async mutationFn({ credibility, contentStyle, contentStyleEffect, topicFamiliarity }) {
       return await api.responses.addCredibility.mutate({
         credibility,
+        contentStyle,
+        contentStyleEffect,
+        topicFamiliarity,
         participantId: props.participantId!,
         postId: query.data?.post_id!,
         postVariantId: query.data?.id!,
@@ -47,20 +52,18 @@ export function SurveyQuestions(props: Props) {
     },
   })
 
-  function onSubmit(values: { credibility: number }) {
-    submit.mutateAsync({
-      credibility: values.credibility,
-    })
+  function onSubmit(values: CredibilityForm) {
+    submit.mutateAsync(values)
   }
 
   return (
     <div>
       <Switch>
         <Match when={query.isSuccess && formStructure()}>
-          <SurveyRenderer onSubmit={onSubmit} survey={formStructure()!} loading={submit.isLoading} />
+          <SurveyRenderer onSubmit={onSubmit} survey={formStructure()!} loading={submit.isLoading} submitLabel={'Next'} />
         </Match>
         <Match when={query.isError}>
-          <p> Error</p>
+          <p>Error</p>
         </Match>
       </Switch>
     </div>

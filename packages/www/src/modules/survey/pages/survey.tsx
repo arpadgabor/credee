@@ -1,14 +1,13 @@
-import { createPostCredibilityForm } from '../forms/post-credibility.form'
-import { SurveyRenderer } from '../form-builder'
-import { api, uploadsPath } from '../../../utils/trpc'
-import { useParams, useSearchParams } from '@solidjs/router'
-import { createSignal, Match, onMount, Show, Switch } from 'solid-js'
-import { z } from 'zod'
-import { createStore } from 'solid-js/store'
 import { Alert } from '@kobalte/core'
-import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
+import { useParams, useSearchParams } from '@solidjs/router'
 import { createMutation, createQuery } from '@tanstack/solid-query'
+import { createSignal, Match, onMount, Switch } from 'solid-js'
+import { createStore } from 'solid-js/store'
+import { z } from 'zod'
+import { api } from '../../../utils/trpc'
 import { SurveyQuestions } from '../components/survey-question'
+import { SurveyRenderer } from '../form-builder'
+import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
 
 const queryParams = z.union([
   z.object({
@@ -52,11 +51,13 @@ export default function Survey() {
         surveyId,
         externalParticipantId: surveyInfo?.participant_id,
         externalPlatform: surveyInfo?.referrer!,
-        academicStatus: data.academicStatus,
         ageRange: data.ageRange,
         gender: data.gender,
+        academicStatus: data.academicStatus,
         onboardingAnswers: {
-          usedReddit: data.usedReddit,
+          redditUsage: data.redditUsage,
+          socialMediaUsage: data.socialMediaUsage,
+          fakeNewsAbility: data.fakeNewsAbility,
         },
       })
     },
@@ -83,16 +84,23 @@ export default function Survey() {
 
   return (
     <div>
-      <section class='max-w-2xl mx-auto pt-32 pb-12 px-4'>
+      <section class='max-w-3xl mx-auto pt-32 pb-64 px-4'>
         <Switch>
           <Match when={invalidSession() || surveyFetch.isError}>
             <Alert.Root class='text-red-600 font-bold'>Sorry, it looks like you cannot access this survey.</Alert.Root>
           </Match>
 
+          {/* Onboarding survey */}
           <Match when={surveyFetch.isSuccess && !participantId()}>
-            <SurveyRenderer onSubmit={onSubmit} survey={postCredibilityForm} loading={participantOnboard.isLoading} />
+            <SurveyRenderer
+              onSubmit={onSubmit}
+              survey={postCredibilityForm}
+              loading={participantOnboard.isLoading}
+              submitLabel={'Continue'}
+            />
           </Match>
 
+          {/* Credibility survey */}
           <Match when={participantId() && surveyFetch.data}>
             <SurveyQuestions participantId={participantId()!} surveyId={surveyFetch.data!.id} />
           </Match>

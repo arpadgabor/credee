@@ -8,6 +8,7 @@ import * as _004 from './migrations/004-survey.js'
 import * as _005 from './migrations/005-reddit-posts-sentiment.js'
 import * as _006 from './migrations/006-survey-reddit-dataset.js'
 import * as _007 from './migrations/007-nullable-participant-id.js'
+import * as _008 from './migrations/008-respone-new-fields.js'
 
 class Migrations implements MigrationProvider {
   async getMigrations(): Promise<Record<string, Migration>> {
@@ -19,6 +20,7 @@ class Migrations implements MigrationProvider {
       '005-reddit-posts-sentiment': _005,
       '006-survey-reddit-dataset': _006,
       '007-nullable-participant-id': _007,
+      '008-respone-new-fields': _008,
     }
   }
 }

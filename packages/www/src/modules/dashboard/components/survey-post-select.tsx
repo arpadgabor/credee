@@ -2,7 +2,7 @@ import { Checkbox } from '@kobalte/core'
 import { Field, FieldValues, FormState, getError } from '@modular-forms/solid'
 import { createInfiniteQuery } from '@tanstack/solid-query'
 import { cx } from 'class-variance-authority'
-import { ErrorBoundary, For, Show } from 'solid-js'
+import { For, Show } from 'solid-js'
 import CheckIcon from '~icons/lucide/check'
 import { Button, FieldAlert, FieldLabel } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
@@ -57,7 +57,7 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
                     <Checkbox.Root
                       isChecked={(field.value as string[])?.includes(post.post_id)}
                       class={cx([
-                        'flex py-2 px-2 border border-gray-300 rounded hover:bg-gray-50 hover:border-gray-400 transition',
+                        'flex py-2 px-2 border border-gray-300 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-600 transition',
                         'data-[checked]:border-accent-500 focus-within:ring-2 focus-within:ring-accent-400 focus-within:border-gray-400',
                       ])}
                     >
@@ -68,7 +68,7 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
                         checked={(field.value as string[])?.includes(post.post_id)}
                       />
                       <div class='flex-1 flex space-x-2'>
-                        <div class='w-64 rounded bg-gray-50 border '>
+                        <div class='w-64 rounded bg-gray-50 dark:bg-gray-800 border dark:border-gray-700'>
                           <Sparkline
                             id={post.post_id}
                             dataset={post.history.map(item => ({
@@ -82,21 +82,21 @@ export function PostsForSurveySelect<FORM extends FieldValues>($: Props<FORM>) {
                         </div>
 
                         <div class='flex flex-col flex-1'>
-                          <div class='flex space-x-2 text-xs text-gray-500 mb-1'>
+                          <div class='flex space-x-2 text-xs text-gray-500 dark:text-gray-300 mb-1'>
                             <span>{post.subreddit}</span>
                             <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
                               {post.post_id}
                             </a>
                           </div>
 
-                          <Checkbox.Label class='text-gray-800 text-sm'>{post.title}</Checkbox.Label>
+                          <Checkbox.Label class='text-gray-800 dark:text-gray-200 text-sm'>{post.title}</Checkbox.Label>
 
                           <PostTags post={post} />
                         </div>
                       </div>
 
                       <div class='flex items-start'>
-                        <Checkbox.Control class='w-6 h-6 rounded-full border flex items-center justify-center'>
+                        <Checkbox.Control class='w-6 h-6 rounded-full border dark:border-gray-700 flex items-center justify-center'>
                           <Checkbox.Indicator class='bg-accent-500 w-full h-full rounded-full flex items-center justify-center text-white'>
                             <CheckIcon class='h-3.5' />
                           </Checkbox.Indicator>

@@ -15,9 +15,11 @@ const button = cva(
       theme: {
         main: 'bg-main-400 border-main-500 hover:bg-main-500 active:bg-main-600 text-gray-900',
         accent: 'bg-accent-500 border-accent-600 hover:bg-accent-600 active:bg-accent-700 text-white',
-        default: 'bg-white border-gray-200 hover:bg-gray-100 active:bg-gray-200 text-gray-900',
-        ghost: 'bg-white border-transparent hover:bg-gray-50 active:bg-gray-100 text-gray-900 !shadow-none',
-        disabled: 'bg-gray-100 border-gray-200 text-gray-400',
+        default:
+          'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-gray-900 dark:text-white',
+        ghost:
+          'bg-white dark:bg-transparent border-transparent hover:bg-gray-50 dark:hover:bg-gray-800 active:bg-gray-100 dark:active:bg-gray-200 text-gray-900 dark:text-gray-100 !shadow-none',
+        disabled: 'bg-gray-100 dark:bg-gray-600 border-gray-200 dark:border-gray-500 text-gray-400 dark:text-gray-200',
       },
     },
     defaultVariants: {

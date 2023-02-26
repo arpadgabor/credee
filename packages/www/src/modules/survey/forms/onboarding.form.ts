@@ -4,7 +4,9 @@ import { FormData } from '../form-builder/form.type'
 export interface OnboardingFields {
   gender: 'male' | 'female' | 'non-binary'
   ageRange: 'under18' | '18to24' | '24to35' | '35to50' | 'over50'
-  usedReddit: boolean
+  redditUsage: 1 | 2 | 3 | 4 | 5
+  socialMediaUsage: 1 | 2 | 3 | 4 | 5
+  fakeNewsAbility: 1 | 2 | 3 | 4 | 5
   academicStatus:
     | 'primary-school'
     | 'middle-school'
@@ -64,13 +66,42 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         ],
       },
       {
-        type: 'multi-select',
-        id: 'usedReddit',
-        title: 'Have you used reddit before?',
-        validator: z.string().transform(v => v === 'true'),
+        type: 'scale',
+        id: 'redditUsage',
+        title: 'Have you used reddit before? How often?',
+        validator: z.number(),
         options: [
-          { value: 'true', label: 'Yes' },
-          { value: 'false', label: 'No' },
+          { value: 1, label: 'Never used it' },
+          { value: 2, label: 'I rarely use it' },
+          { value: 3, label: 'I use it sometimes' },
+          { value: 4, label: 'I use it at least once a week' },
+          { value: 5, label: 'I use it every day' },
+        ],
+      },
+      {
+        type: 'scale',
+        id: 'socialMediaUsage',
+        title: 'How much do you use social media, in general?',
+        validator: z.number(),
+        options: [
+          { value: 1, label: 'I never use social media' },
+          { value: 2, label: 'I rarely use social media' },
+          { value: 3, label: 'I use social media now and then' },
+          { value: 4, label: 'I use social media at least once a week' },
+          { value: 5, label: 'I use social media every day' },
+        ],
+      },
+      {
+        type: 'scale',
+        id: 'fakeNewsAbility',
+        title: 'How would you evaluate your ability to differentiate between fake/misleading media and true/credible media?',
+        validator: z.number(),
+        options: [
+          { value: 1, label: 'I find it difficult to differentiate' },
+          { value: 2, label: 'I find it somewhat difficult to differentiate' },
+          { value: 3, label: 'I find it neither difficult nor easy to differentiate' },
+          { value: 4, label: 'I find it somewhat easy to differentiate' },
+          { value: 5, label: 'I find it easy to differentiate' },
         ],
       },
     ],

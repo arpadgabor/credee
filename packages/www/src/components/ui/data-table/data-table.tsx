@@ -27,7 +27,7 @@ interface DataTableProps<T extends unknown> extends TableVariants {
 
 function TableHeaderCell<T>(header: Header<T, unknown>) {
   const style = cva([
-    'text-left py-2 px-3 text-sm uppercase border-b bg-gray-100 text-gray-600',
+    'text-left py-2 px-3 text-sm uppercase border-b dark:border-gray-800 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400',
     header.column.getCanSort() ? 'cursor-pointer' : '',
   ])
   return (
@@ -77,7 +77,7 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
   const pageCount = createMemo(() => table().getPageCount())
 
   return (
-    <div class='w-full overflow-x-auto relative border border-gray-200 rounded'>
+    <div class='w-full overflow-x-auto relative border border-gray-200 dark:border-gray-800 rounded'>
       <table class={styles({ size: props.size })}>
         <thead>
           <For each={headerGroup()}>{TableHeaderGroup}</For>
@@ -118,7 +118,7 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
         </tbody>
 
         <Show when={!props.hideFooter}>
-          <tfoot class='bg-gray-100'>
+          <tfoot class='bg-gray-100 dark:bg-gray-800'>
             <tr>
               <td class='px-3 py-3' colspan='100%'>
                 <div class='flex justify-between w-full items-center'>

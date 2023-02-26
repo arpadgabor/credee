@@ -51,7 +51,7 @@ export default function RedditCreateSurvey() {
         description='Start a new survey using reddit posts. It will be accessible at the URL:'
       />
       <div class='mt-0 mb-4'>
-        <p class='bg-gray-100 px-3 py-2 rounded border border-gray-200'>
+        <p class='bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded border border-gray-200 dark:border-gray-700'>
           {location.protocol}//{location.hostname}/surveys/{'<id>'}
         </p>
       </div>

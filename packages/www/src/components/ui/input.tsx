@@ -3,7 +3,11 @@ import { JSX, ParentComponent, splitProps } from 'solid-js'
 import { focus, formGroup } from './style-utils'
 
 const input = cva(
-  ['flex items-center rounded border font-normal transition bg-white shadow-sm hover:shadow', focus, formGroup],
+  [
+    'flex items-center rounded border font-normal transition bg-white dark:bg-gray-900 shadow-sm hover:shadow',
+    focus,
+    formGroup,
+  ],
   {
     variants: {
       size: {
@@ -11,7 +15,8 @@ const input = cva(
         sm: 'h-9 px-3',
       },
       theme: {
-        default: 'border-gray-300 hover:border-gray-400 text-gray-900 focus:border-accent-500',
+        default:
+          'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 text-gray-900 dark:text-white focus:border-accent-500',
       },
     },
     defaultVariants: {

@@ -1,4 +1,3 @@
-import { useSearchParams } from '@solidjs/router'
 import { createQuery } from '@tanstack/solid-query'
 import { ErrorBoundary } from 'solid-js'
 import { createStore } from 'solid-js/store'
@@ -11,11 +10,11 @@ interface Filters {
   title: string
 }
 
-export function createRedditFilters(args: { defaultFilters: Partial<Filters> }) {
+export function createRedditFilters(args?: { defaultFilters?: Partial<Filters> }) {
   const [filterBy, setFilter] = createStore<Filters>({
-    subreddit: args.defaultFilters.subreddit || '',
-    flair: args.defaultFilters.flair || '',
-    title: args.defaultFilters.title || '',
+    subreddit: args?.defaultFilters?.subreddit || '',
+    flair: args?.defaultFilters?.flair || '',
+    title: args?.defaultFilters?.title || '',
   })
   function clearFilters() {
     setFilter('flair', '')

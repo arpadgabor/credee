@@ -1,7 +1,7 @@
 import { Alert, Image } from '@kobalte/core'
 import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
 import { cx } from 'class-variance-authority'
-import { For, Match, ParentComponent, Show, Switch } from 'solid-js'
+import { For, Match, ParentComponent, Show, Switch, JSX } from 'solid-js'
 import { z } from 'zod'
 import { Button } from '../../../components/ui'
 import { FieldMultiSelect } from './fields/multi-select'
@@ -12,6 +12,7 @@ import { FormData, FormField, FormFields, Media } from './form.type'
 interface Props {
   survey: FormData
   loading?: boolean
+  submitLabel?: string | JSX.Element
   onSubmit: (values: any) => void
 }
 
@@ -39,7 +40,7 @@ export function SurveyRenderer(props: Props) {
 
       <div class='flex justify-end'>
         <Button type='submit' theme='accent' disabled={props.loading}>
-          Submit!
+          {props.submitLabel || 'Submit'}
         </Button>
       </div>
     </Form>
@@ -56,18 +57,20 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
       {field => (
         <fieldset
           class={cx(
-            'flex flex-col p-4 md:p-8 !pt-0 rounded-lg border border-gray-200',
-            field.error ? 'border-red-200 bg-gradient-to-b from-red-100 via-white' : ''
+            'flex flex-col p-4 md:p-8 !pt-0 rounded-lg border border-gray-200 dark:border-gray-800',
+            field.error
+              ? 'border-red-200 dark:border-red-900 bg-gradient-to-b from-red-100 dark:from-red-900 via-white dark:via-gray-900'
+              : ''
           )}
         >
-          <legend class='font-semibold text-lg text-gray-800 mb-2 bg-white/5 backdrop:blur-xl px-2 -ml-2'>
+          <legend class='font-semibold text-lg text-gray-800 dark:text-white mb-2 backdrop:blur-xl px-2 -ml-2'>
             <label id={`${field.name}-label`} for={field.name} class='pt-8'>
               {$.formField.title}
             </label>
           </legend>
 
           <Show when={$.formField.description}>
-            <p id={`${field.name}-description`} class='text-gray-600'>
+            <p id={`${field.name}-description`} class='text-gray-600 dark:text-gray-400'>
               {$.formField.description}
             </p>
           </Show>
@@ -116,13 +119,13 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
 
 function FormMedia($: { media: Media[] }) {
   return (
-    <div class='flex flex-col space-y-4'>
+    <div class='flex flex-col space-y-4 z-10'>
       <For each={$.media}>
         {item => (
           <Switch>
             <Match when={item.type === 'image'}>
               <Image.Root fallbackDelay={1000}>
-                <Image.Img src={item.href} alt={item.alt} class='rounded overflow-hidden' />
+                <Image.Img src={item.href} alt={item.alt} class='rounded overflow-hidden shadow-sm border border-gray-200' />
                 <Image.Fallback>Image was not found.</Image.Fallback>
               </Image.Root>
             </Match>

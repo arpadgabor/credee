@@ -8,7 +8,7 @@ export function PostTags(props: { post: Post }) {
   const latestHistory = () => props.post.history[props.post.history.length - 1]
 
   return (
-    <div class='flex text-xs text-gray-700 mt-2 space-x-4 select-none'>
+    <div class='flex text-xs text-gray-700 dark:text-gray-500 mt-2 space-x-4 select-none'>
       <InfoTag label='Upvotes' icon='arrowUp' value={latestHistory().score} />
 
       <InfoTag label='Ratio' icon='upDown' value={latestHistory().ratio * 100 + '%'} />
