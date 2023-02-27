@@ -83,30 +83,41 @@ export async function getNextSurveyQuestion({
     throw new TRPCError({ code: 'NOT_FOUND', message: 'Survey does not exist.' })
   }
 
-  const result = await db
+  const query = db
     .with('answers', q =>
       q
         .selectFrom('responses_credibility')
-        .select(['post_variant_id', 'survey_id', q => sql<string>`count(*)`.as('response_count')])
-        .groupBy(['post_variant_id', 'survey_id'])
+        .select(['post_id', q => sql<string>`count(*)`.as('total')])
+        .groupBy(['post_id'])
         .where('survey_id', '=', surveyId)
         .where('participant_id', '=', participantId)
     )
-    .selectFrom('survey_reddit_dataset')
-    .leftJoin('answers', 'answers.post_variant_id', 'survey_reddit_dataset.post_variant_id')
-    .select(['survey_reddit_dataset.id', 'survey_reddit_dataset.survey_id', 'survey_reddit_dataset.post_variant_id'])
-    .where('survey_reddit_dataset.survey_id', '=', surveyId)
-    .orderBy('answers.response_count', 'desc')
-    .executeTakeFirst()
+    .with('unanswered', q =>
+      q
+        .selectFrom('survey_reddit_dataset as dataset')
+        .leftJoin('reddit_posts as posts', 'posts.id', 'dataset.post_variant_id')
+        .leftJoin('answers', 'answers.post_id', 'posts.post_id')
+        .select(['posts.post_id'])
+        .where('dataset.survey_id', '=', surveyId)
+        .groupBy(['posts.post_id', 'answers.total'])
+        .having('answers.total', 'is', null)
+    )
+    .selectFrom('survey_reddit_dataset as dataset')
+    .select(['dataset.post_variant_id'])
+    .leftJoin('reddit_posts as post', 'post.id', 'dataset.post_variant_id')
+    .where('post.post_id', 'in', q => q.selectFrom('unanswered').select(['unanswered.post_id']))
+    .orderBy('post.post_id', 'desc')
+
+  const result = await query.executeTakeFirst()
 
   if (!result) {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'There are no more questions to be answered.' })
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'SURVEY_DONE' })
   }
 
   const post = await db
     .selectFrom('reddit_posts')
     .select(['screenshot_filename', 'title', 'score', 'inserted_at', 'id', 'post_id'])
-    .where('id', '=', result?.post_variant_id)
+    .where('id', '=', result.post_variant_id)
     .executeTakeFirst()
 
   if (!post) {

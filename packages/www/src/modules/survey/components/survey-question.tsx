@@ -1,5 +1,6 @@
 import { Outputs } from '@credee/api'
 import { createMutation, createQuery } from '@tanstack/solid-query'
+import { TRPCClientError } from '@trpc/client'
 import { createSignal, Match, Switch } from 'solid-js'
 import { api } from '../../../utils/trpc'
 import { SurveyRenderer } from '../form-builder'
@@ -12,11 +13,13 @@ interface Props {
 }
 
 export function SurveyQuestions(props: Props) {
+  const [isDone, setIsDone] = createSignal(false)
   const [formStructure, setFormStructure] = createSignal<FormData<keyof CredibilityForm>>()
   const query = createQuery(() => [], {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
+    retry: false,
     queryFn: async () => {
       return await api.surveys.nextQuestion.query({
         surveyId: props.surveyId,
@@ -31,6 +34,13 @@ export function SurveyQuestions(props: Props) {
           imageHref: data?.screenshot_filename!,
         })
       )
+    },
+    onError(error) {
+      if (error instanceof TRPCClientError) {
+        if (error.message === 'SURVEY_DONE') {
+          setIsDone(true)
+        }
+      }
     },
   })
 
@@ -59,10 +69,11 @@ export function SurveyQuestions(props: Props) {
   return (
     <div>
       <Switch>
-        <Match when={query.isSuccess && formStructure()}>
+        <Match when={isDone()}>Thank you for completing the survey!</Match>
+        <Match when={!isDone() && query.isSuccess && formStructure()}>
           <SurveyRenderer onSubmit={onSubmit} survey={formStructure()!} loading={submit.isLoading} submitLabel={'Next'} />
         </Match>
-        <Match when={query.isError}>
+        <Match when={!isDone() && query.isError}>
           <p>Error</p>
         </Match>
       </Switch>
