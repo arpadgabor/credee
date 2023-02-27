@@ -84,7 +84,7 @@ export async function getNextSurveyQuestion({
   }
 
   const query = db
-    .with('answers', q =>
+    .with('post_answers', q =>
       q
         .selectFrom('responses_credibility')
         .select(['post_id', q => sql<string>`count(*)`.as('total')])
@@ -92,21 +92,29 @@ export async function getNextSurveyQuestion({
         .where('survey_id', '=', surveyId)
         .where('participant_id', '=', participantId)
     )
+    .with('variant_answers', q =>
+      q
+        .selectFrom('responses_credibility')
+        .select(['post_variant_id', q => sql<string>`count(*)`.as('total')])
+        .groupBy(['post_variant_id'])
+        .where('survey_id', '=', surveyId)
+    )
     .with('unanswered', q =>
       q
         .selectFrom('survey_reddit_dataset as dataset')
         .leftJoin('reddit_posts as posts', 'posts.id', 'dataset.post_variant_id')
-        .leftJoin('answers', 'answers.post_id', 'posts.post_id')
+        .leftJoin('post_answers', 'post_answers.post_id', 'posts.post_id')
         .select(['posts.post_id'])
         .where('dataset.survey_id', '=', surveyId)
-        .groupBy(['posts.post_id', 'answers.total'])
-        .having('answers.total', 'is', null)
+        .groupBy(['posts.post_id', 'post_answers.total'])
+        .having('post_answers.total', 'is', null)
     )
     .selectFrom('survey_reddit_dataset as dataset')
     .select(['dataset.post_variant_id'])
     .leftJoin('reddit_posts as post', 'post.id', 'dataset.post_variant_id')
+    .leftJoin('variant_answers', 'variant_answers.post_variant_id', 'dataset.post_variant_id')
     .where('post.post_id', 'in', q => q.selectFrom('unanswered').select(['unanswered.post_id']))
-    .orderBy('post.post_id', 'desc')
+    .orderBy('variant_answers.total', 'desc')
 
   const result = await query.executeTakeFirst()
 
@@ -126,19 +134,3 @@ export async function getNextSurveyQuestion({
 
   return post
 }
-
-/*
-with answers as (
-	select
-		count(*) as response_count,
-		post_variant_id,
-		survey_id,
-		post_id
-	from responses_credibility
-	group by post_variant_id, survey_id, post_id
-)
-select dataset.*, answers.response_count, answers.post_id
-from survey_reddit_dataset dataset
-left join answers on answers.post_variant_id = dataset.post_variant_id
-order by answers.response_count desc
-*/
