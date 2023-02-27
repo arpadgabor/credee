@@ -9,6 +9,7 @@ export type FormField<Keys = string> = { id: Keys } & FormFields[keyof FormField
 
 export interface FormData<Keys extends string = string> {
   title: string
+  description?: string
   fields: FormField<Keys>[]
 }
 

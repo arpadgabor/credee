@@ -15,7 +15,8 @@ interface Props {
 export function SurveyQuestions(props: Props) {
   const [isDone, setIsDone] = createSignal(false)
   const [formStructure, setFormStructure] = createSignal<FormData<keyof CredibilityForm>>()
-  const query = createQuery(() => [], {
+
+  const question = createQuery(() => [], {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
@@ -26,12 +27,13 @@ export function SurveyQuestions(props: Props) {
         participantId: props.participantId,
       })
     },
-    onSuccess(data) {
+    onSuccess({ post, remaining }) {
+      window.scrollTo({ top: 0 })
       setFormStructure(
         createPostCredibilityForm({
-          title: 'Please answer the following questions',
-          imageAlt: data?.title!,
-          imageHref: data?.screenshot_filename!,
+          title: `Please answer the following questions.`,
+          imageAlt: post!.title,
+          imageHref: post!.screenshot_filename,
         })
       )
     },
@@ -52,13 +54,13 @@ export function SurveyQuestions(props: Props) {
         contentStyleEffect,
         topicFamiliarity,
         participantId: props.participantId!,
-        postId: query.data?.post_id!,
-        postVariantId: query.data?.id!,
+        postId: question.data?.post.post_id!,
+        postVariantId: question.data?.post.id!,
         surveyId: props.surveyId,
       })
     },
     onSuccess() {
-      query.refetch()
+      question.refetch()
     },
   })
 
@@ -70,10 +72,17 @@ export function SurveyQuestions(props: Props) {
     <div>
       <Switch>
         <Match when={isDone()}>Thank you for completing the survey!</Match>
-        <Match when={!isDone() && query.isSuccess && formStructure()}>
-          <SurveyRenderer onSubmit={onSubmit} survey={formStructure()!} loading={submit.isLoading} submitLabel={'Next'} />
+
+        <Match when={!isDone() && question.isSuccess && formStructure()}>
+          <SurveyRenderer
+            onSubmit={onSubmit}
+            survey={formStructure()!}
+            loading={submit.isLoading}
+            submitLabel={question.data?.remaining === 0 ? 'Finish' : 'Next'}
+          />
         </Match>
-        <Match when={!isDone() && query.isError}>
+
+        <Match when={!isDone() && question.isError}>
           <p>Error</p>
         </Match>
       </Switch>

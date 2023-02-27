@@ -66,12 +66,15 @@ export const nextSurveyQuestion = {
     surveyId: z.number(),
   }),
   output: z.object({
-    screenshot_filename: z.string(),
-    title: z.string(),
-    score: z.number(),
-    inserted_at: z.date().optional(),
-    id: z.number(),
-    post_id: z.string(),
+    post: z.object({
+      screenshot_filename: z.string(),
+      title: z.string(),
+      score: z.number(),
+      inserted_at: z.date().optional(),
+      id: z.number(),
+      post_id: z.string(),
+    }),
+    remaining: z.number(),
   }),
 }
 export async function getNextSurveyQuestion({
@@ -116,21 +119,24 @@ export async function getNextSurveyQuestion({
     .where('post.post_id', 'in', q => q.selectFrom('unanswered').select(['unanswered.post_id']))
     .orderBy('variant_answers.total', 'desc')
 
-  const result = await query.executeTakeFirst()
+  const result = await query.execute()
 
-  if (!result) {
+  if (!result.length) {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'SURVEY_DONE' })
   }
 
   const post = await db
     .selectFrom('reddit_posts')
     .select(['screenshot_filename', 'title', 'score', 'inserted_at', 'id', 'post_id'])
-    .where('id', '=', result.post_variant_id)
+    .where('id', '=', result[0].post_variant_id)
     .executeTakeFirst()
 
   if (!post) {
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Something bad happened.' })
   }
 
-  return post
+  return {
+    post,
+    remaining: result.length - 1,
+  }
 }

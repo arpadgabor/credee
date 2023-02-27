@@ -1,10 +1,12 @@
 import { createMutation } from '@tanstack/solid-query'
 import { TRPCClientError } from '@trpc/client'
-import { Match, Switch } from 'solid-js'
+import { Match, Show, Switch } from 'solid-js'
 import toast from 'solid-toast'
 import { ContextMenu, ContextOptions, HoverCard } from '../../../components/ui'
 import { api, uploadsPath } from '../../../utils/trpc'
 import IconDelete from '~icons/lucide/trash-2'
+import IconAddToList from '~icons/lucide/list-plus'
+import { useSurveyQuestionChooser } from '../logic/survey-question-chooser'
 
 const dateFormat = new Intl.DateTimeFormat('en-GB', {
   dateStyle: 'short',
@@ -34,6 +36,8 @@ export function RedditPostInfoCell(row: {
   screenshotFilename?: string
   onDelete?: () => void
 }) {
+  const { selectedVariants, toggleVariant } = useSurveyQuestionChooser()
+
   const remove = createMutation({
     mutationFn: async () => {
       await api.reddit.removeVariantById.mutate({
@@ -54,6 +58,11 @@ export function RedditPostInfoCell(row: {
   })
 
   const contextMenu: ContextOptions[] = [
+    {
+      content: <>Select for survey</>,
+      command: () => toggleVariant(row.variantId),
+      icon: <IconAddToList />,
+    },
     {
       content: <>Delete</>,
       command: () => remove.mutate(),
@@ -77,7 +86,12 @@ export function RedditPostInfoCell(row: {
       </p>
 
       <HoverCard content={<PreviewImage name={row.screenshotFilename!} />}>
-        <p>{row.title}</p>
+        <p class='flex items-center'>
+          <Show when={selectedVariants().includes(row.variantId)}>
+            <span class='px-2 py-1 rounded bg-accent-500 text-white text-xs mr-2'>Selected</span>
+          </Show>
+          {row.title}
+        </p>
       </HoverCard>
     </ContextMenu>
   )
