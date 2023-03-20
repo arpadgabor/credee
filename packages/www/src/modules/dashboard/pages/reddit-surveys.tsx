@@ -1,28 +1,21 @@
-import { createForm, Field, Form, reset as resetForm, zodForm } from '@modular-forms/solid'
+import { Component } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-import { createMutation, createQuery } from '@tanstack/solid-query'
+import { createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel } from '@tanstack/solid-table'
-import { Component, createSignal, Show } from 'solid-js'
-import { z } from 'zod'
+
 import IconAdd from '~icons/lucide/file-plus'
-import {
-  Button,
-  DataTable,
-  DateCell,
-  FieldAlert,
-  FieldLabel,
-  Input,
-  PageHeader,
-  Panel,
-  StringCell,
-} from '../../../components/ui'
+
 import { api } from '../../../utils/trpc'
-import { PostsForSurveySelect } from '../components/survey-post-select'
+import { Button, ButtonLink, DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
 
 const Page: Component = () => {
   const goTo = useNavigate()
   type Result = NonNullable<(typeof surveyList)['data']>['data'][number]
   const surveyList = createQuery(() => ['reddit_surveys'], {
+    initialData: {
+      data: [],
+      meta: {},
+    },
     keepPreviousData: true,
     queryFn: () => {
       return api.surveys.list.query()
@@ -56,9 +49,21 @@ const Page: Component = () => {
         cell: DateCell,
         size: 128,
       }),
+      col.display({
+        id: 'view',
+        header: 'Details',
+        cell: cell => {
+          return (
+            <ButtonLink size={'sm'} href={String(cell.row.original.id)}>
+              Details
+            </ButtonLink>
+          )
+        },
+        size: 128,
+      }),
     ],
     get data() {
-      return surveyList.data?.data ?? []
+      return surveyList.data?.data
     },
     manualPagination: true,
     getCoreRowModel: getCoreRowModel(),

@@ -1,10 +1,10 @@
 import { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
-import { router } from './core/trpc.js'
-import { JobsRouter } from './modules/jobs/jobs.router.js'
-import { RedditRouter } from './modules/jobs/reddit.router.js'
-import { ParticipantsRouter } from './modules/participants/participants.router.js'
-import { ResponsesRouter } from './modules/responses/responses.router.js'
-import { SurveyRouter } from './modules/survey/survey.router.js'
+import { router } from './core/trpc'
+import { JobsRouter } from './modules/jobs/jobs.router'
+import { RedditRouter } from './modules/jobs/reddit.router'
+import { ParticipantsRouter } from './modules/participants/participants.router'
+import { ResponsesRouter } from './modules/responses/responses.router'
+import { SurveyRouter } from './modules/survey/survey.router'
 
 export const appRouter = router({
   jobs: JobsRouter,

@@ -1,8 +1,10 @@
-import { Alert, Image } from '@kobalte/core'
-import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
+import { For, JSX, Match, ParentComponent, Show, Switch } from 'solid-js'
 import { cx } from 'class-variance-authority'
-import { For, Match, ParentComponent, Show, Switch, JSX } from 'solid-js'
 import { z } from 'zod'
+
+import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
+import { Alert, Image } from '@kobalte/core'
+
 import { Button } from '../../../components/ui'
 import { FieldMultiSelect } from './fields/multi-select'
 import { FieldScale } from './fields/scale'

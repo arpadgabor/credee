@@ -10,8 +10,8 @@
   "scripts": {},
   "dependencies": {
     "convict": "^6.2.4",
-    "kysely": "^0.23.4",
-    "pg": "^8.9.0"
+    "kysely": "^0.23.5",
+    "pg": "^8.10.0"
   },
   "devDependencies": {
     "@types/convict": "^6.1.1",

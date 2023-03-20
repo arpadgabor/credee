@@ -1,4 +1,4 @@
-import { createMutation } from '@tanstack/solid-query'
+import { createMutation, createQuery } from '@tanstack/solid-query'
 import { TRPCClientError } from '@trpc/client'
 import { Match, Show, Switch } from 'solid-js'
 import toast from 'solid-toast'
@@ -38,6 +38,12 @@ export function RedditPostInfoCell(row: {
 }) {
   const { selectedVariants, toggleVariant } = useSurveyQuestionChooser()
 
+  const surveys = createQuery(() => ['reddit_surveys'], {
+    async queryFn() {
+      return api.surveys.list.query()
+    },
+  })
+
   const remove = createMutation({
     mutationFn: async () => {
       await api.reddit.removeVariantById.mutate({
@@ -56,11 +62,34 @@ export function RedditPostInfoCell(row: {
       }
     },
   })
+  const assign = createMutation({
+    mutationFn: async (surveyId: number) => {
+      await api.surveys.addVariantToSurvey.mutate({
+        surveyId,
+        variantId: row.variantId,
+      })
+    },
+    onSuccess() {
+      toast.success('Variant added to survey!')
+    },
+    onError(err) {
+      if (err instanceof TRPCClientError) {
+        toast.error(err?.message)
+      } else {
+        toast.error('Could not add variant.')
+      }
+    },
+  })
 
   const contextMenu: ContextOptions[] = [
     {
-      content: <>Select for survey</>,
-      command: () => toggleVariant(row.variantId),
+      content: <>Add to survey</>,
+      children:
+        surveys.data?.data.map((survey, idx) => ({
+          command: () => assign.mutate(survey.id),
+          content: <>Survey 1</>,
+          icon: <div class='font-mono font-bold text-gray-500 flex items-center'>{idx + 1}</div>,
+        })) || [],
       icon: <IconAddToList />,
     },
     {

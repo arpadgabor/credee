@@ -1,6 +1,5 @@
 import { children, For, JSX, Match, ParentComponent, splitProps, Switch } from 'solid-js'
 import { ContextMenu as CtxMenu } from '@kobalte/core'
-import { MenuItemOptions } from '@kobalte/core/dist/types/menu'
 
 interface Option {
   icon?: JSX.Element
@@ -26,7 +25,10 @@ export const ContextMenu: ParentComponent<Props> = props => {
       <CtxMenu.Trigger>{slot()}</CtxMenu.Trigger>
 
       <CtxMenu.Portal>
-        <CtxMenu.Content class='bg-white dark:bg-gray-900 rounded shadow-lg p-1 border border-gray-100 dark:border-gray-800'>
+        <CtxMenu.Content
+          onClick={e => e.stopPropagation()}
+          class='bg-white dark:bg-gray-900 rounded shadow-lg p-1 border border-gray-100 dark:border-gray-800'
+        >
           <ContextItems options={props.options} />
         </CtxMenu.Content>
       </CtxMenu.Portal>
@@ -38,7 +40,6 @@ const ContextItem = (props: { option: ContextOptions }) => {
   return (
     <CtxMenu.Item
       class='h-9 px-3 w-64 rounded flex items-center cursor-default hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150'
-      as='button'
       onSelect={(props.option as OptionWithCommand).command}
     >
       <div class='w-8 flex items-center text-gray-700 dark:text-gray-500'>{props.option.icon ? props.option.icon : null}</div>
@@ -56,10 +57,12 @@ function ContextItems(props: { options: ContextOptions[] }) {
             <ContextItem option={option} />
           </Match>
           <Match when={'children' in option}>
-            <CtxMenu.Sub overlap gutter={4} shift={-8}>
-              <CtxMenu.SubTrigger class='context-menu__sub-trigger'>{option.content}</CtxMenu.SubTrigger>
+            <CtxMenu.Sub overlap gutter={4} shift={-4}>
+              <CtxMenu.SubTrigger class='context-menu__sub-trigger'>
+                <ContextItem option={option} />
+              </CtxMenu.SubTrigger>
               <CtxMenu.Portal>
-                <CtxMenu.SubContent class='context-menu__sub-content'>
+                <CtxMenu.SubContent class='bg-white dark:bg-gray-900 rounded shadow-lg p-1 border border-gray-100 dark:border-gray-800'>
                   <ContextItems options={(option as OptionWithChildren).children} />
                 </CtxMenu.SubContent>
               </CtxMenu.Portal>

@@ -11,7 +11,7 @@ const App: Component = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster position='bottom-left' />
+      <Toaster position='top-center' toastOptions={{ duration: 5000 }} />
       <Routes />
     </QueryClientProvider>
   )

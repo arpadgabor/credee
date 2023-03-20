@@ -11,6 +11,10 @@ export const OverviewRoutes: RouteDefinition[] = [
         path: '/reddit/surveys',
       },
       {
+        component: lazy(() => import('./pages/reddit-survey-id')),
+        path: '/reddit/surveys/:id',
+      },
+      {
         component: lazy(() => import('./pages/reddit-create-survey')),
         path: '/reddit/surveys/create',
       },

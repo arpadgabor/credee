@@ -1,10 +1,10 @@
-import { sql, Survey } from '@credee/shared/database'
+import { RedditPost, sql, Survey, SurveyRedditDataset } from '@credee/shared/database'
 import { db } from '@credee/shared/database'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'> & { postIds: string[] }) {
-  const posts = await db.selectFrom('reddit_posts').select('id').where('post_id', 'in', values.postIds).execute()
+export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'>) {
+  // const posts = await db.selectFrom('reddit_posts').select('id').where('post_id', 'in', values.postIds).execute()
 
   const survey = await db.transaction().execute(async trx => {
     const [survey] = await trx
@@ -16,20 +16,41 @@ export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'> & {
       .returningAll()
       .execute()
 
-    trx
-      .insertInto('survey_reddit_dataset')
-      .values(
-        posts.map(post => ({
-          survey_id: survey.id,
-          post_variant_id: post.id,
-        }))
-      )
-      .execute()
+    // trx
+    //   .insertInto('survey_reddit_dataset')
+    //   .values(
+    //     posts.map(post => ({
+    //       survey_id: survey.id,
+    //       post_variant_id: post.id,
+    //     }))
+    //   )
+    //   .execute()
 
     return survey
   })
 
   return survey
+}
+
+export async function assignVariantToSurvey(variantId: number, surveyId: number) {
+  const isAlreadyAdded = await db
+    .selectFrom('survey_reddit_dataset')
+    .where('post_variant_id', '=', variantId)
+    .where('survey_id', '=', surveyId)
+    .executeTakeFirst()
+
+  if (isAlreadyAdded) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Post is already added to the survey.' })
+  }
+
+  return db
+    .insertInto('survey_reddit_dataset')
+    .values({
+      survey_id: surveyId,
+      post_variant_id: variantId,
+    })
+    .returningAll()
+    .execute()
 }
 
 export async function createSurveyDataset(surveyId: number, postVariantIds: number[]) {

@@ -1,5 +1,4 @@
-import { Kysely, sql } from 'kysely'
-import { redditPostsTable } from './001-reddit-posts.js'
+import { Kysely } from 'kysely'
 import { participantsTable } from './004-survey.js'
 
 export async function up(db: Kysely<any>): Promise<void> {

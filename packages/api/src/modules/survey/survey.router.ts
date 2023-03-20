@@ -1,8 +1,9 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-import { procedure, router } from '../../core/trpc.js'
-import { createListSchema as listOf } from '../../core/zod.js'
+import { procedure, router } from '../../core/trpc'
+import { createListSchema as listOf } from '../../core/zod'
 import {
+  assignVariantToSurvey,
   countSurveys,
   createSurvey,
   findSurvey,
@@ -10,6 +11,7 @@ import {
   listSurveys,
   nextSurveyQuestion,
 } from './survey.service.js'
+import { getSurveyDetails, surveyDetails } from './survey-details.service'
 
 const surveyCreate = z.object({
   title: z.string(),
@@ -57,13 +59,12 @@ const getById = procedure
   })
 
 const create = procedure
-  .input(surveyCreate.and(z.object({ posts: z.array(z.string()) })))
+  .input(surveyCreate)
   .output(surveySchema)
   .mutation(async ({ input }) => {
     const survey = await createSurvey({
       title: input.title,
       ends_at: input.endsAt,
-      postIds: input.posts,
     })
 
     return {
@@ -82,9 +83,29 @@ const nextQuestion = procedure
     return question
   })
 
+const getByIdDetailed = procedure
+  .output(surveyDetails.output)
+  .input(surveyDetails.input)
+  .query(async ({ input }) => {
+    const survey = await getSurveyDetails(input)
+
+    return survey
+  })
+
+const addVariantToSurvey = procedure
+  .input(z.object({ variantId: z.number(), surveyId: z.number() }))
+  // .input(surveyDetails.input)
+  .mutation(async ({ input }) => {
+    const data = await assignVariantToSurvey(input.variantId, input.surveyId)
+
+    return data
+  })
+
 export const SurveyRouter = router({
   create,
   list,
   getById,
   nextQuestion,
+  getByIdDetailed,
+  addVariantToSurvey,
 })

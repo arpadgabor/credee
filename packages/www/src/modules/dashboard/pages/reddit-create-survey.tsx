@@ -20,7 +20,6 @@ const formValidator = z.object({
       },
       { message: 'The deadline must be at least 1 day in the future.' }
     ),
-  posts: z.array(z.string()).min(5, 'Please select at leat 5 posts.'),
 })
 
 export default function RedditCreateSurvey() {
@@ -33,7 +32,6 @@ export default function RedditCreateSurvey() {
       return api.surveys.create.mutate({
         title: data.title,
         endsAt: data.endDate ? new Date(data.endDate) : undefined,
-        posts: data.posts,
       })
     },
     onSuccess: () => {
@@ -84,7 +82,7 @@ export default function RedditCreateSurvey() {
             </Field>
           </div>
 
-          <PostsForSurveySelect form={submitForm} fieldName='posts' />
+          {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
 
           <div class='flex-1 flex items-end'>
             <Button theme='main' disabled={createSurvey.isLoading}>

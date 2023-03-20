@@ -1,3 +1,3 @@
-export * from './client.js'
-export * from './database.js'
-export { migrateToLatest } from './migrations.js'
+export * from './client'
+export * from './database'
+export { migrateToLatest } from './migrations'
