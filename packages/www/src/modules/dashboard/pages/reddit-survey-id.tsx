@@ -35,9 +35,12 @@ export default function RedditSurveyId() {
             title={survey.data!.title}
             description={
               <div>
-                <div>{}query.data!.deadline?.toISOString() || 'No deadline'</div>
+                <div>{survey.data!.deadline?.toISOString() || 'No deadline'}</div>
                 <div>
-                  {location.origin}/surveys/{params.id}?referrer=custom
+                  URL for testing:{' '}
+                  <code>
+                    {location.origin}/surveys/{params.id}?referrer=custom
+                  </code>
                 </div>
               </div>
             }
