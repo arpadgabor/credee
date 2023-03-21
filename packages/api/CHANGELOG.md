@@ -1,5 +1,11 @@
 # @credee/api
 
+## 0.3.0
+
+### Minor Changes
+
+- Refactor survey detail query, add reddit dataset from a survey
+
 ## 0.2.0
 
 ### Minor Changes

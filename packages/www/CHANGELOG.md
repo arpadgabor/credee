@@ -1,5 +1,16 @@
 # @credee/www
 
+## 0.3.0
+
+### Minor Changes
+
+- Add tabs component, show answers and dataset in survey details
+
+### Patch Changes
+
+- Updated dependencies
+  - @credee/api@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
