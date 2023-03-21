@@ -1,4 +1,4 @@
-import type { RichTextJSONSegment } from './rich-text.types.js'
+import type { RichTextJSONSegment } from './rich-text.types'
 
 export interface SubredditResponse {
   authorFlair: Record<string, Record<string, Applied | null>>

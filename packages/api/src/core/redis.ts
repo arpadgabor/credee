@@ -1,4 +1,4 @@
-import { config } from '../config.js'
+import { config } from '../config'
 import { createClient } from 'redis'
 
 export const redis = createClient({

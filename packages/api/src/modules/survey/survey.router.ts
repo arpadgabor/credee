@@ -10,7 +10,7 @@ import {
   getNextSurveyQuestion,
   listSurveys,
   nextSurveyQuestion,
-} from './survey.service.js'
+} from './survey.service'
 import { getSurveyDetails, surveyDetails } from './survey-details.service'
 
 const surveyCreate = z.object({
@@ -84,7 +84,7 @@ const nextQuestion = procedure
   })
 
 const getByIdDetailed = procedure
-  .output(surveyDetails.output)
+  // .output(surveyDetails.output)
   .input(surveyDetails.input)
   .query(async ({ input }) => {
     const survey = await getSurveyDetails(input)

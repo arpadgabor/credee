@@ -24,10 +24,10 @@
     "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
-    "tsx": "^3.12.5",
-    "turbo": "^1.8.3",
+    "tsx": "^3.12.6",
+    "turbo": "^1.8.5",
     "typescript": "^5.0.2",
-    "vitest": "^0.29.3"
+    "vitest": "^0.29.7"
   },
   "workspaces": {
     "packages": [

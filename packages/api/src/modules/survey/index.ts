@@ -1,1 +1,1 @@
-export { SurveyRouter } from './survey.router.js'
+export { SurveyRouter } from './survey.router'

@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { procedure, router } from '../../core/trpc.js'
-import { createCredibilityResponse } from './responses.service.js'
+import { procedure, router } from '../../core/trpc'
+import { createCredibilityResponse } from './responses.service'
 
 const credibilityResponseCreate = z.object({
   credibility: z.number(),

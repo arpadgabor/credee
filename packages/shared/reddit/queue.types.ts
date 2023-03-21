@@ -1,5 +1,5 @@
 import type { Job } from 'bullmq'
-import { RedditCrawledPost } from './crawler.types.js'
+import { RedditCrawledPost } from './crawler.types'
 
 export interface CrawlInput {
   subreddit: `/r/${string}`

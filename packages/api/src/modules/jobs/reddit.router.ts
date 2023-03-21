@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { procedure, router } from '../../core/trpc.js'
-import { createListSchema } from '../../core/zod.js'
+import { procedure, router } from '../../core/trpc'
+import { createListSchema } from '../../core/zod'
 import {
   getRedditFilters,
   groupById,
@@ -13,7 +13,7 @@ import {
   removeRedditSchema,
   removeRedditVariant,
   removeRedditVariantSchema,
-} from './reddit.service.js'
+} from './reddit.service'
 
 const redditByPostId = procedure
   .input(groupByIdQuerySchema.optional())

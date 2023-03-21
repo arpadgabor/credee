@@ -1,6 +1,6 @@
 import { db } from '@credee/shared/database'
 import type { ResponsesCredibility } from '@credee/shared/database'
-import { findSurvey } from '../../modules/survey/survey.service.js'
+import { findSurvey } from '../../modules/survey/survey.service'
 
 export async function createCredibilityResponse(data: Omit<ResponsesCredibility, 'id'>) {
   const survey = await findSurvey(data.survey_id)

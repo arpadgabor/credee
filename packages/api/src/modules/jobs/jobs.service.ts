@@ -1,7 +1,7 @@
 import type { CrawlInput } from '@credee/shared/reddit/types'
 import { Job, RepeatOptions } from 'bullmq'
-import { redis } from '../../core/redis.js'
-import { RedditCrawler } from './queues/reddit.js'
+import { redis } from '../../core/redis'
+import { RedditCrawler } from './queues/reddit'
 
 export async function getJobsInQueue() {
   const jobs = await RedditCrawler.queue.getJobs(['active', 'completed', 'delayed', 'failed', 'paused', 'waiting'])

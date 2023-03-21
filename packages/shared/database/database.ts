@@ -1,4 +1,4 @@
-import type { Media, RichTextJSONSegment } from '../reddit/types.js'
+import type { Media, RichTextJSONSegment } from '../reddit/types'
 import type { Generated } from 'kysely'
 import { sql } from 'kysely'
 

@@ -1,5 +1,5 @@
-import { RichTextJSONSegment } from './rich-text.types.js'
-import { Media } from './subreddit.types.js'
+import { RichTextJSONSegment } from './rich-text.types'
+import { Media } from './subreddit.types'
 
 export interface RedditCrawledPost {
   id: string

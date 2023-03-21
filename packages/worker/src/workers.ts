@@ -1,7 +1,7 @@
 import { useRedditUpdater } from '@credee/shared/reddit/queue'
-import { worker as redditWorker } from './queues/reddit-crawler.js'
-import { worker as redditUpdater } from './queues/reddit-updater.js'
 import { redisConnection } from './redis.js'
+import { worker as redditUpdater } from './queues/reddit-updater.js'
+import { worker as redditWorker } from './queues/reddit-crawler.js'
 
 redditWorker.run()
 redditWorker.on('ready', () => console.log('Reddit worker ready.'))

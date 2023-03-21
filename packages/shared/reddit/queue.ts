@@ -1,5 +1,5 @@
 import { Queue, QueueEvents, ConnectionOptions } from 'bullmq'
-import type { CrawlInput, CrawlOutput } from './queue.types.js'
+import type { CrawlInput, CrawlOutput } from './queue.types'
 
 export function useRedditCrawler({ redisConnection }: { redisConnection: ConnectionOptions }) {
   const queueName = 'reddit-crawler'

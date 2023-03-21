@@ -6,42 +6,40 @@ export const surveyDetails = {
   input: z.object({
     surveyId: z.number(),
   }),
-  output: z.object({
-    title: z.string(),
-    deadline: z.date().nullish(),
-    answers: z.array(
-      z.object({
-        participantId: z.string().nullish(),
-        credibility: z.number(),
-        contentStyle: z.string(),
-        contentStyleEffect: z.number(),
-        contentStyleOther: z.string().nullish(),
-        academicStatus: z.string().nullish(),
-        ageRange: z.string().nullish(),
-        respondedAt: z.date(),
-        gender: z.string().nullish(),
-        externalPlatform: z.string().nullish(),
-        onboardingAnswers: z.any(),
-        post: z.object({
-          title: z.string(),
-          titleSentiment: z.number(),
-          subreddit: z.string(),
-          domain: z.string(),
-          upvotes: z.number(),
-          ratio: z.number(),
-          comments: z.number(),
-          goldCount: z.number(),
-          postedAt: z.date().nullish(),
-          screenshot: z.string().nullish(),
-        }),
-      })
-    ),
-  }),
+  // output: z.object({
+  //   title: z.string(),
+  //   deadline: z.date().nullish(),
+  //   answers: z.array(
+  //     z.object({
+  //       participantId: z.string().nullish(),
+  //       credibility: z.number(),
+  //       contentStyle: z.string(),
+  //       contentStyleEffect: z.number(),
+  //       contentStyleOther: z.string().nullish(),
+  //       academicStatus: z.string().nullish(),
+  //       ageRange: z.string().nullish(),
+  //       respondedAt: z.date(),
+  //       gender: z.string().nullish(),
+  //       externalPlatform: z.string().nullish(),
+  //       onboardingAnswers: z.any(),
+  //       post: z.object({
+  //         title: z.string(),
+  //         titleSentiment: z.number(),
+  //         subreddit: z.string(),
+  //         domain: z.string(),
+  //         upvotes: z.number(),
+  //         ratio: z.number(),
+  //         comments: z.number(),
+  //         goldCount: z.number(),
+  //         postedAt: z.date().nullish(),
+  //         screenshot: z.string().nullish(),
+  //       }),
+  //     })
+  //   ),
+  // }),
 }
 
-export async function getSurveyDetails({
-  surveyId,
-}: z.infer<typeof surveyDetails.input>): Promise<z.infer<typeof surveyDetails.output>> {
+export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetails.input>) {
   const survey = await db.selectFrom('surveys').selectAll().where('id', '=', surveyId).executeTakeFirst()
 
   if (!survey) {
@@ -85,33 +83,66 @@ export async function getSurveyDetails({
     // .orderBy('responses_credibility.')
     .execute()
 
+  const variants = await db
+    .selectFrom('survey_reddit_dataset')
+    .where('survey_id', '=', surveyId)
+    .leftJoin('reddit_posts', 'reddit_posts.id', 'survey_reddit_dataset.post_variant_id')
+    .select([
+      'reddit_posts.id',
+      'reddit_posts.post_id as postId',
+      'reddit_posts.author',
+      'reddit_posts.domain',
+      'reddit_posts.flair',
+      'reddit_posts.nr_of_comments as nrOfComments',
+      'reddit_posts.permalink',
+      'reddit_posts.screenshot_filename as screenshot',
+      'reddit_posts.ratio',
+      'reddit_posts.score',
+      'reddit_posts.subreddit',
+      'reddit_posts.title',
+      'reddit_posts.title_sentiment as titleSentiment',
+      'reddit_posts.url',
+      'reddit_posts.url_title as urlTitle',
+      'reddit_posts.gold_count as goldCount',
+      'reddit_posts.created_at as createdAt',
+      'reddit_posts.created_at as insertedAt',
+    ])
+    .execute()
+
   return {
     title: survey.title,
     deadline: survey.ends_at,
-    answers: responses.map(r => ({
-      participantId: r.external_participant_id,
-      post: {
-        title: r.post_title!,
-        titleSentiment: r.post_title_sentiment || 0,
-        domain: r.domain || '',
-        subreddit: r.subreddit!,
-        goldCount: r.gold_count || 0,
-        comments: r.nr_of_comments || 0,
-        ratio: r.ratio!,
-        upvotes: r.score!,
-        postedAt: r.posted_at ? new Date(r.posted_at) : undefined,
-        screenshot: r.screenshot_filename,
-      },
-      credibility: r.credibility,
-      contentStyle: r.content_style,
-      contentStyleEffect: r.content_style_effect,
-      contentStyleOther: r.content_style_other,
-      academicStatus: r.academic_status,
-      ageRange: r.age_range,
-      respondedAt: r.responded_at!,
-      gender: r.gender,
-      externalPlatform: r.external_platform,
-      onboardingAnswers: r.onboarding_answers,
-    })),
+    answers: responses.map(r => {
+      const { redditUsage, socialMediaUsage, fakeNewsAbility } = r.onboarding_answers as Record<string, number>
+
+      return {
+        participantId: r.external_participant_id,
+        post: {
+          title: r.post_title!,
+          titleSentiment: r.post_title_sentiment || 0,
+          domain: r.domain || '',
+          subreddit: r.subreddit!,
+          goldCount: r.gold_count || 0,
+          comments: r.nr_of_comments || 0,
+          ratio: r.ratio!,
+          upvotes: r.score!,
+          postedAt: r.posted_at ? new Date(r.posted_at) : undefined,
+          screenshot: r.screenshot_filename,
+        },
+        credibility: r.credibility,
+        contentStyle: r.content_style,
+        contentStyleEffect: r.content_style_effect,
+        contentStyleOther: r.content_style_other,
+        academicStatus: r.academic_status,
+        ageRange: r.age_range,
+        respondedAt: r.responded_at!,
+        gender: r.gender,
+        externalPlatform: r.external_platform,
+        redditUsage,
+        socialMediaUsage,
+        fakeNewsAbility,
+      }
+    }),
+    variants,
   }
 }

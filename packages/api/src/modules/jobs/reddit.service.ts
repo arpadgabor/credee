@@ -3,7 +3,7 @@ import { db } from '@credee/shared/database'
 import type { RedditPost } from '@credee/shared/database'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { deleteFile } from '../../core/s3.js'
+import { deleteFile } from '../../core/s3'
 
 //#region listRedditResults
 interface RedditListOptions {

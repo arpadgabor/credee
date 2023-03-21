@@ -1,6 +1,6 @@
 import { db } from '@credee/shared/database'
 import type { Participants } from '@credee/shared/database'
-import { findSurvey } from '../../modules/survey/survey.service.js'
+import { findSurvey } from '../../modules/survey/survey.service'
 
 export async function createParticipant(data: Omit<Participants, 'id' | 'created_at'>) {
   const survey = await findSurvey(data.survey_id)

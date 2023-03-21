@@ -1,7 +1,7 @@
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { unlink } from 'fs/promises'
 import { resolve } from 'path'
-import { config } from '../config.js'
+import { config } from '../config'
 
 const s3 = new S3Client({
   region: 'auto',

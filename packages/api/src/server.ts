@@ -2,9 +2,9 @@ import cors from '@fastify/cors'
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import { fastify } from 'fastify'
 import { migrateToLatest } from '@credee/shared/database'
-import { config } from './config.js'
-import { appRouter } from './router.js'
-import { serverLogging } from './core/logger.js'
+import { config } from './config'
+import { appRouter } from './router'
+import { serverLogging } from './core/logger'
 
 const server = fastify({
   maxParamLength: 5000,

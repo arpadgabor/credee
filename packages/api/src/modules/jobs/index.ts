@@ -1,3 +1,3 @@
-export { JobsRouter } from './jobs.router.js'
-export { RedditRouter } from './reddit.router.js'
-export type { CrawlRedditInput } from './jobs.router.js'
+export { JobsRouter } from './jobs.router'
+export { RedditRouter } from './reddit.router'
+export type { CrawlRedditInput } from './jobs.router'

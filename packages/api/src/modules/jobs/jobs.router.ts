@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { procedure, router } from '../../core/trpc.js'
-import { getActiveJobs, getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service.js'
-import { groupById, listRedditResults as listRedditPosts } from './reddit.service.js'
+import { procedure, router } from '../../core/trpc'
+import { getActiveJobs, getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service'
+import { groupById, listRedditResults as listRedditPosts } from './reddit.service'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),

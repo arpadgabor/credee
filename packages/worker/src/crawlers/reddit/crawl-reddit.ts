@@ -1,6 +1,4 @@
-import { useRedditUpdater } from '@credee/shared/reddit/queue'
 import type { RedditCrawlerOptions } from '@credee/shared/reddit/types'
-import { redisConnection } from '../../redis.js'
 import { browser } from '../../utils/browser.js'
 import { uploadFile } from '../../utils/file-upload.js'
 import { sentiment } from '../../utils/sentiment.js'

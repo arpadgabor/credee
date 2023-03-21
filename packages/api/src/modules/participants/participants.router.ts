@@ -1,7 +1,7 @@
 import { ExternalPlatform, ExternalPlatforms } from '@credee/shared/database'
 import { z } from 'zod'
-import { procedure, router } from '../../core/trpc.js'
-import { createParticipant } from './participants.service.js'
+import { procedure, router } from '../../core/trpc'
+import { createParticipant } from './participants.service'
 
 const participantCreate = z.object({
   surveyId: z.number(),

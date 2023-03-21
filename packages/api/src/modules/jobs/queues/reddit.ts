@@ -1,5 +1,5 @@
 import { useRedditCrawler, useRedditUpdater } from '@credee/shared/reddit/queue'
-import { config } from '../../../config.js'
+import { config } from '../../../config'
 
 const redisConnection = {
   host: config.get('redis.host'),
