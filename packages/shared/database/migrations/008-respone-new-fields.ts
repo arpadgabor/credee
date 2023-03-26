@@ -13,7 +13,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema
-    .alterTable(participantsTable)
+    .alterTable(responsesTable)
     .dropColumn('content_style')
     .dropColumn('content_style_other')
     .dropColumn('content_style_effect')
