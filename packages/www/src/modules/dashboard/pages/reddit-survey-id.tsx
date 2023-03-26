@@ -1,13 +1,17 @@
 import { useParams } from '@solidjs/router'
 import { createQuery } from '@tanstack/solid-query'
-import { api } from '../../../utils/trpc'
-import { DataTable, DateCell, PageHeader, StringCell, Tabs } from '../../../components/ui'
-import { Switch, Match, Show, createMemo } from 'solid-js'
+import { stringify as toCsv } from 'csv-stringify/browser/esm/sync'
+import { Match, Show, Switch, createMemo, createSignal, onMount } from 'solid-js'
+
 import { createColumnHelper, createSolidTable, getCoreRowModel } from '@tanstack/solid-table'
+import { Button, DataTable, DateCell, PageHeader, StringCell, Tabs } from '../../../components/ui'
+
+import DownloadIcon from '~icons/ph/download'
 import { Outputs } from '@credee/api'
+import { api } from '../../../utils/trpc'
+
 import Survey from '../../survey/pages/survey'
 import { RedditPostInfoCell } from '../components/post-info-cell'
-
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
 type Variant = Survey['variants'][number]
@@ -133,13 +137,54 @@ function SurveyResponses(props: { answers: Answer[] }) {
     ],
     getCoreRowModel: getCoreRowModel(),
   })
+  const [csvDownloadHref, setCsvDownloadHref] = createSignal<string>()
+  onMount(() => {
+    const csv = toCsv(
+      props.answers.map(({ post, ...rest }) => ({
+        'Responded At': new Date(rest.respondedAt).toLocaleString(),
+        'External Platform': rest.externalPlatform,
+        'Participant ID': rest.participantId,
+        Gender: rest.gender,
+        'Age Range': rest.ageRange,
+        'Studies Level': rest.academicStatus,
+        'Reddit Usage': rest.redditUsage,
+        'Social Media Usage': rest.socialMediaUsage,
+        'Fake News Ability': rest.fakeNewsAbility,
+        'Credibility Rating': rest.credibility,
+        'Content Style': rest.contentStyle,
+        'Content Style Effect': rest.contentStyleOther || rest.contentStyleEffect,
+        '[Post] Title': post.title,
+        '[Post] Title Sentiment': post.titleSentiment,
+        '[Post] Link Domain': post.domain,
+        '[Post] Subreddit': post.subreddit,
+        '[Post] Award Count': post.goldCount,
+        '[Post] Comments': post.comments,
+        '[Post] Upvote Ratio': post.ratio,
+        '[Post] Upvotes': post.upvotes,
+        '[Post] Posted At': post.postedAt ? new Date(post.postedAt).toLocaleString() : '',
+      })),
+      {
+        header: true,
+      }
+    )
+
+    const dataUrl = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`
+    setCsvDownloadHref(dataUrl)
+  })
 
   return (
     <div>
-      <Show when={!props.answers.length}>No answers.</Show>
-      <Show when={props.answers.length}>
-        <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />
-      </Show>
+      <div class='flex mb-2'>
+        <Show when={csvDownloadHref()}>
+          <a href={csvDownloadHref()!} download={'Responses.csv'}>
+            <Button type='button' tabIndex={-1}>
+              <DownloadIcon class='mr-3' />
+              Download Responses CSV
+            </Button>
+          </a>
+        </Show>
+      </div>
+      <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />
     </div>
   )
 }

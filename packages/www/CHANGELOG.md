@@ -1,5 +1,12 @@
 # @credee/www
 
+## 0.4.0
+
+### Minor Changes
+
+- New: Added responses export to CSV in survey details
+- Fix: Show outline using focus-visible instead of focus
+
 ## 0.3.0
 
 ### Minor Changes

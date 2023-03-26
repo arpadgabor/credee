@@ -1,6 +1,6 @@
 {
   "name": "@credee/www",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -11,21 +11,22 @@
   "license": "MIT",
   "dependencies": {
     "@credee/api": "workspace:*",
-    "@kobalte/core": "^0.7.4",
+    "@kobalte/core": "^0.8.1",
     "@modular-forms/solid": "^0.11.0",
-    "@solidjs/router": "^0.8.0",
+    "@solidjs/router": "^0.8.2",
     "@tanstack/solid-query": "^4.27.0",
-    "@tanstack/solid-table": "^8.7.9",
+    "@tanstack/solid-table": "^8.8.0",
     "@trpc/client": "^10.16.0",
     "chart.js": "^4.2.1",
+    "csv-stringify": "^6.3.0",
     "lodash-es": "^4.17.21",
     "solid-js": "^1.6.15",
-    "solid-toast": "^0.4.0",
+    "solid-toast": "^0.5.0",
     "superjson": "^1.12.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.1.70",
+    "@iconify-json/lucide": "^1.1.72",
     "@iconify-json/ph": "^1.1.5",
     "@types/lodash-es": "^4.17.7",
     "autoprefixer": "^10.4.14",
@@ -34,9 +35,9 @@
     "solid-devtools": "^0.26.0",
     "tailwindcss": "^3.2.7",
     "typescript": "^5.0.2",
-    "unplugin-auto-import": "^0.15.1",
+    "unplugin-auto-import": "^0.15.2",
     "unplugin-icons": "^0.15.3",
-    "vite": "^4.2.0",
+    "vite": "^4.2.1",
     "vite-plugin-solid": "^2.6.1"
   }
 }

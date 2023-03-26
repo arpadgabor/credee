@@ -10,14 +10,15 @@
     "build": "node build.cjs"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.294.0",
+    "@aws-sdk/client-s3": "^3.299.0",
     "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.1",
     "@fastify/static": "^6.9.0",
-    "@trpc/server": "^10.16.0",
-    "bullmq": "^3.10.1",
+    "@trpc/server": "^10.18.0",
+    "bullmq": "^3.10.2",
     "convict": "^6.2.4",
-    "fastify": "^4.14.1",
+    "csv-stringify": "^6.3.0",
+    "fastify": "^4.15.0",
     "pino-pretty": "^10.0.0",
     "redis": "^4.6.5",
     "superjson": "^1.12.2",
@@ -29,7 +30,7 @@
   "devDependencies": {
     "@types/convict": "^6.1.1",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.12",
+    "esbuild": "^0.17.13",
     "pino": "^8.11.0",
     "tsconfig-paths": "^4.1.2"
   }

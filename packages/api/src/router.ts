@@ -13,6 +13,7 @@ export const appRouter = router({
   participants: ParticipantsRouter,
   reddit: RedditRouter,
 })
+
 export type AppRouter = typeof appRouter
 export type Outputs = inferRouterOutputs<AppRouter>
 export type Inputs = inferRouterInputs<AppRouter>

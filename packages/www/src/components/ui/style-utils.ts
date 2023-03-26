@@ -6,4 +6,4 @@ export const formGroup = cx([
   'group-[.formrow]:!border-l group-[.formrow]:last:!border-r',
 ])
 
-export const focus = cx(['focus-visible:outline-none focus:ring-2 focus:ring-gray-400'])
+export const focus = cx(['focus-visible:outline-none focus-visible:ring-2 focus:ring-gray-400'])
