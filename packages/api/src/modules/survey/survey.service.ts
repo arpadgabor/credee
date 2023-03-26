@@ -3,33 +3,42 @@ import { db } from '@credee/shared/database'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at'>) {
-  // const posts = await db.selectFrom('reddit_posts').select('id').where('post_id', 'in', values.postIds).execute()
-
+export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url'>) {
   const survey = await db.transaction().execute(async trx => {
     const [survey] = await trx
       .insertInto('surveys')
       .values({
         title: values.title,
         ends_at: values.ends_at,
+        redirect_url: values.redirect_url,
       })
       .returningAll()
       .execute()
-
-    // trx
-    //   .insertInto('survey_reddit_dataset')
-    //   .values(
-    //     posts.map(post => ({
-    //       survey_id: survey.id,
-    //       post_variant_id: post.id,
-    //     }))
-    //   )
-    //   .execute()
 
     return survey
   })
 
   return survey
+}
+
+export async function updateSurvey(surveyId: number, values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url'>) {
+  const survey = await findSurvey(surveyId)
+  if (!survey) {
+    throw new TRPCError({ code: 'NOT_FOUND', message: 'Survey does not exist.' })
+  }
+
+  const updated = await db
+    .updateTable('surveys')
+    .set({
+      title: values.title,
+      ends_at: values.ends_at,
+      redirect_url: values.redirect_url,
+    })
+    .where('id', '=', surveyId)
+    .returningAll()
+    .executeTakeFirst()
+
+  return updated!
 }
 
 export async function assignVariantToSurvey(variantId: number, surveyId: number) {
@@ -87,15 +96,18 @@ export const nextSurveyQuestion = {
     surveyId: z.number(),
   }),
   output: z.object({
-    post: z.object({
-      screenshot_filename: z.string(),
-      title: z.string(),
-      score: z.number(),
-      inserted_at: z.date().optional(),
-      id: z.number(),
-      post_id: z.string(),
-    }),
+    post: z
+      .object({
+        screenshot_filename: z.string(),
+        title: z.string(),
+        score: z.number(),
+        inserted_at: z.date().optional(),
+        id: z.number(),
+        post_id: z.string(),
+      })
+      .nullish(),
     remaining: z.number(),
+    redirectUrl: z.string().url().nullish(),
   }),
 }
 export async function getNextSurveyQuestion({
@@ -143,7 +155,10 @@ export async function getNextSurveyQuestion({
   const result = await query.execute()
 
   if (!result.length) {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'SURVEY_DONE' })
+    return {
+      remaining: 0,
+      redirectUrl: survey.redirect_url,
+    }
   }
 
   const post = await db

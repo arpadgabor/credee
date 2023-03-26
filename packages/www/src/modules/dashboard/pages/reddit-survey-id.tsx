@@ -1,31 +1,95 @@
 import { useParams } from '@solidjs/router'
-import { createQuery } from '@tanstack/solid-query'
+import { createMutation, createQuery } from '@tanstack/solid-query'
 import { stringify as toCsv } from 'csv-stringify/browser/esm/sync'
 import { Match, Show, Switch, createMemo, createSignal, onMount } from 'solid-js'
 
 import { createColumnHelper, createSolidTable, getCoreRowModel } from '@tanstack/solid-table'
-import { Button, DataTable, DateCell, PageHeader, StringCell, Tabs } from '../../../components/ui'
+import {
+  Button,
+  DataTable,
+  DateCell,
+  FieldAlert,
+  FieldLabel,
+  Input,
+  PageHeader,
+  StringCell,
+  Tabs,
+} from '../../../components/ui'
 
 import DownloadIcon from '~icons/ph/download'
+import CopyIcon from '~icons/ph/copy'
 import { Outputs } from '@credee/api'
 import { api } from '../../../utils/trpc'
 
 import Survey from '../../survey/pages/survey'
 import { RedditPostInfoCell } from '../components/post-info-cell'
+import { z } from 'zod'
+import { Field, Form, createForm, setValue, zodForm } from '@modular-forms/solid'
+import toast from 'solid-toast'
+
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
 type Variant = Survey['variants'][number]
 
+const formValidator = z.object({
+  title: z.string({ required_error: 'The title is required.' }).min(1, 'Please enter a title for the survey.'),
+  redirectUrl: z.string().url(),
+  endDate: z
+    .string()
+    .optional()
+    .refine(
+      value => {
+        if (!value) return true
+        const date = new Date(value)
+        return date > new Date()
+      },
+      { message: 'The deadline must be at least 1 day in the future.' }
+    ),
+})
+
 export default function RedditSurveyId() {
   const params = useParams<{ id: string }>()
 
+  const updateForm = createForm({
+    validate: zodForm(formValidator),
+  })
   const survey = createQuery<Survey>(() => [params.id], {
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     queryFn() {
       return api.surveys.getByIdDetailed.query({
         surveyId: Number(params.id),
       })
     },
+    onSuccess(data) {
+      setValue(updateForm, 'title', data.title)
+      setValue(updateForm, 'redirectUrl', data.redirectUrl!)
+      !!data.deadline && setValue(updateForm, 'endDate', data.deadline.toISOString().split('T')[0])
+    },
   })
+
+  const createSurvey = createMutation({
+    mutationFn: (data: z.infer<typeof formValidator>) => {
+      return api.surveys.update.mutate({
+        id: Number(params.id),
+        title: data.title,
+        endsAt: data.endDate ? new Date(data.endDate) : undefined,
+        redirectUrl: data.redirectUrl,
+      })
+    },
+    onSuccess: () => {
+      toast.success('Survey updated!')
+    },
+  })
+  function onSubmit(data: z.infer<typeof formValidator>) {
+    createSurvey.mutate(data)
+  }
+
+  function copyUrl() {
+    const url = `${location.origin}/survey/${params.id}?referrer=custom`
+    navigator.clipboard.writeText(url)
+    toast.success('URL copied to your clipboard!')
+  }
 
   const answers = createMemo(() => survey.data?.answers || [])
   const variants = createMemo(() => survey.data?.variants || [])
@@ -39,18 +103,70 @@ export default function RedditSurveyId() {
             title={survey.data!.title}
             description={
               <div>
-                <div>{survey.data!.deadline?.toISOString() || 'No deadline'}</div>
                 <div>
                   URL for testing:{' '}
                   <code>
-                    {location.origin}/surveys/{params.id}?referrer=custom
+                    {location.origin}/survey/{params.id}?referrer=custom
                   </code>
+                  <button class='ml-2' onClick={copyUrl} title='Copy URL to clipboard'>
+                    <CopyIcon />
+                  </button>
                 </div>
               </div>
             }
           />
 
           <main>
+            <Form of={updateForm} onSubmit={onSubmit} class='flex flex-col h-full space-y-4'>
+              <div class='flex flex-col md:flex-row md:space-x-2'>
+                <Field of={updateForm} name='title'>
+                  {field => (
+                    <label class='w-full md:w-3/4'>
+                      <FieldLabel>Title</FieldLabel>
+                      <Input {...field.props} value={field.value} class='w-full' />
+                      <Show when={field.error}>
+                        <FieldAlert type='error'>{field.error}</FieldAlert>
+                      </Show>
+                    </label>
+                  )}
+                </Field>
+
+                <Field of={updateForm} name='redirectUrl'>
+                  {field => (
+                    <label class='w-full md:w-3/4'>
+                      <FieldLabel>URL to redirect after finishing</FieldLabel>
+                      <Input {...field.props} value={field.value} class='w-full' type='url' />
+                      <Show when={field.error}>
+                        <FieldAlert type='error'>{field.error}</FieldAlert>
+                      </Show>
+                    </label>
+                  )}
+                </Field>
+
+                <Field of={updateForm} name='endDate'>
+                  {field => (
+                    <label class='w-full md:w-1/4'>
+                      <FieldLabel>Deadline</FieldLabel>
+                      <Input {...field.props} value={field.value} type='date' class='w-full' />
+                      <Show when={field.error}>
+                        <FieldAlert type='error'>{field.error}</FieldAlert>
+                      </Show>
+                    </label>
+                  )}
+                </Field>
+              </div>
+
+              {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
+
+              <div class='flex-1 flex items-end'>
+                <Button theme='main' disabled={createSurvey.isLoading}>
+                  Save
+                </Button>
+              </div>
+            </Form>
+
+            <hr class='my-4' />
+
             <Tabs
               ariaLabel='Survey Detail Tabs'
               tabs={[

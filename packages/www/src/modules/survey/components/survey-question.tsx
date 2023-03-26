@@ -27,7 +27,11 @@ export function SurveyQuestions(props: Props) {
         participantId: props.participantId,
       })
     },
-    onSuccess({ post, remaining }) {
+    onSuccess({ post, remaining, redirectUrl }) {
+      if (redirectUrl) {
+        location.replace(redirectUrl)
+      }
+
       window.scrollTo({ top: 0 })
       setFormStructure(
         createPostCredibilityForm({
@@ -54,8 +58,8 @@ export function SurveyQuestions(props: Props) {
         contentStyleEffect,
         topicFamiliarity,
         participantId: props.participantId!,
-        postId: question.data?.post.post_id!,
-        postVariantId: question.data?.post.id!,
+        postId: question.data?.post!.post_id!,
+        postVariantId: question.data!.post!.id!,
         surveyId: props.surveyId,
       })
     },

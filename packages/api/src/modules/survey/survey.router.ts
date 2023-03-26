@@ -10,11 +10,13 @@ import {
   getNextSurveyQuestion,
   listSurveys,
   nextSurveyQuestion,
+  updateSurvey,
 } from './survey.service'
 import { getSurveyDetails, surveyDetails } from './survey-details.service'
 
 const surveyCreate = z.object({
   title: z.string(),
+  redirectUrl: z.string().url(),
   endsAt: z.date().nullish(),
 })
 
@@ -32,6 +34,7 @@ const list = procedure.output(listSchema).query(async () => {
     id: s.id,
     title: s.title,
     endsAt: s.ends_at,
+    redirectUrl: s.redirect_url || 'https://missing.url/',
   }))
 
   return {
@@ -55,7 +58,10 @@ const getById = procedure
       })
     }
 
-    return survey
+    return {
+      ...survey,
+      redirectUrl: survey.redirect_url || 'https://missing.url/',
+    }
   })
 
 const create = procedure
@@ -65,12 +71,32 @@ const create = procedure
     const survey = await createSurvey({
       title: input.title,
       ends_at: input.endsAt,
+      redirect_url: input.redirectUrl,
     })
 
     return {
       id: survey.id,
       title: survey.title,
       endsAt: survey.ends_at,
+      redirectUrl: survey.redirect_url!,
+    }
+  })
+
+const update = procedure
+  .input(surveySchema)
+  .output(surveySchema)
+  .mutation(async ({ input }) => {
+    const survey = await updateSurvey(input.id, {
+      title: input.title,
+      ends_at: input.endsAt,
+      redirect_url: input.redirectUrl,
+    })
+
+    return {
+      id: survey.id,
+      title: survey.title,
+      endsAt: survey.ends_at,
+      redirectUrl: survey.redirect_url!,
     }
   })
 
@@ -103,6 +129,7 @@ const addVariantToSurvey = procedure
 
 export const SurveyRouter = router({
   create,
+  update,
   list,
   getById,
   nextQuestion,

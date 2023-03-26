@@ -6,37 +6,6 @@ export const surveyDetails = {
   input: z.object({
     surveyId: z.number(),
   }),
-  // output: z.object({
-  //   title: z.string(),
-  //   deadline: z.date().nullish(),
-  //   answers: z.array(
-  //     z.object({
-  //       participantId: z.string().nullish(),
-  //       credibility: z.number(),
-  //       contentStyle: z.string(),
-  //       contentStyleEffect: z.number(),
-  //       contentStyleOther: z.string().nullish(),
-  //       academicStatus: z.string().nullish(),
-  //       ageRange: z.string().nullish(),
-  //       respondedAt: z.date(),
-  //       gender: z.string().nullish(),
-  //       externalPlatform: z.string().nullish(),
-  //       onboardingAnswers: z.any(),
-  //       post: z.object({
-  //         title: z.string(),
-  //         titleSentiment: z.number(),
-  //         subreddit: z.string(),
-  //         domain: z.string(),
-  //         upvotes: z.number(),
-  //         ratio: z.number(),
-  //         comments: z.number(),
-  //         goldCount: z.number(),
-  //         postedAt: z.date().nullish(),
-  //         screenshot: z.string().nullish(),
-  //       }),
-  //     })
-  //   ),
-  // }),
 }
 
 export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetails.input>) {
@@ -112,6 +81,7 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
   return {
     title: survey.title,
     deadline: survey.ends_at,
+    redirectUrl: survey.redirect_url || '-',
     answers: responses.map(r => {
       const { redditUsage, socialMediaUsage, fakeNewsAbility } = r.onboarding_answers as Record<string, number>
 

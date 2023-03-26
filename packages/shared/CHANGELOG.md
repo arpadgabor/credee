@@ -1,5 +1,11 @@
 # @credee/shared
 
+## 0.4.0
+
+### Minor Changes
+
+- Added redirect after completing survey
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @credee/api
 
+## 0.4.0
+
+### Minor Changes
+
+- Added redirect after completing survey
+
+### Patch Changes
+
+- Updated dependencies
+  - @credee/shared@0.4.0
+
 ## 0.3.1
 
 ### Patch Changes

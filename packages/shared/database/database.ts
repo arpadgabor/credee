@@ -62,6 +62,7 @@ export interface RedditPost {
 export interface Survey {
   id: Generated<number>
   title: string
+  redirect_url?: string
   ends_at?: Date | null
 }
 
@@ -96,6 +97,7 @@ export interface ResponsesCredibility {
   content_style_other?: string | null
   content_style_effect: number
   topic_familiarity: number
+  created_at: Date
 }
 
 export interface SurveyRedditDataset {

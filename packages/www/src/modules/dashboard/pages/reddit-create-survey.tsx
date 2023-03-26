@@ -5,10 +5,10 @@ import { Show } from 'solid-js'
 import { z } from 'zod'
 import { Button, FieldAlert, FieldLabel, Input, PageHeader } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import { PostsForSurveySelect } from '../components/survey-post-select'
 
 const formValidator = z.object({
   title: z.string({ required_error: 'The title is required.' }).min(1, 'Please enter a title for the survey.'),
+  redirectUrl: z.string().url(),
   endDate: z
     .string()
     .optional()
@@ -32,6 +32,7 @@ export default function RedditCreateSurvey() {
       return api.surveys.create.mutate({
         title: data.title,
         endsAt: data.endDate ? new Date(data.endDate) : undefined,
+        redirectUrl: data.redirectUrl,
       })
     },
     onSuccess: () => {
@@ -62,6 +63,18 @@ export default function RedditCreateSurvey() {
                 <label class='w-full md:w-3/4'>
                   <FieldLabel>Title</FieldLabel>
                   <Input {...field.props} class='w-full' />
+                  <Show when={field.error}>
+                    <FieldAlert type='error'>{field.error}</FieldAlert>
+                  </Show>
+                </label>
+              )}
+            </Field>
+
+            <Field of={submitForm} name='redirectUrl'>
+              {field => (
+                <label class='w-full md:w-3/4'>
+                  <FieldLabel>URL to redirect after finishing</FieldLabel>
+                  <Input {...field.props} class='w-full' type='url' />
                   <Show when={field.error}>
                     <FieldAlert type='error'>{field.error}</FieldAlert>
                   </Show>
