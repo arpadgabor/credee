@@ -82,6 +82,7 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
     title: survey.title,
     deadline: survey.ends_at,
     redirectUrl: survey.redirect_url || '-',
+    description: survey.description,
     answers: responses.map(r => {
       const { redditUsage, socialMediaUsage, fakeNewsAbility } = r.onboarding_answers as Record<string, number>
 

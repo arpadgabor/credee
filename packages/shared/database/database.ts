@@ -63,6 +63,7 @@ export interface Survey {
   id: Generated<number>
   title: string
   redirect_url?: string
+  description?: any
   ends_at?: Date | null
 }
 

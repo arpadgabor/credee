@@ -11,6 +11,7 @@ import * as _007 from './migrations/007-nullable-participant-id.js'
 import * as _008 from './migrations/008-respone-new-fields.js'
 import * as _009 from './migrations/009-responses-created-at.js'
 import * as _010 from './migrations/010-survey-updates.js'
+import * as _011 from './migrations/011-survey-description.js'
 
 class Migrations implements MigrationProvider {
   async getMigrations(): Promise<Record<string, Migration>> {
@@ -25,6 +26,7 @@ class Migrations implements MigrationProvider {
       '008-respone-new-fields': _008,
       '009-responses-created-at': _009,
       '010-survey-updates': _010,
+      '011-survey-description': _011,
     }
   }
 }

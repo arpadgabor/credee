@@ -1,5 +1,5 @@
 import { cx } from 'class-variance-authority'
-import { JSXElement, Show, children } from 'solid-js'
+import { JSXElement, Show, children, createEffect, onMount } from 'solid-js'
 
 import { createEditorTransaction, useEditor } from './rich-editor.utils'
 import { type Editor, type JSONContent } from '@tiptap/core'
@@ -16,7 +16,7 @@ import H2 from '~icons/ph/text-h-two'
 import H3 from '~icons/ph/text-h-three'
 
 interface Props {
-  value?: JSONContent
+  defaultValue?: JSONContent
   onUpdate?: (value: JSONContent) => void
 }
 
@@ -25,7 +25,7 @@ export function RichEditor(props: Props) {
 
   const editor = useEditor(() => ({
     element,
-    content: props.value,
+    content: props.defaultValue,
     extensions: [StarterKit, Typography, Link],
     onUpdate({ editor }) {
       props.onUpdate?.(editor.getJSON())
@@ -38,7 +38,10 @@ export function RichEditor(props: Props) {
         <Toolbar editor={editor()!} />
       </Show>
 
-      <div class='prose-sm outline-none' ref={element}></div>
+      <div
+        class='prose prose-p:my-2 prose-h1:mb-2 prose-h1:mt-6 prose-h2:mb-2 prose-h2:mt-4 prose-h3:mb-2 prose-h3:mt-3 prose-ul:my-0 prose-ol:my-0 outline-none'
+        ref={element}
+      ></div>
     </div>
   )
 }
@@ -57,7 +60,7 @@ function ToolbarButton(props: { editor: Editor; name: string; attrs?: any; onCli
       onClick={props.onClick}
       class={cx([
         'p-1 rounded transition bg-transparent flex items-center justify-center',
-        isActive() ? 'bg-gray-900 text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-200',
+        isActive() ? '!bg-gray-900 text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-200',
       ])}
     >
       {slot()}
@@ -78,11 +81,11 @@ function Toolbar($: { editor: Editor }) {
 
       <div class='w-2'></div>
 
-      <ToolbarButton editor={$.editor} name='bullet-list' onClick={() => $.editor.chain().focus().toggleBulletList().run()}>
+      <ToolbarButton editor={$.editor} name='bulletList' onClick={() => $.editor.chain().focus().toggleBulletList().run()}>
         <ListUnordered />
       </ToolbarButton>
 
-      <ToolbarButton editor={$.editor} name='ordered-list' onClick={() => $.editor.chain().focus().toggleOrderedList().run()}>
+      <ToolbarButton editor={$.editor} name='orderedList' onClick={() => $.editor.chain().focus().toggleOrderedList().run()}>
         <ListOrdered />
       </ToolbarButton>
 

@@ -30,6 +30,7 @@ import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-
 import { HoverCard } from '../../../components/ui/hover-card'
 import { cx } from 'class-variance-authority'
 import { RichEditor } from '../../../components/ui/rich-editor'
+import { createSign } from 'crypto'
 
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
@@ -68,6 +69,7 @@ export default function RedditSurveyId() {
     onSuccess(data) {
       setValue(updateForm, 'title', data.title)
       setValue(updateForm, 'redirectUrl', data.redirectUrl!)
+      setValue(updateForm, 'description', data.description)
       !!data.deadline && setValue(updateForm, 'endDate', data.deadline.toISOString().split('T')[0])
     },
   })
@@ -134,6 +136,7 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
         title: data.title,
         endsAt: data.endDate ? new Date(data.endDate) : undefined,
         redirectUrl: data.redirectUrl,
+        description: data.description,
       })
     },
     onSuccess: () => {
@@ -141,8 +144,12 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
     },
   })
 
+  const [editorContent, setContent] = createSignal()
   function onSubmit(data: z.infer<typeof formValidator>) {
-    createSurvey.mutate(data)
+    createSurvey.mutate({
+      ...data,
+      description: editorContent(),
+    })
   }
 
   return (
@@ -187,8 +194,7 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
         {field => (
           <div class='w-full'>
             <FieldLabel>Description</FieldLabel>
-            {/* value={field.value ? JSON.parse(field.value) : undefined} */}
-            <RichEditor onUpdate={content => setValue(props.form, field.name, content)} />
+            <RichEditor defaultValue={field.value} onUpdate={content => setContent(content)} />
             <Show when={field.error}>
               <FieldAlert type='error'>{field.error}</FieldAlert>
             </Show>

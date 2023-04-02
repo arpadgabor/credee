@@ -17,6 +17,7 @@ import { getSurveyDetails, surveyDetails } from './survey-details.service'
 const surveyCreate = z.object({
   title: z.string(),
   redirectUrl: z.string().url(),
+  description: z.any().nullish(),
   endsAt: z.date().nullish(),
 })
 
@@ -62,6 +63,7 @@ const getById = procedure
       id: survey.id,
       title: survey.title,
       endsAt: survey.ends_at,
+      description: survey.description,
       redirectUrl: survey.redirect_url || 'https://missing.url/',
     }
   })
@@ -74,6 +76,7 @@ const create = procedure
       title: input.title,
       ends_at: input.endsAt,
       redirect_url: input.redirectUrl,
+      description: input.description,
     })
 
     return {
@@ -81,6 +84,7 @@ const create = procedure
       title: survey.title,
       endsAt: survey.ends_at,
       redirectUrl: survey.redirect_url!,
+      description: survey.description,
     }
   })
 
@@ -92,6 +96,7 @@ const update = procedure
       title: input.title,
       ends_at: input.endsAt,
       redirect_url: input.redirectUrl,
+      description: input.description,
     })
 
     return {
@@ -99,6 +104,7 @@ const update = procedure
       title: survey.title,
       endsAt: survey.ends_at,
       redirectUrl: survey.redirect_url!,
+      description: survey.description,
     }
   })
 

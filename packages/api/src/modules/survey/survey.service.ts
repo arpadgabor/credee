@@ -1,9 +1,8 @@
-import { RedditPost, sql, Survey, SurveyRedditDataset } from '@credee/shared/database'
-import { db } from '@credee/shared/database'
+import { db, sql, Survey } from '@credee/shared/database'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
-export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url'>) {
+export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url' | 'description'>) {
   const survey = await db.transaction().execute(async trx => {
     const [survey] = await trx
       .insertInto('surveys')
@@ -11,6 +10,7 @@ export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at' | 'r
         title: values.title,
         ends_at: values.ends_at,
         redirect_url: values.redirect_url,
+        description: values.description,
       })
       .returningAll()
       .execute()
@@ -21,7 +21,10 @@ export async function createSurvey(values: Pick<Survey, 'title' | 'ends_at' | 'r
   return survey
 }
 
-export async function updateSurvey(surveyId: number, values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url'>) {
+export async function updateSurvey(
+  surveyId: number,
+  values: Pick<Survey, 'title' | 'ends_at' | 'redirect_url' | 'description'>
+) {
   const survey = await findSurvey(surveyId)
   if (!survey) {
     throw new TRPCError({ code: 'NOT_FOUND', message: 'Survey does not exist.' })
@@ -33,6 +36,7 @@ export async function updateSurvey(surveyId: number, values: Pick<Survey, 'title
       title: values.title,
       ends_at: values.ends_at,
       redirect_url: values.redirect_url,
+      description: values.description,
     })
     .where('id', '=', surveyId)
     .returningAll()
