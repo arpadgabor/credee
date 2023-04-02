@@ -1,4 +1,4 @@
-import { useParams } from '@solidjs/router'
+import { NavLink, useParams } from '@solidjs/router'
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import { stringify as toCsv } from 'csv-stringify/browser/esm/sync'
 import { Match, Show, Switch, createMemo, createSignal, onMount } from 'solid-js'
@@ -320,7 +320,7 @@ function SurveyDataset(props: { variants: Variant[] }) {
           <div>
             <Show when={img}>
               <HoverCard openDelay={150} closeDelay={0} content={<PreviewImage name={img!} />}>
-                <img src={img!} alt={`Screenshot for post "${title}"`} />
+                <img src={img!} alt={`Screenshot for post "${title}"`} class='border rounded h-full aspect-video w-32' />
               </HoverCard>
             </Show>
           </div>
@@ -375,6 +375,14 @@ function SurveyDataset(props: { variants: Variant[] }) {
 
   return (
     <div>
+      <p class='p-2 bg-accent-50 rounded border border-accent-100 mb-2'>
+        To add variants, go to{' '}
+        <NavLink class='text-accent-500 underline decoration-dotted' href='/dashboard/reddit/detailed'>
+          Aggregate data
+        </NavLink>
+        , search for posts you want to add, right click on the title of a post, click on "<em>View variants</em>", then for each
+        variant you wish to add, right click and choose "<em>Add to survey</em>".
+      </p>
       <Show when={!props.variants.length}>No variants.</Show>
       <Show when={props.variants.length}>
         <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />

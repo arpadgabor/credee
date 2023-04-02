@@ -36,7 +36,7 @@ export function RedditPostInfoCell(row: {
   screenshotFilename?: string
   onDelete?: () => void
 }) {
-  const { selectedVariants, toggleVariant } = useSurveyQuestionChooser()
+  const { selectedVariants } = useSurveyQuestionChooser()
 
   const surveys = createQuery(() => ['reddit_surveys'], {
     async queryFn() {
@@ -87,7 +87,7 @@ export function RedditPostInfoCell(row: {
       children:
         surveys.data?.data.map((survey, idx) => ({
           command: () => assign.mutate(survey.id),
-          content: <>Survey 1</>,
+          content: <>{survey.title}</>,
           icon: <div class='font-mono font-bold text-gray-500 flex items-center'>{idx + 1}</div>,
         })) || [],
       icon: <IconAddToList />,

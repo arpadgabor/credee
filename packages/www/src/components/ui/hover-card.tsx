@@ -17,7 +17,7 @@ export const HoverCard: ParentComponent<HoverCardProps> = props => {
         <_.Portal>
           <_.Content
             onClick={() => setIsOpen(false)}
-            class='bg-white p-4 border border-gray-100 shadow-md rounded-md animate-[fade-out_250ms_ease-in] data-[expanded]:animate-[fade-up_100ms_ease-out]'
+            class='bg-white p-4 border border-gray-100 shadow-md rounded-md animate-[fade-out_100ms_ease-in] data-[expanded]:animate-[fade-up_100ms_ease-out]'
           >
             <_.Arrow />
             <div>{props.content}</div>

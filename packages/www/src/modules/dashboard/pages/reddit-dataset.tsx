@@ -48,7 +48,7 @@ const Page: Component = () => {
           <div>
             <Show when={img}>
               <HoverCard openDelay={150} closeDelay={0} content={<PreviewImage name={img!} />}>
-                <img src={img!} alt={`Screenshot for post "${title}"`} />
+                <img src={img!} alt={`Screenshot for post "${title}"`} class='border rounded h-full aspect-video w-32' />
               </HoverCard>
             </Show>
           </div>
