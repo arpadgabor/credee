@@ -1,5 +1,5 @@
 # REMOVE UNUSED PACKAGES
-FROM node:16.19 as init
+FROM node:18.15 as init
 
 RUN npm i -g pnpm@7.25.1
 RUN npm i -g turbo@1.7
@@ -10,7 +10,7 @@ COPY . .
 RUN turbo prune --scope=@credee/www --docker
 
 # INSTALLER
-FROM node:16.19 AS installer
+FROM node:18.15 AS installer
 
 RUN npm i -g pnpm@7.25.1
 WORKDIR /app

@@ -22,10 +22,11 @@ import { Outputs } from '@credee/api'
 import { api } from '../../../utils/trpc'
 
 import Survey from '../../survey/pages/survey'
-import { RedditPostInfoCell } from '../components/post-info-cell'
+import { PreviewImage, RedditPostInfoCell } from '../components/post-info-cell'
 import { z } from 'zod'
-import { Field, Form, createForm, setValue, zodForm } from '@modular-forms/solid'
+import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
 import toast from 'solid-toast'
+import { HoverCard } from '../../../components/ui/hover-card'
 
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
@@ -49,7 +50,6 @@ const formValidator = z.object({
 
 export default function RedditSurveyId() {
   const params = useParams<{ id: string }>()
-
   const updateForm = createForm({
     validate: zodForm(formValidator),
   })
@@ -68,23 +68,6 @@ export default function RedditSurveyId() {
     },
   })
 
-  const createSurvey = createMutation({
-    mutationFn: (data: z.infer<typeof formValidator>) => {
-      return api.surveys.update.mutate({
-        id: Number(params.id),
-        title: data.title,
-        endsAt: data.endDate ? new Date(data.endDate) : undefined,
-        redirectUrl: data.redirectUrl,
-      })
-    },
-    onSuccess: () => {
-      toast.success('Survey updated!')
-    },
-  })
-  function onSubmit(data: z.infer<typeof formValidator>) {
-    createSurvey.mutate(data)
-  }
-
   function copyUrl() {
     const url = `${location.origin}/survey/${params.id}?referrer=custom`
     navigator.clipboard.writeText(url)
@@ -94,96 +77,116 @@ export default function RedditSurveyId() {
   const answers = createMemo(() => survey.data?.answers || [])
   const variants = createMemo(() => survey.data?.variants || [])
 
+  const tabs = [
+    {
+      content: <DetailsForm surveyId={Number(params.id)} form={updateForm} />,
+      name: 'Details',
+    },
+    {
+      content: <SurveyResponses answers={answers()} />,
+      name: 'Responses',
+    },
+    {
+      content: <SurveyDataset variants={variants()} />,
+      name: 'Dataset',
+    },
+  ]
+
+  const description = (
+    <div>
+      <div>
+        URL for testing:{' '}
+        <code>
+          {location.origin}/survey/{params.id}?referrer=custom
+        </code>
+        <button class='ml-2' onClick={copyUrl} title='Copy URL to clipboard'>
+          <CopyIcon />
+        </button>
+      </div>
+    </div>
+  )
+
   return (
     <Switch>
       <Match when={survey.isLoading}>Loading</Match>
       <Match when={survey.isSuccess && survey.data}>
         <section>
-          <PageHeader
-            title={survey.data!.title}
-            description={
-              <div>
-                <div>
-                  URL for testing:{' '}
-                  <code>
-                    {location.origin}/survey/{params.id}?referrer=custom
-                  </code>
-                  <button class='ml-2' onClick={copyUrl} title='Copy URL to clipboard'>
-                    <CopyIcon />
-                  </button>
-                </div>
-              </div>
-            }
-          />
+          <PageHeader title={survey.data!.title} description={description} />
 
-          <main>
-            <Form of={updateForm} onSubmit={onSubmit} class='flex flex-col h-full space-y-4'>
-              <div class='flex flex-col md:flex-row md:space-x-2'>
-                <Field of={updateForm} name='title'>
-                  {field => (
-                    <label class='w-full md:w-3/4'>
-                      <FieldLabel>Title</FieldLabel>
-                      <Input {...field.props} value={field.value} class='w-full' />
-                      <Show when={field.error}>
-                        <FieldAlert type='error'>{field.error}</FieldAlert>
-                      </Show>
-                    </label>
-                  )}
-                </Field>
-
-                <Field of={updateForm} name='redirectUrl'>
-                  {field => (
-                    <label class='w-full md:w-3/4'>
-                      <FieldLabel>URL to redirect after finishing</FieldLabel>
-                      <Input {...field.props} value={field.value} class='w-full' type='url' />
-                      <Show when={field.error}>
-                        <FieldAlert type='error'>{field.error}</FieldAlert>
-                      </Show>
-                    </label>
-                  )}
-                </Field>
-
-                <Field of={updateForm} name='endDate'>
-                  {field => (
-                    <label class='w-full md:w-1/4'>
-                      <FieldLabel>Deadline</FieldLabel>
-                      <Input {...field.props} value={field.value} type='date' class='w-full' />
-                      <Show when={field.error}>
-                        <FieldAlert type='error'>{field.error}</FieldAlert>
-                      </Show>
-                    </label>
-                  )}
-                </Field>
-              </div>
-
-              {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
-
-              <div class='flex-1 flex items-end'>
-                <Button theme='main' disabled={createSurvey.isLoading}>
-                  Save
-                </Button>
-              </div>
-            </Form>
-
-            <hr class='my-4' />
-
-            <Tabs
-              ariaLabel='Survey Detail Tabs'
-              tabs={[
-                {
-                  content: <SurveyResponses answers={answers()} />,
-                  name: 'Responses',
-                },
-                {
-                  content: <SurveyDataset variants={variants()} />,
-                  name: 'Dataset',
-                },
-              ]}
-            />
+          <main class='pt-4'>
+            <Tabs ariaLabel='Survey Detail Tabs' tabs={tabs} />
           </main>
         </section>
       </Match>
     </Switch>
+  )
+}
+
+function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof formValidator>> }) {
+  const createSurvey = createMutation({
+    mutationFn: (data: z.infer<typeof formValidator>) => {
+      return api.surveys.update.mutate({
+        id: props.surveyId,
+        title: data.title,
+        endsAt: data.endDate ? new Date(data.endDate) : undefined,
+        redirectUrl: data.redirectUrl,
+      })
+    },
+    onSuccess: () => {
+      toast.success('Survey updated!')
+    },
+  })
+
+  function onSubmit(data: z.infer<typeof formValidator>) {
+    createSurvey.mutate(data)
+  }
+
+  return (
+    <Form of={props.form} onSubmit={onSubmit} class='flex flex-col h-full space-y-4 max-w-lg'>
+      <Field of={props.form} name='title'>
+        {field => (
+          <label class='w-full'>
+            <FieldLabel>Title</FieldLabel>
+            <Input {...field.props} value={field.value} class='w-full' />
+            <Show when={field.error}>
+              <FieldAlert type='error'>{field.error}</FieldAlert>
+            </Show>
+          </label>
+        )}
+      </Field>
+
+      <Field of={props.form} name='redirectUrl'>
+        {field => (
+          <label class='w-full'>
+            <FieldLabel>URL to redirect after finishing</FieldLabel>
+            <Input {...field.props} value={field.value} class='w-full' type='url' />
+            <Show when={field.error}>
+              <FieldAlert type='error'>{field.error}</FieldAlert>
+            </Show>
+          </label>
+        )}
+      </Field>
+
+      <Field of={props.form} name='endDate'>
+        {field => (
+          <label class='w-full'>
+            <FieldLabel>Deadline</FieldLabel>
+            <Input {...field.props} value={field.value} type='date' class='w-full' />
+            <Show when={field.error}>
+              <FieldAlert type='error'>{field.error}</FieldAlert>
+            </Show>
+          </label>
+        )}
+      </Field>
+
+      {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
+
+      <div class='flex-1 flex items-end'>
+        <Button theme='main' disabled={createSurvey.isLoading}>
+          Save
+        </Button>
+      </div>
+    </Form>
   )
 }
 
@@ -308,6 +311,22 @@ function SurveyResponses(props: { answers: Answer[] }) {
 function SurveyDataset(props: { variants: Variant[] }) {
   const col = createColumnHelper<Variant>()
   const columns = [
+    col.accessor('screenshot', {
+      header: 'Screenshot',
+      cell: cell => {
+        const img = cell.row.original.screenshot
+        const title = cell.row.original.title
+        return (
+          <div>
+            <Show when={img}>
+              <HoverCard openDelay={150} closeDelay={0} content={<PreviewImage name={img!} />}>
+                <img src={img!} alt={`Screenshot for post "${title}"`} />
+              </HoverCard>
+            </Show>
+          </div>
+        )
+      },
+    }),
     col.accessor('title', {
       header: 'Post',
       cell: cell => {

@@ -141,13 +141,8 @@ const Page: Component = () => {
   return (
     <section class='max-w-full'>
       <PageHeader
-        title='Detailed data'
-        description={
-          <>
-            <span>This page contains aggregated data of the dataset. The posts are grouped by their ID. </span>
-            <span>({results.data?.meta?.count} results)</span>
-          </>
-        }
+        title={`Aggregate data [${results.data?.meta?.count || 0}]`}
+        description='This page contains aggregated data of the dataset. The posts are grouped by their ID.'
       />
 
       <RedditFilters {...props} />

@@ -1,5 +1,11 @@
 # @credee/api
 
+## 0.5.0
+
+### Minor Changes
+
+- Fixed survey expired handling
+
 ## 0.4.0
 
 ### Minor Changes

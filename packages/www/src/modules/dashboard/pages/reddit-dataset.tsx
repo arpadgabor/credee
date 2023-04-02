@@ -3,9 +3,10 @@ import { createQuery } from '@tanstack/solid-query'
 import { createColumnHelper, createSolidTable, getCoreRowModel, getSortedRowModel, SortingState } from '@tanstack/solid-table'
 import { Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { DataTable, DateCell, PageHeader, StringCell } from '../../../components/ui'
+import { DataTable, DateCell, HoverCard, PageHeader, StringCell } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
-import { RedditPostInfoCell } from '../components/post-info-cell'
+import { PreviewImage, RedditPostInfoCell } from '../components/post-info-cell'
+import { Show } from 'solid-js'
 
 const Page: Component = () => {
   const [params] = useSearchParams()
@@ -38,6 +39,22 @@ const Page: Component = () => {
 
   const col = createColumnHelper<Result>()
   const columns = [
+    col.accessor('screenshot_filename', {
+      header: 'Screenshot',
+      cell: cell => {
+        const img = cell.row.original.screenshot_filename
+        const title = cell.row.original.title
+        return (
+          <div>
+            <Show when={img}>
+              <HoverCard openDelay={150} closeDelay={0} content={<PreviewImage name={img!} />}>
+                <img src={img!} alt={`Screenshot for post "${title}"`} />
+              </HoverCard>
+            </Show>
+          </div>
+        )
+      },
+    }),
     col.accessor('title', {
       header: 'Post',
       cell: cell => {
@@ -102,7 +119,7 @@ const Page: Component = () => {
   return (
     <section class='max-w-full'>
       <PageHeader
-        title='Dataset'
+        title={`All data [${results.data.meta.count}]`}
         description='This page contains the original dataset, all data that is scraped in a cut-down format, but no aggregation.'
       />
       <DataTable table={table} loading={results.isLoading} error={results.isError} size='auto' />

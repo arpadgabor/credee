@@ -1,6 +1,6 @@
 {
   "name": "@credee/api",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "type": "module",
@@ -10,12 +10,12 @@
     "build": "node build.cjs"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.299.0",
+    "@aws-sdk/client-s3": "^3.304.0",
     "@credee/shared": "workspace:*",
     "@fastify/cors": "^8.2.1",
-    "@fastify/static": "^6.9.0",
+    "@fastify/static": "^6.10.0",
     "@trpc/server": "^10.18.0",
-    "bullmq": "^3.10.2",
+    "bullmq": "^3.10.3",
     "convict": "^6.2.4",
     "csv-stringify": "^6.3.0",
     "fastify": "^4.15.0",
@@ -23,15 +23,15 @@
     "redis": "^4.6.5",
     "superjson": "^1.12.2",
     "trpc-panel": "^1.2.8",
-    "wink-eng-lite-web-model": "^1.4.3",
-    "wink-nlp": "^1.13.0",
+    "wink-eng-lite-web-model": "^1.5.0",
+    "wink-nlp": "^1.13.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/convict": "^6.1.1",
     "dotenv": "^16.0.3",
-    "esbuild": "^0.17.13",
+    "esbuild": "^0.17.15",
     "pino": "^8.11.0",
-    "tsconfig-paths": "^4.1.2"
+    "tsconfig-paths": "^4.2.0"
   }
 }

@@ -8,6 +8,8 @@ import { api } from '../../../utils/trpc'
 import { SurveyQuestions } from '../components/survey-question'
 import { SurveyRenderer } from '../form-builder'
 import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
+import { TRPCClientError } from '@trpc/client'
+import toast from 'solid-toast'
 
 const queryParams = z.union([
   z.object({
@@ -65,6 +67,13 @@ export default function Survey() {
       localStorage.setItem('participant', String(data.id))
       setParticipantId(data.id)
     },
+    onError(e) {
+      if (e instanceof TRPCClientError) {
+        toast.error(e.message)
+      } else {
+        toast.error('There was an unexpected error. Please try again later.')
+      }
+    },
   })
 
   onMount(() => {
@@ -88,6 +97,10 @@ export default function Survey() {
         <Switch>
           <Match when={invalidSession() || surveyFetch.isError}>
             <Alert.Root class='text-red-600 font-bold'>Sorry, it looks like you cannot access this survey.</Alert.Root>
+          </Match>
+
+          <Match when={surveyFetch.data?.endsAt && new Date(surveyFetch.data?.endsAt) < new Date()}>
+            <Alert.Root class='text-red-600 font-bold'>We're sorry but this survey has ended.</Alert.Root>
           </Match>
 
           {/* Onboarding survey */}

@@ -13,7 +13,7 @@ const dateFormat = new Intl.DateTimeFormat('en-GB', {
   timeStyle: 'short',
 })
 
-const PreviewImage = (props: { name: string }) => (
+export const PreviewImage = (props: { name: string }) => (
   <div>
     <Switch>
       <Match when={props.name}>
@@ -114,14 +114,12 @@ export function RedditPostInfoCell(row: {
         </small>
       </p>
 
-      <HoverCard content={<PreviewImage name={row.screenshotFilename!} />}>
-        <p class='flex items-center'>
-          <Show when={selectedVariants().includes(row.variantId)}>
-            <span class='px-2 py-1 rounded bg-accent-500 text-white text-xs mr-2'>Selected</span>
-          </Show>
-          {row.title}
-        </p>
-      </HoverCard>
+      <p class='flex items-center'>
+        <Show when={selectedVariants().includes(row.variantId)}>
+          <span class='px-2 py-1 rounded bg-accent-500 text-white text-xs mr-2'>Selected</span>
+        </Show>
+        {row.title}
+      </p>
     </ContextMenu>
   )
 }

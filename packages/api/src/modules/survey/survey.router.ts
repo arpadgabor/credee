@@ -59,7 +59,9 @@ const getById = procedure
     }
 
     return {
-      ...survey,
+      id: survey.id,
+      title: survey.title,
+      endsAt: survey.ends_at,
       redirectUrl: survey.redirect_url || 'https://missing.url/',
     }
   })

@@ -6,3 +6,23 @@
   @apply font-main text-sm;
   @apply bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100;
 }
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

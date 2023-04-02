@@ -1,5 +1,16 @@
 # @credee/www
 
+## 0.6.0
+
+### Minor Changes
+
+- Fixed survey expired handling
+
+### Patch Changes
+
+- Updated dependencies
+  - @credee/api@0.5.0
+
 ## 0.5.0
 
 ### Minor Changes

@@ -14,15 +14,15 @@ interface Props {
 export function Tabs(props: Props) {
   return (
     <_Tabs.Root aria-label={props.ariaLabel}>
-      <_Tabs.List class='mb-2'>
+      <_Tabs.List class='mb-2 border-b'>
         <For each={props.tabs}>
           {tab => (
             <_Tabs.Trigger
               class={cx([
-                'px-2 h-8 border border-gray-200',
+                'px-2 h-10 border border-b-0 border-gray-200',
                 'transition shadow-sm',
                 'data-[selected]:bg-gray-100 data-[selected]:border-gray-400',
-                'first:rounded-l last:rounded-r',
+                'first:rounded-tl last:rounded-tr',
               ])}
               value={tab.name}
             >
@@ -32,7 +32,13 @@ export function Tabs(props: Props) {
         </For>
       </_Tabs.List>
 
-      <For each={props.tabs}>{tab => <_Tabs.Content value={tab.name}>{tab.content}</_Tabs.Content>}</For>
+      <For each={props.tabs}>
+        {tab => (
+          <_Tabs.Content class='pt-4' value={tab.name}>
+            {tab.content}
+          </_Tabs.Content>
+        )}
+      </For>
     </_Tabs.Root>
   )
 }
