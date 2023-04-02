@@ -26,5 +26,5 @@ module.exports = {
       green: colors.green,
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 }

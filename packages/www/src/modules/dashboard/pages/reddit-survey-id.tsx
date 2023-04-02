@@ -29,6 +29,7 @@ import { z } from 'zod'
 import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
 import { HoverCard } from '../../../components/ui/hover-card'
 import { cx } from 'class-variance-authority'
+import { RichEditor } from '../../../components/ui/rich-editor'
 
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
@@ -48,6 +49,7 @@ const formValidator = z.object({
       },
       { message: 'The deadline must be at least 1 day in the future.' }
     ),
+  description: z.any().nullish(),
 })
 
 export default function RedditSurveyId() {
@@ -181,7 +183,18 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
         )}
       </Field>
 
-      {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
+      <Field of={props.form} name='description'>
+        {field => (
+          <div class='w-full'>
+            <FieldLabel>Description</FieldLabel>
+            {/* value={field.value ? JSON.parse(field.value) : undefined} */}
+            <RichEditor onUpdate={content => setValue(props.form, field.name, content)} />
+            <Show when={field.error}>
+              <FieldAlert type='error'>{field.error}</FieldAlert>
+            </Show>
+          </div>
+        )}
+      </Field>
 
       <div class='flex-1 flex items-end'>
         <Button theme='main' disabled={createSurvey.isLoading}>
