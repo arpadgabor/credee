@@ -15,22 +15,21 @@ import {
   StringCell,
   Tabs,
 } from '../../../components/ui'
-
-import DownloadIcon from '~icons/ph/download'
-import CopyIcon from '~icons/ph/copy'
-import RefreshIcon from '~icons/ph/arrows-counter-clockwise'
-import { Outputs } from '@credee/api'
-import { api } from '../../../utils/trpc'
-import toast from 'solid-toast'
-
-import Survey from '../../survey/pages/survey'
-import { PreviewImage, RedditPostInfoCell } from '../components/post-info-cell'
+import { cx } from 'class-variance-authority'
 import { z } from 'zod'
+
+import { Outputs } from '@credee/api'
+import toast from 'solid-toast'
+import RefreshIcon from '~icons/ph/arrows-counter-clockwise'
+import CopyIcon from '~icons/ph/copy'
+import DownloadIcon from '~icons/ph/download'
+import { api } from '../../../utils/trpc'
+
 import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
 import { HoverCard } from '../../../components/ui/hover-card'
-import { cx } from 'class-variance-authority'
 import { RichEditor } from '../../../components/ui/rich-editor'
-import { createSign } from 'crypto'
+import Survey from '../../survey/pages/survey'
+import { PreviewImage, RedditPostInfoCell } from '../components/post-info-cell'
 
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
