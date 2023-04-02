@@ -18,15 +18,17 @@ import {
 
 import DownloadIcon from '~icons/ph/download'
 import CopyIcon from '~icons/ph/copy'
+import RefreshIcon from '~icons/ph/arrows-counter-clockwise'
 import { Outputs } from '@credee/api'
 import { api } from '../../../utils/trpc'
+import toast from 'solid-toast'
 
 import Survey from '../../survey/pages/survey'
 import { PreviewImage, RedditPostInfoCell } from '../components/post-info-cell'
 import { z } from 'zod'
 import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
-import toast from 'solid-toast'
 import { HoverCard } from '../../../components/ui/hover-card'
+import { cx } from 'class-variance-authority'
 
 type Survey = Outputs['surveys']['getByIdDetailed']
 type Answer = Survey['answers'][number]
@@ -83,7 +85,7 @@ export default function RedditSurveyId() {
       name: 'Details',
     },
     {
-      content: <SurveyResponses answers={answers()} />,
+      content: <SurveyResponses answers={answers()} onRefresh={() => survey.refetch()} isLoading={survey.isRefetching} />,
       name: 'Responses',
     },
     {
@@ -190,7 +192,7 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
   )
 }
 
-function SurveyResponses(props: { answers: Answer[] }) {
+function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLoading: boolean }) {
   const col = createColumnHelper<Answer>()
   const table = createSolidTable({
     get data() {
@@ -293,14 +295,18 @@ function SurveyResponses(props: { answers: Answer[] }) {
 
   return (
     <div>
-      <div class='flex mb-2'>
+      <div class='flex mb-2 space-x-2'>
         <Show when={csvDownloadHref()}>
           <a href={csvDownloadHref()!} download={'Responses.csv'}>
-            <Button type='button' tabIndex={-1}>
+            <Button type='button' disabled={props.answers.length === 0} tabIndex={-1}>
               <DownloadIcon class='mr-3' />
               Download Responses CSV
             </Button>
           </a>
+          <Button type='button' onClick={props.onRefresh}>
+            <RefreshIcon class={cx(['mr-3', props.isLoading ? 'animate-spin' : ''])} />
+            Refresh
+          </Button>
         </Show>
       </div>
       <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />

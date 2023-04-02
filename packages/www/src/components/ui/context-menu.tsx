@@ -25,10 +25,7 @@ export const ContextMenu: ParentComponent<Props> = props => {
       <CtxMenu.Trigger>{slot()}</CtxMenu.Trigger>
 
       <CtxMenu.Portal>
-        <CtxMenu.Content
-          onClick={e => e.stopPropagation()}
-          class='bg-white dark:bg-gray-900 rounded shadow-lg p-1 border border-gray-100 dark:border-gray-800'
-        >
+        <CtxMenu.Content class='bg-white dark:bg-gray-900 rounded shadow-lg p-1 border border-gray-100 dark:border-gray-800'>
           <ContextItems options={props.options} />
         </CtxMenu.Content>
       </CtxMenu.Portal>
