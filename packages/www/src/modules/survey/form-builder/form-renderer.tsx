@@ -34,8 +34,6 @@ export function SurveyRenderer(props: Props) {
 
   return (
     <Form of={form} onSubmit={props.onSubmit}>
-      <h1 class='font-bold text-2xl mb-8'>{props.survey.title}</h1>
-
       <div class='flex flex-col space-y-4 mb-8'>
         <For each={props.survey.fields}>{field => <FormFieldMapper formField={field} form={form} />}</For>
       </div>

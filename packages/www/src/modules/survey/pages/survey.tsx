@@ -10,6 +10,7 @@ import { SurveyRenderer } from '../form-builder'
 import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
 import { TRPCClientError } from '@trpc/client'
 import toast from 'solid-toast'
+import { RichEditor } from '../../../components/ui/rich-editor'
 
 const queryParams = z.union([
   z.object({
@@ -38,7 +39,7 @@ export default function Survey() {
     title: 'Onboarding',
   })
 
-  const surveyFetch = createQuery(() => [params.id], {
+  const qSurvey = createQuery(() => [params.id], {
     queryFn: async () => {
       return api.surveys.getById.query(surveyId)
     },
@@ -47,7 +48,7 @@ export default function Survey() {
     refetchOnWindowFocus: false,
   })
 
-  const participantOnboard = createMutation({
+  const qOnboard = createMutation({
     mutationFn: async (data: OnboardingFields) => {
       return api.participants.onboard.mutate({
         surveyId,
@@ -81,41 +82,45 @@ export default function Survey() {
 
     if (result.success) {
       setSurveyInfo(result.data)
-      surveyFetch.refetch()
+      qSurvey.refetch()
     } else {
       setInvalidSession(true)
     }
   })
 
   async function onSubmit(data: OnboardingFields) {
-    await participantOnboard.mutateAsync(data)
+    await qOnboard.mutateAsync(data)
   }
 
   return (
     <div>
       <section class='max-w-3xl mx-auto pt-32 pb-64 px-4'>
         <Switch>
-          <Match when={invalidSession() || surveyFetch.isError}>
+          <Match when={invalidSession() || qSurvey.isError}>
             <Alert.Root class='text-red-600 font-bold'>Sorry, it looks like you cannot access this survey.</Alert.Root>
           </Match>
 
-          <Match when={surveyFetch.data?.endsAt && new Date(surveyFetch.data?.endsAt) < new Date()}>
+          <Match when={qSurvey.data?.endsAt && new Date(qSurvey.data?.endsAt) < new Date()}>
             <Alert.Root class='text-red-600 font-bold'>We're sorry but this survey has ended.</Alert.Root>
           </Match>
 
           {/* Onboarding survey */}
-          <Match when={surveyFetch.isSuccess && !participantId()}>
+          <Match when={qSurvey.isSuccess && !participantId()}>
+            <RichEditor readonly defaultValue={qSurvey.data?.description} />
+
+            <div class='h-8' />
+
             <SurveyRenderer
               onSubmit={onSubmit}
               survey={postCredibilityForm}
-              loading={participantOnboard.isLoading}
+              loading={qOnboard.isLoading}
               submitLabel={'Continue'}
             />
           </Match>
 
           {/* Credibility survey */}
-          <Match when={participantId() && surveyFetch.data}>
-            <SurveyQuestions participantId={participantId()!} surveyId={surveyFetch.data!.id} />
+          <Match when={participantId() && qSurvey.data}>
+            <SurveyQuestions participantId={participantId()!} surveyId={qSurvey.data!.id} />
           </Match>
         </Switch>
       </section>

@@ -28,7 +28,7 @@ export function SurveyQuestions(props: Props) {
       })
     },
     onSuccess({ post, remaining, redirectUrl }) {
-      if (redirectUrl) {
+      if (redirectUrl && !post) {
         location.replace(redirectUrl)
       }
 

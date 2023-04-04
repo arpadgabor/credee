@@ -17,13 +17,14 @@ import {
 } from '../../../components/ui'
 import { cx } from 'class-variance-authority'
 import { z } from 'zod'
+import toast from 'solid-toast'
 
 import { Outputs } from '@credee/api'
-import toast from 'solid-toast'
+import { api } from '../../../utils/trpc'
+
 import RefreshIcon from '~icons/ph/arrows-counter-clockwise'
 import CopyIcon from '~icons/ph/copy'
 import DownloadIcon from '~icons/ph/download'
-import { api } from '../../../utils/trpc'
 
 import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
 import { HoverCard } from '../../../components/ui/hover-card'
@@ -152,7 +153,7 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
   }
 
   return (
-    <Form of={props.form} onSubmit={onSubmit} class='flex flex-col h-full space-y-4 max-w-lg'>
+    <Form of={props.form} onSubmit={onSubmit} class='flex flex-col h-full space-y-4 max-w-2xl'>
       <Field of={props.form} name='title'>
         {field => (
           <label class='w-full'>
