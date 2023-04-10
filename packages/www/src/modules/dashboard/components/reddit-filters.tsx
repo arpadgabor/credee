@@ -1,8 +1,12 @@
 import { createQuery } from '@tanstack/solid-query'
-import { ErrorBoundary } from 'solid-js'
+import { ErrorBoundary, createMemo } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Button, Input, Select } from '../../../components/ui'
 import { api } from '../../../utils/trpc'
+import { Outputs } from '@credee/api'
+
+type Post = Outputs['reddit']['redditByPostId']['data'][number]
+type PostColumns = keyof Post | keyof Post['history'][number]
 
 interface Filters {
   subreddit: string
@@ -16,6 +20,7 @@ export function createRedditFilters(args?: { defaultFilters?: Partial<Filters> }
     flair: args?.defaultFilters?.flair || '',
     title: args?.defaultFilters?.title || '',
   })
+
   function clearFilters() {
     setFilter('flair', '')
     setFilter('subreddit', '')
@@ -27,8 +32,15 @@ export function createRedditFilters(args?: { defaultFilters?: Partial<Filters> }
       return await api.reddit.redditFilters.query()
     },
   })
-  const subreddits = () => [{ label: 'Any', value: '' }, ...(query.data?.subreddits.map(s => ({ label: s, value: s })) ?? [])]
-  const flairs = () => [{ label: 'Any', value: '' }, ...(query.data?.flairs.map(s => ({ label: s, value: s })) ?? [])]
+
+  const subreddits = createMemo(() => [
+    { label: 'Any', value: '' },
+    ...(query.data?.subreddits.map(s => ({ label: s, value: s })) ?? []),
+  ])
+  const flairs = createMemo(() => [
+    { label: 'Any', value: '' },
+    ...(query.data?.flairs.map(s => ({ label: s, value: s })) ?? []),
+  ])
 
   return {
     filterBy,

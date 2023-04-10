@@ -1,5 +1,5 @@
 import { Select as _Select } from '@kobalte/core'
-import { For, JSX, Show } from 'solid-js'
+import { For } from 'solid-js'
 import UpDown from '~icons/lucide/chevrons-up-down'
 import Check from '~icons/lucide/check'
 import { cva, cx, VariantProps } from 'class-variance-authority'
@@ -40,9 +40,36 @@ interface InputProps<Options extends Option> extends StyleProps {
 
 export function Select<T extends Option>(props: InputProps<T>) {
   return (
-    <_Select.Root name={props.name} onValueChange={props.onSelect} value={props.value}>
+    <_Select.Root
+      name={props.name}
+      onValueChange={props.onSelect}
+      value={props.value}
+      options={props.options}
+      optionValue='value'
+      optionTextValue='label'
+      valueComponent={props => props.item.rawValue.label}
+      placeholder={props.placeholder}
+      itemComponent={option => (
+        <_Select.Item
+          item={option.item}
+          class={cx([
+            'pr-3 pl-8 py-2 flex justify-between items-center outline-none transition-all relative overflow-hidden',
+            'border-l border-r first:border-t last:border-b first:rounded-t last:rounded-b dark:border-gray-700',
+            'bg-gradient-to-r from-white dark:from-gray-900 to-white dark:to-gray-900',
+            'hover:border-l-accent-500 hover:bg-gradient-to-r hover:from-accent-100 dark:hover:from-accent-900 hover:to-white dark:hover:to-gray-900',
+            'focus-visible:border-l-accent-500 focus-visible:bg-gradient-to-r focus-visible:from-accent-100 dark:focus-visible:!from-accent-900 focus-visible:to-white dark:focus-visible:!to-gray-900',
+          ])}
+        >
+          <_Select.ItemIndicator class='w-6 h-6 ml-1 rounded-full flex items-center justify-center absolute left-0 text-accent-500'>
+            <Check class='transform scale-90' />
+          </_Select.ItemIndicator>
+
+          <_Select.ItemLabel class='cursor-default flex-1'>{option.item.rawValue.label}</_Select.ItemLabel>
+        </_Select.Item>
+      )}
+    >
       <_Select.Trigger class={selectOuter({ class: props.class })} aria-label={props.label}>
-        <_Select.Value placeholder={props.placeholder} class='pr-8 flex-1 text-left' />
+        <_Select.Value class='pr-8 flex-1 text-left' />
 
         <_Select.Icon
           class={
@@ -55,28 +82,7 @@ export function Select<T extends Option>(props: InputProps<T>) {
 
       <_Select.Portal>
         <_Select.Content class='bg-white dark:bg-gray-900 rounded focus-within:outline-none shadow-lg z-[999] max-h-96 overflow-auto'>
-          <_Select.Listbox class='focus-within:outline-none'>
-            <For each={props.options || []}>
-              {option => (
-                <_Select.Item
-                  value={option.value}
-                  class={cx([
-                    'pr-3 pl-8 py-2 flex justify-between items-center outline-none transition-all relative overflow-hidden',
-                    'border-l border-r first:border-t last:border-b first:rounded-t last:rounded-b dark:border-gray-700',
-                    'bg-gradient-to-r from-white dark:from-gray-900 to-white dark:to-gray-900',
-                    'hover:border-l-accent-500 hover:bg-gradient-to-r hover:from-accent-100 dark:hover:from-accent-900 hover:to-white dark:hover:to-gray-900',
-                    'focus-visible:border-l-accent-500 focus-visible:bg-gradient-to-r focus-visible:from-accent-100 dark:focus-visible:!from-accent-900 focus-visible:to-white dark:focus-visible:!to-gray-900',
-                  ])}
-                >
-                  <_Select.ItemIndicator class='w-6 h-6 ml-1 rounded-full flex items-center justify-center absolute left-0 text-accent-500'>
-                    <Check class='transform scale-90' />
-                  </_Select.ItemIndicator>
-
-                  <_Select.ItemLabel class='cursor-default flex-1'>{option.label}</_Select.ItemLabel>
-                </_Select.Item>
-              )}
-            </For>
-          </_Select.Listbox>
+          <_Select.Listbox class='focus-within:outline-none' />
         </_Select.Content>
       </_Select.Portal>
     </_Select.Root>

@@ -70,11 +70,11 @@ export async function listRedditResults(
 
 //#region groupById
 export const groupByIdQuerySchema = z.object({
-  limit: z.number().optional(),
-  offset: z.number().optional(),
-  flair: z.string().optional(),
-  subreddit: z.string().optional(),
-  title: z.string().optional(),
+  limit: z.number().nullish(),
+  offset: z.number().nullish(),
+  flair: z.string().nullish(),
+  subreddit: z.string().nullish(),
+  title: z.string().nullish(),
 })
 export const groupByIdItem = z.object({
   post_id: z.string(),
@@ -162,6 +162,7 @@ export async function getRedditFilters() {
     db.selectFrom('reddit_posts').distinct().select('flair').execute(),
   ])
 
+  console.log(subreddits, flairs)
   return {
     subreddits: subreddits.map(item => item.subreddit),
     flairs: flairs.map(item => item.flair).filter(Boolean) as string[],
