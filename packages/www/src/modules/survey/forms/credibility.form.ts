@@ -52,9 +52,11 @@ export function createPostCredibilityForm(options: {
         validator: z.string(),
         options: [
           { value: 'jargony', label: `I find the title hard to read or understand` },
-          { value: 'easy-to-understand', label: `I find the title easy to understand` },
+          { value: 'misleading-title', label: `I find the title misleading` },
           { value: 'offensive', label: `I find the post offensive` },
           { value: 'disagreement', label: `I disagree with what the post claims` },
+          { value: 'agreement', label: `I agree with what the post claims` },
+          { value: 'easy-to-understand', label: `I find the title easy to understand` },
           { value: 'none', label: `I have no opinion` },
           { value: 'other', label: `Other, please specify below` },
         ],

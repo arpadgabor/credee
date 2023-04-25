@@ -41,11 +41,11 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         description: "You can skip this if you don't want to share.",
         validator: z.string().optional(),
         options: [
-          { value: 'under18', label: `17 or under` },
-          { value: '18to24', label: `18-24` },
-          { value: '24to35', label: `24-35` },
-          { value: '35to50', label: `35-50` },
-          { value: 'over50', label: `Over 50` },
+          { value: 'under18', label: '17 or under' },
+          { value: '18to24', label: '18-24' },
+          { value: '25to35', label: '25-35' },
+          { value: '36to50', label: '36-50' },
+          { value: 'over50', label: 'Over 50' },
         ],
       },
       {
