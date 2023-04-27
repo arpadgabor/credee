@@ -4,7 +4,13 @@ import { FormData } from '../form-builder/form.type'
 
 export type CredibilityForm = Pick<
   Inputs['responses']['addCredibility'],
-  'contentStyle' | 'contentStyleEffect' | 'credibility' | 'topicFamiliarity' | 'contentStyleOther'
+  | 'contentStyle'
+  | 'contentStyleEffect'
+  | 'credibility'
+  | 'topicFamiliarity'
+  | 'contentStyleOther'
+  | 'theirRating'
+  | 'theirRatingWhy'
 >
 
 export function createPostCredibilityForm(options: {
@@ -29,6 +35,24 @@ export function createPostCredibilityForm(options: {
           { value: 4, label: `It is somewhat credible`, icon: 'face' },
           { value: 5, label: `It is very credible`, icon: 'face' },
         ],
+      },
+      {
+        type: 'multi-select',
+        id: 'theirRating',
+        title: 'Would you upvote or downvote the post?',
+        validator: z.string(),
+        media: [{ type: 'image', href: options.imageHref, alt: options.imageAlt }],
+        options: [
+          { value: 'upvote', label: 'Upvote' },
+          { value: 'downvote', label: 'Downvote' },
+        ],
+      },
+      {
+        type: 'short-text',
+        id: 'theirRatingWhy',
+        title: 'Please explain why you chose the specific upvote/downvote',
+        description: undefined,
+        validator: z.string(),
       },
       {
         type: 'scale',

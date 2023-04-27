@@ -3,15 +3,20 @@ import { procedure, router } from '../../core/trpc'
 import { createCredibilityResponse } from './responses.service'
 
 const credibilityResponseCreate = z.object({
-  credibility: z.number(),
-  contentStyle: z.string(),
-  contentStyleOther: z.string().nullish(),
-  contentStyleEffect: z.number(),
-  topicFamiliarity: z.number(),
   postId: z.string(),
   participantId: z.number(),
   postVariantId: z.number(),
   surveyId: z.number(),
+
+  response: z.object({
+    credibility: z.number(),
+    contentStyle: z.string(),
+    contentStyleOther: z.string().nullish(),
+    contentStyleEffect: z.number(),
+    topicFamiliarity: z.number(),
+    theirRating: z.enum(['upvote', 'downvote']),
+    theirRatingWhy: z.string(),
+  }),
 })
 
 const credibilityResponseOutput = credibilityResponseCreate.and(
@@ -24,29 +29,37 @@ const addCredibility = procedure
   .input(credibilityResponseCreate)
   .output(credibilityResponseOutput)
   .mutation(async ({ input }) => {
-    const response = await createCredibilityResponse({
-      credibility: input.credibility,
+    const result = await createCredibilityResponse({
       post_id: input.postId,
       participant_id: input.participantId,
       post_variant_id: input.postVariantId,
       survey_id: input.surveyId,
-      content_style: input.contentStyle,
-      content_style_other: input.contentStyleOther,
-      content_style_effect: input.contentStyleEffect,
-      topic_familiarity: input.topicFamiliarity,
+      response: {
+        credibility: input.response.credibility,
+        content_style: input.response.contentStyle,
+        content_style_other: input.response.contentStyleOther,
+        content_style_effect: input.response.contentStyleEffect,
+        topic_familiarity: input.response.topicFamiliarity,
+        their_rating: input.response.theirRating,
+        their_rating_why: input.response.theirRatingWhy,
+      },
     })
 
     return {
-      id: response!.id,
-      credibility: response!.credibility,
-      postId: response!.post_id,
-      participantId: response!.participant_id,
-      postVariantId: response!.post_variant_id,
-      surveyId: response!.survey_id,
-      contentStyle: response!.content_style,
-      topicFamiliarity: response!.topic_familiarity,
-      contentStyleEffect: response!.content_style_effect,
-      contentStyleOther: response!.content_style_other,
+      id: result!.id,
+      postId: result!.post_id,
+      participantId: result!.participant_id,
+      postVariantId: result!.post_variant_id,
+      surveyId: result!.survey_id,
+      response: {
+        credibility: result!.response!.credibility,
+        contentStyle: result!.response!.content_style,
+        topicFamiliarity: result!.response!.topic_familiarity,
+        contentStyleEffect: result!.response!.content_style_effect,
+        contentStyleOther: result!.response!.content_style_other,
+        theirRating: result!.response!.their_rating,
+        theirRatingWhy: result!.response!.their_rating_why,
+      },
     }
   })
 

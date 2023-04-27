@@ -23,21 +23,21 @@ export async function createParticipant(data: Omit<Participants, 'id' | 'created
 
   if (participant) return participant
 
-  // @ts-expect-error typescript complains for no reason
   const response = await db
     .insertInto('participants')
     .values({
       survey_id: data.survey_id,
       external_platform: data.external_platform,
       external_participant_id: data.external_participant_id,
-      age_range: data.age_range,
-      gender: data.gender,
-      nationality: data.nationality,
-      marital_status: data.marital_status,
-      academic_status: data.academic_status,
-      employment_status: data.employment_status,
-      annual_income_level: data.annual_income_level,
-      onboarding_answers: data.onboarding_answers,
+      response: {
+        age: data?.response?.age,
+        gender: data?.response?.gender,
+        nationality: data?.response?.nationality,
+        academic_status: data?.response?.academic_status,
+        academic_topic: data?.response?.academic_topic,
+        reddit_usage: data?.response?.reddit_usage,
+        social_media_usage: data?.response?.social_media_usage,
+      },
     })
     .returningAll()
     .executeTakeFirst()

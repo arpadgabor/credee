@@ -22,19 +22,13 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
     .select([
       'responses_credibility.id',
       'responses_credibility.post_variant_id',
-      'credibility',
-      'content_style',
-      'content_style_effect',
-      'content_style_other',
       'responses_credibility.post_id',
+      'responses_credibility.response as credibility_response',
 
       'participants.external_participant_id',
-      'participants.academic_status',
-      'participants.age_range',
       'participants.created_at as responded_at',
-      'participants.gender',
       'participants.external_platform',
-      'participants.onboarding_answers',
+      'participants.response as participant_response',
 
       'reddit_posts.title as post_title',
       'reddit_posts.title_sentiment as post_title_sentiment',
@@ -84,10 +78,29 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
     redirectUrl: survey.redirect_url || '-',
     description: survey.description,
     answers: responses.map(r => {
-      const { redditUsage, socialMediaUsage, fakeNewsAbility } = r.onboarding_answers as Record<string, number>
-
       return {
+        respondedAt: r.responded_at!,
+
         participantId: r.external_participant_id,
+
+        credibility: r.credibility_response.credibility,
+        contentStyle: r.credibility_response.content_style,
+        contentStyleEffect: r.credibility_response.content_style_effect,
+        contentStyleOther: r.credibility_response.content_style_other,
+        theirRating: r.credibility_response.their_rating,
+        theirRatingWhy: r.credibility_response.their_rating_why,
+
+        age: r.participant_response?.age,
+        gender: r.participant_response?.gender,
+        academicStatus: r.participant_response?.academic_status,
+        academicTopic: r.participant_response?.academic_topic,
+        redditUsage: r.participant_response?.reddit_usage,
+        socialMediaUsage: r.participant_response?.social_media_usage,
+        fakeNewsAbility: r.participant_response?.fake_news_ability,
+        redditAsNewsSource: r.participant_response?.reddit_as_news_source,
+
+        externalPlatform: r.external_platform,
+
         post: {
           title: r.post_title!,
           titleSentiment: r.post_title_sentiment || 0,
@@ -100,18 +113,6 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
           postedAt: r.posted_at ? new Date(r.posted_at) : undefined,
           screenshot: r.screenshot_filename,
         },
-        credibility: r.credibility,
-        contentStyle: r.content_style,
-        contentStyleEffect: r.content_style_effect,
-        contentStyleOther: r.content_style_other,
-        academicStatus: r.academic_status,
-        ageRange: r.age_range,
-        respondedAt: r.responded_at!,
-        gender: r.gender,
-        externalPlatform: r.external_platform,
-        redditUsage,
-        socialMediaUsage,
-        fakeNewsAbility,
       }
     }),
     variants,

@@ -71,21 +71,28 @@ export const ExternalPlatform = {
   prolific: 'prolific',
   custom: 'custom',
 } as const
-export const ExternalPlatforms = Object.keys(ExternalPlatform)
+export const ExternalPlatforms = Object.keys(ExternalPlatform) as (keyof typeof ExternalPlatform)[]
 export interface Participants {
   id: Generated<number>
   survey_id: number
   external_platform: keyof typeof ExternalPlatform
   external_participant_id?: string | null
-  age_range?: string | null
-  gender?: string | null
-  nationality?: string | null
-  marital_status?: string | null
-  academic_status?: string | null
-  employment_status?: string | null
-  annual_income_level?: string | null
-  onboarding_answers?: Record<string, string | number | boolean> | null
-  created_at: Date
+
+  response?: {
+    age?: number | null
+    gender?: 'male' | 'female' | 'other' | null
+    nationality?: string | null
+    academic_status?: string | null
+    academic_topic?: string | null
+
+    reddit_usage?: string | null
+    social_media_usage?: string | null
+    fake_news_ability?: string | null
+
+    reddit_as_news_source?: string | null
+  }
+
+  created_at: Generated<Date>
 }
 export interface ResponsesCredibility {
   id: Generated<number>
@@ -93,12 +100,17 @@ export interface ResponsesCredibility {
   participant_id: number
   post_id: string
   post_variant_id: number
-  credibility: number
-  content_style: string
-  content_style_other?: string | null
-  content_style_effect: number
-  topic_familiarity: number
-  created_at: Date
+  response: {
+    credibility: number
+    content_style: string
+    content_style_other?: string | null
+    content_style_effect: number
+    topic_familiarity: number
+    their_rating: 'upvote' | 'downvote'
+    their_rating_why: string
+  }
+
+  created_at: Generated<Date>
 }
 
 export interface SurveyRedditDataset {

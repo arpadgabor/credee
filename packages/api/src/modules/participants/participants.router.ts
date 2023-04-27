@@ -7,14 +7,18 @@ const participantCreate = z.object({
   surveyId: z.number(),
   externalPlatform: z.enum(ExternalPlatforms as [string, ...string[]]),
   externalParticipantId: z.string().nullish(),
-  ageRange: z.string().nullish(),
-  gender: z.string().nullish(),
-  nationality: z.string().nullish(),
-  maritalStatus: z.string().nullish(),
-  academicStatus: z.string().nullish(),
-  employmentStatus: z.string().nullish(),
-  annualIncomeLevel: z.string().nullish(),
-  onboardingAnswers: z.record(z.union([z.string(), z.boolean(), z.number()])).nullish(),
+
+  response: z.object({
+    age: z.number().nullish(),
+    gender: z.enum(['male', 'female', 'other']).nullish(),
+    nationality: z.string().nullish(),
+    academicStatus: z.string().nullish(),
+    academicTopic: z.string().nullish(),
+    redditUsage: z.string().nullish(),
+    socialMediaUsage: z.string().nullish(),
+    fakeNewsAbility: z.string().nullish(),
+    redditAsNewsSource: z.string().nullish(),
+  }),
 })
 
 const participant = participantCreate.and(
@@ -32,14 +36,19 @@ const addParticipant = procedure
       survey_id: input.surveyId,
       external_platform: input.externalPlatform as keyof typeof ExternalPlatform,
       external_participant_id: input.externalParticipantId,
-      age_range: input.ageRange,
-      gender: input.gender,
-      nationality: input.nationality,
-      marital_status: input.maritalStatus,
-      academic_status: input.academicStatus,
-      employment_status: input.employmentStatus,
-      annual_income_level: input.annualIncomeLevel,
-      onboarding_answers: input.onboardingAnswers,
+      response: {
+        age: input.response.age,
+        gender: input.response.gender,
+        nationality: input.response.nationality,
+        academic_status: input.response.academicStatus,
+        academic_topic: input.response.academicStatus,
+
+        reddit_usage: input.response.redditUsage,
+        fake_news_ability: input.response.fakeNewsAbility,
+        social_media_usage: input.response.socialMediaUsage,
+
+        reddit_as_news_source: input.response.redditAsNewsSource,
+      },
     })
 
     return {
@@ -47,14 +56,19 @@ const addParticipant = procedure
       surveyId: participant!.survey_id,
       externalPlatform: participant!.external_platform,
       externalParticipantId: participant!.external_participant_id,
-      ageRange: participant!.age_range,
-      gender: participant!.gender,
-      nationality: participant!.nationality,
-      maritalStatus: participant!.marital_status,
-      academicStatus: participant!.academic_status,
-      employmentStatus: participant!.employment_status,
-      annualIncomeLevel: participant!.annual_income_level,
-      onboardingAnswers: participant!.onboarding_answers,
+      response: {
+        age: participant?.response?.age,
+        gender: participant?.response?.gender,
+        nationality: participant?.response?.nationality,
+        academicStatus: participant?.response?.academic_status,
+        academicTopic: participant?.response?.academic_topic,
+
+        redditUsage: participant?.response?.reddit_usage,
+        fakeNewsAbility: participant?.response?.fake_news_ability,
+        socialMediaUsage: participant?.response?.social_media_usage,
+
+        redditAsNewsSource: participant?.response?.reddit_as_news_source,
+      },
       createdAt: participant!.created_at,
     }
   })
