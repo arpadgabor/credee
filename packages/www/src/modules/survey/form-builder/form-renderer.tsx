@@ -10,6 +10,8 @@ import { FieldMultiSelect } from './fields/multi-select'
 import { FieldScale } from './fields/scale'
 import { FieldShortText } from './fields/short-text'
 import { FormData, FormField, FormFields, Media } from './form.type'
+import { FieldNumber } from './fields/number'
+import { FieldDropdown } from './fields/dropdown'
 
 interface Props {
   survey: FormData
@@ -92,6 +94,15 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
               />
             </Match>
 
+            <Match when={$.formField.type === 'number'}>
+              <FieldNumber
+                form={$.form}
+                field={field}
+                formField={$.formField as FormFields['short-text']}
+                required={!isOptional}
+              />
+            </Match>
+
             <Match when={$.formField.type === 'scale'}>
               <FieldScale form={$.form} field={field} formField={$.formField as FormFields['scale']} required={!isOptional} />
             </Match>
@@ -101,6 +112,15 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
                 form={$.form}
                 field={field}
                 formField={$.formField as FormFields['multi-select']}
+                required={!isOptional}
+              />
+            </Match>
+
+            <Match when={$.formField.type === 'dropdown'}>
+              <FieldDropdown
+                form={$.form}
+                field={field}
+                formField={$.formField as FormFields['dropdown']}
                 required={!isOptional}
               />
             </Match>

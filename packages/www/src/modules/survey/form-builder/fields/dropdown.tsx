@@ -10,6 +10,12 @@ export function FieldDropdown($: SurveyFieldProps<'dropdown'>) {
   }
 
   return (
-    <Select name={$.field.name} label={$.formField.title} options={$.formField.options} placeholder={$.formField.placeholder} />
+    <Select
+      class='w-full'
+      name={$.field.name}
+      label={$.formField.title}
+      options={$.formField.options}
+      placeholder={$.formField.placeholder}
+    />
   )
 }

@@ -3,6 +3,8 @@ export interface FormFields {
   scale: FormScaleField
   'multi-select': FormMultiSelectField
   dropdown: FormDropdownField
+  number: FormNumberField
+  search: FormSearchField
 }
 
 export type FormField<Keys = string> = { id: Keys } & FormFields[keyof FormFields]
@@ -30,6 +32,9 @@ interface FormFieldBase {
 export interface FormShortTextField extends FormFieldBase {
   type: 'short-text'
 }
+export interface FormNumberField extends FormFieldBase {
+  type: 'number'
+}
 
 export interface FormScaleField extends FormFieldBase {
   type: 'scale'
@@ -43,6 +48,12 @@ export interface FormMultiSelectField extends FormFieldBase {
 
 export interface FormDropdownField extends FormFieldBase {
   type: 'dropdown'
+  placeholder?: string
+  options: { value: string; label: string }[]
+}
+
+export interface FormSearchField extends FormFieldBase {
+  type: 'search'
   placeholder?: string
   options: { value: string; label: string }[]
 }

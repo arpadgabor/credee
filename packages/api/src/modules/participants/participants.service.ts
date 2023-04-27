@@ -34,7 +34,7 @@ export async function createParticipant(data: Omit<Participants, 'id' | 'created
         gender: data?.response?.gender,
         nationality: data?.response?.nationality,
         academic_status: data?.response?.academic_status,
-        academic_topic: data?.response?.academic_topic,
+        academic_field: data?.response?.academic_field,
         reddit_usage: data?.response?.reddit_usage,
         social_media_usage: data?.response?.social_media_usage,
       },

@@ -2,16 +2,7 @@ import { Inputs } from '@credee/api'
 import { z } from 'zod'
 import { FormData } from '../form-builder/form.type'
 
-export type CredibilityForm = Pick<
-  Inputs['responses']['addCredibility'],
-  | 'contentStyle'
-  | 'contentStyleEffect'
-  | 'credibility'
-  | 'topicFamiliarity'
-  | 'contentStyleOther'
-  | 'theirRating'
-  | 'theirRatingWhy'
->
+export type CredibilityForm = Inputs['responses']['addCredibility']['response']
 
 export function createPostCredibilityForm(options: {
   title: string

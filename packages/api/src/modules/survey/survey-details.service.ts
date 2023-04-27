@@ -93,7 +93,7 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
         age: r.participant_response?.age,
         gender: r.participant_response?.gender,
         academicStatus: r.participant_response?.academic_status,
-        academicTopic: r.participant_response?.academic_topic,
+        academicField: r.participant_response?.academic_field,
         redditUsage: r.participant_response?.reddit_usage,
         socialMediaUsage: r.participant_response?.social_media_usage,
         fakeNewsAbility: r.participant_response?.fake_news_ability,

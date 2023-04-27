@@ -54,13 +54,17 @@ export default function Survey() {
         surveyId,
         externalParticipantId: surveyInfo?.participant_id,
         externalPlatform: surveyInfo?.referrer!,
-        ageRange: data.ageRange,
-        gender: data.gender,
-        academicStatus: data.academicStatus,
-        onboardingAnswers: {
+        response: {
+          age: Number(data.age),
+          gender: data.gender,
+          academicStatus: data.academicStatus,
           redditUsage: data.redditUsage,
           socialMediaUsage: data.socialMediaUsage,
           fakeNewsAbility: data.fakeNewsAbility,
+          academicField: data.academicField,
+          // TODO:
+          // redditAsNewsSource: data.redditAsNewsSource,
+          // nationality: data.nationality
         },
       })
     },

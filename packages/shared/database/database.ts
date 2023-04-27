@@ -83,11 +83,11 @@ export interface Participants {
     gender?: 'male' | 'female' | 'other' | null
     nationality?: string | null
     academic_status?: string | null
-    academic_topic?: string | null
+    academic_field?: string | null
 
-    reddit_usage?: string | null
-    social_media_usage?: string | null
-    fake_news_ability?: string | null
+    reddit_usage?: number | null
+    social_media_usage?: number | null
+    fake_news_ability?: number | null
 
     reddit_as_news_source?: string | null
   }
@@ -100,6 +100,7 @@ export interface ResponsesCredibility {
   participant_id: number
   post_id: string
   post_variant_id: number
+
   response: {
     credibility: number
     content_style: string

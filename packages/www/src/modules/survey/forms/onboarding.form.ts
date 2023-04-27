@@ -2,11 +2,13 @@ import { z } from 'zod'
 import { FormData } from '../form-builder/form.type'
 
 export interface OnboardingFields {
-  gender: 'male' | 'female' | 'non-binary'
-  ageRange: 'under18' | '18to24' | '24to35' | '35to50' | 'over50'
+  age: number
+  gender: 'male' | 'female' | 'other'
   redditUsage: 1 | 2 | 3 | 4 | 5
   socialMediaUsage: 1 | 2 | 3 | 4 | 5
   fakeNewsAbility: 1 | 2 | 3 | 4 | 5
+  academicField: string
+  nationality: string
   academicStatus:
     | 'primary-school'
     | 'middle-school'
@@ -31,22 +33,23 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         options: [
           { value: 'male', label: `Male` },
           { value: 'female', label: `Female` },
-          { value: 'non-binary', label: `Non-binary` },
+          { value: 'other', label: `Other` },
         ],
       },
       {
-        type: 'multi-select',
-        id: 'ageRange',
+        type: 'number',
+        id: 'age',
         title: "What's your age?",
         description: "You can skip this if you don't want to share.",
+        validator: z.number().optional(),
+      },
+      {
+        type: 'search',
+        id: 'nationality',
+        title: "What's your nationality?",
+        description: "You can skip this if you don't want to share.",
         validator: z.string().optional(),
-        options: [
-          { value: 'under18', label: '17 or under' },
-          { value: '18to24', label: '18-24' },
-          { value: '25to35', label: '25-35' },
-          { value: '36to50', label: '36-50' },
-          { value: 'over50', label: 'Over 50' },
-        ],
+        options: [],
       },
       {
         type: 'multi-select',
@@ -64,6 +67,31 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
           { value: 'doctoral', label: `Doctoral studies` },
           { value: 'post-doctoral', label: `Post-doctoral` },
         ],
+      },
+      {
+        type: 'dropdown',
+        id: 'academicField',
+        title: 'What is your field of study?',
+        validator: z.string().optional(),
+        options: [
+          'Agriculture & Natural Resources',
+          'Arts',
+          'Biology & Life Science',
+          'Business',
+          'Communications & Journalism',
+          'Computers & Mathematics',
+          'Education',
+          'Engineering',
+          'Health',
+          'Humanities & Liberal Arts',
+          'Industrial Arts & Consumer Services',
+          'Interdisciplinary',
+          'Law & Public Policy',
+          'Physical Sciences',
+          'Psychology & Social Work',
+          'Social Science',
+          'Other',
+        ].map(value => ({ value, label: value })),
       },
       {
         type: 'scale',

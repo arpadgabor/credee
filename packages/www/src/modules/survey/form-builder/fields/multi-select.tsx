@@ -14,7 +14,7 @@ export function FieldMultiSelect($: SurveyFieldProps<'multi-select'>) {
         {option => (
           <RadioGroup.Item
             value={String(option.value)}
-            class='flex focus-within:ring-2 focus-within:ring-accent-500 py-3 px-2 items-center group hover:bg-gray-100 dark:hover:bg-gray-800 transition rounded-md'
+            class='flex focus-within:ring-2 focus-within:ring-accent-500 py-3 px-2 items-center group hover:bg-gray-100 dark:hover:bg-gray-800 transition rounded-md transform active:scale-[0.99]'
           >
             <RadioGroup.ItemInput />
             <RadioGroup.ItemControl class='relative w-6 h-6 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 shadow-sm group-hover:shadow rounded-full flex items-center justify-center p-0 m-0 mr-2 transition'>

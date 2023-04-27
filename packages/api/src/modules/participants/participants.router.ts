@@ -13,10 +13,10 @@ const participantCreate = z.object({
     gender: z.enum(['male', 'female', 'other']).nullish(),
     nationality: z.string().nullish(),
     academicStatus: z.string().nullish(),
-    academicTopic: z.string().nullish(),
-    redditUsage: z.string().nullish(),
-    socialMediaUsage: z.string().nullish(),
-    fakeNewsAbility: z.string().nullish(),
+    academicField: z.string().nullish(),
+    redditUsage: z.number().nullish(),
+    socialMediaUsage: z.number().nullish(),
+    fakeNewsAbility: z.number().nullish(),
     redditAsNewsSource: z.string().nullish(),
   }),
 })
@@ -41,7 +41,7 @@ const addParticipant = procedure
         gender: input.response.gender,
         nationality: input.response.nationality,
         academic_status: input.response.academicStatus,
-        academic_topic: input.response.academicStatus,
+        academic_field: input.response.academicStatus,
 
         reddit_usage: input.response.redditUsage,
         fake_news_ability: input.response.fakeNewsAbility,
@@ -61,7 +61,7 @@ const addParticipant = procedure
         gender: participant?.response?.gender,
         nationality: participant?.response?.nationality,
         academicStatus: participant?.response?.academic_status,
-        academicTopic: participant?.response?.academic_topic,
+        academicField: participant?.response?.academic_field,
 
         redditUsage: participant?.response?.reddit_usage,
         fakeNewsAbility: participant?.response?.fake_news_ability,

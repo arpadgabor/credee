@@ -51,16 +51,29 @@ export function SurveyQuestions(props: Props) {
   })
 
   const submit = createMutation<Outputs['responses']['addCredibility'], any, CredibilityForm>({
-    async mutationFn({ credibility, contentStyle, contentStyleEffect, topicFamiliarity }) {
+    async mutationFn({
+      credibility,
+      contentStyle,
+      contentStyleEffect,
+      topicFamiliarity,
+      theirRating,
+      theirRatingWhy,
+      contentStyleOther,
+    }) {
       return await api.responses.addCredibility.mutate({
-        credibility,
-        contentStyle,
-        contentStyleEffect,
-        topicFamiliarity,
         participantId: props.participantId!,
         postId: question.data?.post!.post_id!,
         postVariantId: question.data!.post!.id!,
         surveyId: props.surveyId,
+        response: {
+          credibility,
+          contentStyle,
+          contentStyleEffect,
+          topicFamiliarity,
+          theirRating,
+          theirRatingWhy,
+          contentStyleOther,
+        },
       })
     },
     onSuccess() {
