@@ -40,15 +40,13 @@ interface InputProps<Options extends Option> extends StyleProps {
 
 export function Select<T extends Option>(props: InputProps<T>) {
   return (
-    <_Select.Root
+    <_Select.Root<Option>
       options={props.options}
-      // @ts-expect-error
       optionValue='value'
-      // @ts-expect-error
       optionTextValue='label'
       name={props.name}
-      onChange={props.onSelect}
-      value={props.value}
+      onChange={e => props.onSelect?.(e.value)}
+      value={props.options.find(option => option.value === props.value)}
       placeholder={props.placeholder}
       itemComponent={option => (
         <_Select.Item

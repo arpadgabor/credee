@@ -4,6 +4,8 @@ import superjson from 'superjson'
 
 const baseUrl = import.meta.env.VITE_API_URL ?? '/api'
 
+export const apiUrl = baseUrl
+
 export const uploadsPath = (name: string) => {
   return name.includes('://') ? name : `${baseUrl}/uploads/${name}`
 }

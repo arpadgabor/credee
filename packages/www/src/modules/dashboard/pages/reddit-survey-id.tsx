@@ -20,13 +20,13 @@ import { z } from 'zod'
 import toast from 'solid-toast'
 
 import { Outputs } from '@credee/api'
-import { api } from '../../../utils/trpc'
+import { api, apiUrl } from '../../../utils/trpc'
 
 import RefreshIcon from '~icons/ph/arrows-counter-clockwise'
 import CopyIcon from '~icons/ph/copy'
 import DownloadIcon from '~icons/ph/download'
 
-import { Field, Form, FormState, createForm, setValue, zodForm } from '@modular-forms/solid'
+import { Field, Form, FormStore, createFormStore, setValue, zodForm } from '@modular-forms/solid'
 import { HoverCard } from '../../../components/ui/hover-card'
 import { RichEditor } from '../../../components/ui/rich-editor'
 import Survey from '../../survey/pages/survey'
@@ -55,7 +55,7 @@ const formValidator = z.object({
 
 export default function RedditSurveyId() {
   const params = useParams<{ id: string }>()
-  const updateForm = createForm({
+  const updateForm = createFormStore({
     validate: zodForm(formValidator),
   })
   const survey = createQuery<Survey>(() => [params.id], {
@@ -89,7 +89,14 @@ export default function RedditSurveyId() {
       name: 'Details',
     },
     {
-      content: <SurveyResponses answers={answers()} onRefresh={() => survey.refetch()} isLoading={survey.isRefetching} />,
+      content: (
+        <SurveyResponses
+          answers={answers()}
+          onRefresh={() => survey.refetch()}
+          isLoading={survey.isRefetching}
+          surveyId={Number(params.id)}
+        />
+      ),
       name: 'Responses',
     },
     {
@@ -128,7 +135,7 @@ export default function RedditSurveyId() {
   )
 }
 
-function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof formValidator>> }) {
+function DetailsForm(props: { surveyId: number; form: FormStore<z.infer<typeof formValidator>, any> }) {
   const createSurvey = createMutation({
     mutationFn: (data: z.infer<typeof formValidator>) => {
       return api.surveys.update.mutate({
@@ -155,10 +162,10 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
   return (
     <Form of={props.form} onSubmit={onSubmit} class='flex flex-col h-full space-y-4 max-w-2xl'>
       <Field of={props.form} name='title'>
-        {field => (
+        {(field, props) => (
           <label class='w-full'>
             <FieldLabel>Title</FieldLabel>
-            <Input {...field.props} value={field.value} class='w-full' />
+            <Input {...props} value={field.value} class='w-full' />
             <Show when={field.error}>
               <FieldAlert type='error'>{field.error}</FieldAlert>
             </Show>
@@ -167,10 +174,10 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
       </Field>
 
       <Field of={props.form} name='redirectUrl'>
-        {field => (
+        {(field, props) => (
           <label class='w-full'>
             <FieldLabel>URL to redirect after finishing</FieldLabel>
-            <Input {...field.props} value={field.value} class='w-full' type='url' />
+            <Input {...props} value={field.value} class='w-full' type='url' />
             <Show when={field.error}>
               <FieldAlert type='error'>{field.error}</FieldAlert>
             </Show>
@@ -179,10 +186,10 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
       </Field>
 
       <Field of={props.form} name='endDate'>
-        {field => (
+        {(field, props) => (
           <label class='w-full'>
             <FieldLabel>Deadline</FieldLabel>
-            <Input {...field.props} value={field.value} type='date' class='w-full' />
+            <Input {...props} value={field.value} type='date' class='w-full' />
             <Show when={field.error}>
               <FieldAlert type='error'>{field.error}</FieldAlert>
             </Show>
@@ -211,7 +218,7 @@ function DetailsForm(props: { surveyId: number; form: FormState<z.infer<typeof f
   )
 }
 
-function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLoading: boolean }) {
+function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLoading: boolean; surveyId: number }) {
   const col = createColumnHelper<Answer>()
   const table = createSolidTable({
     get data() {
@@ -242,6 +249,10 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
         cell: StringCell,
         header: 'Education',
       }),
+      col.accessor('academicField', {
+        cell: StringCell,
+        header: 'Study Field',
+      }),
       col.accessor('contentStyle', {
         cell: StringCell,
         header: 'Content style',
@@ -250,7 +261,7 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
         cell: StringCell,
         header: 'Content style effect',
       }),
-      col.accessor('ageRange', {
+      col.accessor('age', {
         cell: StringCell,
         header: 'Age',
       }),
@@ -261,6 +272,14 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
       col.accessor('gender', {
         cell: StringCell,
         header: 'Gender',
+      }),
+      col.accessor('theirRating', {
+        cell: StringCell,
+        header: 'They would...',
+      }),
+      col.accessor('theirRatingWhy', {
+        cell: StringCell,
+        header: 'Reason',
       }),
       col.accessor('redditUsage', {
         cell: StringCell,
@@ -277,56 +296,21 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
     ],
     getCoreRowModel: getCoreRowModel(),
   })
-  const [csvDownloadHref, setCsvDownloadHref] = createSignal<string>()
-  onMount(() => {
-    const csv = toCsv(
-      props.answers.map(({ post, ...rest }) => ({
-        'Responded At': new Date(rest.respondedAt).toLocaleString(),
-        'External Platform': rest.externalPlatform,
-        'Participant ID': rest.participantId,
-        Gender: rest.gender,
-        'Age Range': rest.ageRange,
-        'Studies Level': rest.academicStatus,
-        'Reddit Usage': rest.redditUsage,
-        'Social Media Usage': rest.socialMediaUsage,
-        'Fake News Ability': rest.fakeNewsAbility,
-        'Credibility Rating': rest.credibility,
-        'Content Style': rest.contentStyle,
-        'Content Style Effect': rest.contentStyleOther || rest.contentStyleEffect,
-        '[Post] Title': post.title,
-        '[Post] Title Sentiment': post.titleSentiment,
-        '[Post] Link Domain': post.domain,
-        '[Post] Subreddit': post.subreddit,
-        '[Post] Award Count': post.goldCount,
-        '[Post] Comments': post.comments,
-        '[Post] Upvote Ratio': post.ratio,
-        '[Post] Upvotes': post.upvotes,
-        '[Post] Posted At': post.postedAt ? new Date(post.postedAt).toLocaleString() : '',
-      })),
-      {
-        header: true,
-      }
-    )
-
-    const dataUrl = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`
-    setCsvDownloadHref(dataUrl)
-  })
 
   return (
     <div>
       <div class='flex mb-2 space-x-2'>
-        <Show when={csvDownloadHref()}>
-          <a href={csvDownloadHref()!} download={'Responses.csv'}>
-            <Button type='button' disabled={props.answers.length === 0} tabIndex={-1}>
-              <DownloadIcon class='mr-3' />
-              Download Responses CSV
-            </Button>
-          </a>
-          <Button type='button' onClick={props.onRefresh}>
-            <RefreshIcon class={cx(['mr-3', props.isLoading ? 'animate-spin' : ''])} />
-            Refresh
+        <a href={`${apiUrl}/surveys/${props.surveyId}/responses.csv`} download='Responses.csv'>
+          <Button type='button' disabled={props.answers.length === 0} tabIndex={-1}>
+            <DownloadIcon class='mr-3' />
+            Download Responses CSV
           </Button>
-        </Show>
+        </a>
+
+        <Button type='button' onClick={props.onRefresh}>
+          <RefreshIcon class={cx(['mr-3', props.isLoading ? 'animate-spin' : ''])} />
+          Refresh
+        </Button>
       </div>
       <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />
     </div>

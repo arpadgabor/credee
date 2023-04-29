@@ -88,6 +88,7 @@ export async function findSurvey(id: number) {
 export async function listSurveys() {
   return await db.selectFrom('surveys').selectAll().execute()
 }
+
 export async function countSurveys() {
   const result = await db.selectFrom('surveys').select(db.fn.count('id').as('count')).executeTakeFirst()
 

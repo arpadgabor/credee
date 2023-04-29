@@ -35,15 +35,15 @@ const Page: Component = () => {
         cell: StringCell,
         size: 900,
       }),
-      col.display({
-        id: 'url',
-        header: 'URL',
-        cell: cell => (
-          <a class='underline decoration-dotted text-accent-500' href={`${location.origin}/survey/${cell.row.original.id}`}>
-            Access link
-          </a>
-        ),
-      }),
+      // col.display({
+      //   id: 'url',
+      //   header: 'URL',
+      //   cell: cell => (
+      //     <a class='underline decoration-dotted text-accent-500' href={`${location.origin}/survey/${cell.row.original.id}`}>
+      //       Access link
+      //     </a>
+      //   ),
+      // }),
       col.accessor('endsAt', {
         header: 'Deadline',
         cell: DateCell,

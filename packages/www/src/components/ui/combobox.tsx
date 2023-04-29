@@ -62,18 +62,15 @@ export function Combobox<T extends Option>(props: ComboboxProps<T>) {
   }
 
   return (
-    <_Combobox.Root
+    <_Combobox.Root<Option>
       name={props.name}
+      options={options()}
       onInputChange={onInput}
       onOpenChange={onOpen}
-      onChange={props.onSelect}
-      value={props.value}
-      options={options()}
-      //@ts-expect-error
+      onChange={v => props.onSelect?.(v.value)}
+      value={props.options.find(option => option.value === props.value)}
       optionValue='value'
-      //@ts-expect-error
       optionTextValue='label'
-      //@ts-expect-error
       optionLabel='label'
       placeholder={props.placeholder}
       itemComponent={option => (

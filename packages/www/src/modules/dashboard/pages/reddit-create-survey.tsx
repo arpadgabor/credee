@@ -1,4 +1,4 @@
-import { createForm, Field, Form, zodForm } from '@modular-forms/solid'
+import { createFormStore, Field, Form, zodForm } from '@modular-forms/solid'
 import { useNavigate } from '@solidjs/router'
 import { createMutation } from '@tanstack/solid-query'
 import { Show } from 'solid-js'
@@ -24,7 +24,7 @@ const formValidator = z.object({
 
 export default function RedditCreateSurvey() {
   const goTo = useNavigate()
-  const submitForm = createForm({
+  const submitForm = createFormStore({
     validate: zodForm(formValidator),
   })
   const createSurvey = createMutation({
@@ -35,8 +35,8 @@ export default function RedditCreateSurvey() {
         redirectUrl: data.redirectUrl,
       })
     },
-    onSuccess: () => {
-      goTo('/dashboard/reddit/surveys')
+    onSuccess: survey => {
+      goTo(`/dashboard/reddit/surveys/${survey.id}`)
     },
   })
   function onSubmit(data: z.infer<typeof formValidator>) {
@@ -59,10 +59,10 @@ export default function RedditCreateSurvey() {
         <Form of={submitForm} onSubmit={onSubmit} class='flex flex-col h-full space-y-4'>
           <div class='flex flex-col md:flex-row md:space-x-2'>
             <Field of={submitForm} name='title'>
-              {field => (
+              {(field, props) => (
                 <label class='w-full md:w-3/4'>
                   <FieldLabel>Title</FieldLabel>
-                  <Input {...field.props} class='w-full' />
+                  <Input {...props} class='w-full' />
                   <Show when={field.error}>
                     <FieldAlert type='error'>{field.error}</FieldAlert>
                   </Show>
@@ -71,10 +71,10 @@ export default function RedditCreateSurvey() {
             </Field>
 
             <Field of={submitForm} name='redirectUrl'>
-              {field => (
+              {(field, props) => (
                 <label class='w-full md:w-3/4'>
                   <FieldLabel>URL to redirect after finishing</FieldLabel>
-                  <Input {...field.props} class='w-full' type='url' />
+                  <Input {...props} class='w-full' type='url' />
                   <Show when={field.error}>
                     <FieldAlert type='error'>{field.error}</FieldAlert>
                   </Show>
@@ -83,10 +83,10 @@ export default function RedditCreateSurvey() {
             </Field>
 
             <Field of={submitForm} name='endDate'>
-              {field => (
+              {(field, props) => (
                 <label class='w-full md:w-1/4'>
                   <FieldLabel>Deadline</FieldLabel>
-                  <Input {...field.props} type='date' class='w-full' />
+                  <Input {...props} type='date' class='w-full' />
                   <Show when={field.error}>
                     <FieldAlert type='error'>{field.error}</FieldAlert>
                   </Show>
@@ -94,8 +94,6 @@ export default function RedditCreateSurvey() {
               )}
             </Field>
           </div>
-
-          {/* <PostsForSurveySelect form={submitForm} fieldName='posts' /> */}
 
           <div class='flex-1 flex items-end'>
             <Button theme='main' disabled={createSurvey.isLoading}>
