@@ -4,8 +4,8 @@ import { SurveyFieldProps } from './utils'
 export function FieldNumber($: SurveyFieldProps<'short-text'>) {
   return (
     <Input
+      {...$.props}
       type='number'
-      {...$.field.props}
       id={$.field.name}
       value={$.field.value}
       required={$.required}

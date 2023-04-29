@@ -1,20 +1,21 @@
 import { setValue } from '@modular-forms/solid'
-import { Select } from '../../../../components/ui'
 import { SurveyFieldProps } from './utils'
+import { Combobox } from '../../../../components/ui/combobox'
 
-export function FieldDropdown($: SurveyFieldProps<'dropdown'>) {
+export function FieldSearch($: SurveyFieldProps<'search'>) {
   function onChange(value: { label: string; value: string }) {
+    console.log(value)
     setValue($.form, $.field.name, value.value)
   }
 
   return (
-    <Select
+    <Combobox
       class='w-full'
       name={$.field.name}
       label={$.formField.title}
       options={$.formField.options}
       placeholder={$.formField.placeholder}
-      //@ts-expect-error kobalte is stupid
+      // @ts-expect-error kobalte is stupid
       onSelect={onChange}
     />
   )

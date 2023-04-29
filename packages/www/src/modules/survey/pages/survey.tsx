@@ -64,7 +64,7 @@ export default function Survey() {
           academicField: data.academicField,
           // TODO:
           // redditAsNewsSource: data.redditAsNewsSource,
-          // nationality: data.nationality
+          nationality: data.nationality,
         },
       })
     },

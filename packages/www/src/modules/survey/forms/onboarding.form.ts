@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { FormData } from '../form-builder/form.type'
+import countries from '../../../assets/countries.json'
 
 export interface OnboardingFields {
   age: number
@@ -41,7 +42,10 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         id: 'age',
         title: "What's your age?",
         description: "You can skip this if you don't want to share.",
-        validator: z.number().optional(),
+        validator: z
+          .string()
+          .optional()
+          .transform(v => Number(v)),
       },
       {
         type: 'search',
@@ -49,7 +53,7 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         title: "What's your nationality?",
         description: "You can skip this if you don't want to share.",
         validator: z.string().optional(),
-        options: [],
+        options: countries,
       },
       {
         type: 'multi-select',

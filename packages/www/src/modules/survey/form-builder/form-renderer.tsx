@@ -2,7 +2,7 @@ import { For, JSX, Match, ParentComponent, Show, Switch } from 'solid-js'
 import { cx } from 'class-variance-authority'
 import { z } from 'zod'
 
-import { createForm, Field, Form, FormState, zodForm } from '@modular-forms/solid'
+import { createFormStore, Field, Form, zodForm, FormStore } from '@modular-forms/solid'
 import { Alert, Image } from '@kobalte/core'
 
 import { Button } from '../../../components/ui'
@@ -12,6 +12,7 @@ import { FieldShortText } from './fields/short-text'
 import { FormData, FormField, FormFields, Media } from './form.type'
 import { FieldNumber } from './fields/number'
 import { FieldDropdown } from './fields/dropdown'
+import { FieldSearch } from './fields/search'
 
 interface Props {
   survey: FormData
@@ -30,7 +31,7 @@ export function SurveyRenderer(props: Props) {
   )
   const validationSchema = z.object(validationObject)
 
-  const form = createForm<z.input<typeof validationSchema>>({
+  const form = createFormStore<z.input<typeof validationSchema>>({
     validate: zodForm(validationSchema),
   })
 
@@ -49,14 +50,14 @@ export function SurveyRenderer(props: Props) {
   )
 }
 
-const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<any> }> = $ => {
+const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormStore<any, any> }> = $ => {
   // @ts-expect-error typeName is a hidden property
   const zodFieldType: 'ZodNullable' | 'ZodOptional' = $.formField.validator._def?.typeName
   const isOptional = ['ZodNullable', 'ZodOptional'].includes(zodFieldType)
 
   return (
     <Field of={$.form} name={$.formField.id}>
-      {field => (
+      {(field, props) => (
         <fieldset
           class={cx(
             'flex flex-col p-4 md:p-8 !pt-0 rounded-lg border border-gray-200 dark:border-gray-800',
@@ -89,6 +90,7 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
               <FieldShortText
                 form={$.form}
                 field={field}
+                props={props}
                 formField={$.formField as FormFields['short-text']}
                 required={!isOptional}
               />
@@ -98,19 +100,27 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
               <FieldNumber
                 form={$.form}
                 field={field}
+                props={props}
                 formField={$.formField as FormFields['short-text']}
                 required={!isOptional}
               />
             </Match>
 
             <Match when={$.formField.type === 'scale'}>
-              <FieldScale form={$.form} field={field} formField={$.formField as FormFields['scale']} required={!isOptional} />
+              <FieldScale
+                form={$.form}
+                field={field}
+                props={props}
+                formField={$.formField as FormFields['scale']}
+                required={!isOptional}
+              />
             </Match>
 
             <Match when={$.formField.type === 'multi-select'}>
               <FieldMultiSelect
                 form={$.form}
                 field={field}
+                props={props}
                 formField={$.formField as FormFields['multi-select']}
                 required={!isOptional}
               />
@@ -120,7 +130,18 @@ const FormFieldMapper: ParentComponent<{ formField: FormField; form: FormState<a
               <FieldDropdown
                 form={$.form}
                 field={field}
+                props={props}
                 formField={$.formField as FormFields['dropdown']}
+                required={!isOptional}
+              />
+            </Match>
+
+            <Match when={$.formField.type === 'search'}>
+              <FieldSearch
+                form={$.form}
+                field={field}
+                props={props}
+                formField={$.formField as FormFields['search']}
                 required={!isOptional}
               />
             </Match>

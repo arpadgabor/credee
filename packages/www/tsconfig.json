@@ -11,7 +11,8 @@
     "types": ["vite/client", "unplugin-icons/types/solid"],
     "noEmit": true,
     "isolatedModules": true,
-    "lib": ["DOM", "ESNext"]
+    "lib": ["DOM", "ESNext"],
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"],
   "include": [".", "../api"]

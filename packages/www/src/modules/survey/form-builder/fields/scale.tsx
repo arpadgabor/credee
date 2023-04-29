@@ -9,7 +9,7 @@ export function FieldScale($: SurveyFieldProps<'scale'>) {
   }
 
   return (
-    <RadioGroup.Root name={$.field.name} onValueChange={onChange} class='space-y-2' aria-labelledby={`${$.field.name}-label`}>
+    <RadioGroup.Root name={$.field.name} onChange={onChange} class='space-y-2' aria-labelledby={`${$.field.name}-label`}>
       <For each={$.formField.options}>
         {option => (
           <RadioGroup.Item

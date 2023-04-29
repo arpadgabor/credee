@@ -41,13 +41,14 @@ interface InputProps<Options extends Option> extends StyleProps {
 export function Select<T extends Option>(props: InputProps<T>) {
   return (
     <_Select.Root
-      name={props.name}
-      onValueChange={props.onSelect}
-      value={props.value}
       options={props.options}
+      // @ts-expect-error
       optionValue='value'
+      // @ts-expect-error
       optionTextValue='label'
-      valueComponent={props => props.item.rawValue.label}
+      name={props.name}
+      onChange={props.onSelect}
+      value={props.value}
       placeholder={props.placeholder}
       itemComponent={option => (
         <_Select.Item
@@ -64,12 +65,12 @@ export function Select<T extends Option>(props: InputProps<T>) {
             <Check class='transform scale-90' />
           </_Select.ItemIndicator>
 
-          <_Select.ItemLabel class='cursor-default flex-1'>{option.item.rawValue.label}</_Select.ItemLabel>
+          <_Select.ItemLabel class='cursor-default flex-1'>{option.item.textValue}</_Select.ItemLabel>
         </_Select.Item>
       )}
     >
       <_Select.Trigger class={selectOuter({ class: props.class })} aria-label={props.label}>
-        <_Select.Value class='pr-8 flex-1 text-left' />
+        <_Select.Value<Option> class='pr-8 flex-1 text-left'>{state => state.selectedOption().label}</_Select.Value>
 
         <_Select.Icon
           class={

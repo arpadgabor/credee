@@ -5,7 +5,7 @@ export function FieldShortText($: SurveyFieldProps<'short-text'>) {
   return (
     <Input
       type='text'
-      {...$.field.props}
+      {...$.props}
       id={$.field.name}
       value={$.field.value}
       required={$.required}
