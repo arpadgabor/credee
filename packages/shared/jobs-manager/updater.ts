@@ -11,9 +11,12 @@ export async function getUpdaterJob() {
   const options = await redis.json.get('reddit-updater:options')
 
   const lastTenJobs = await updater.getCompleted(0, 10)
+  const lastTenFailed = await updater.getFailed(0, 10)
   const running = await updater.getActive()
 
-  const allLogs = await Promise.all([...running, ...lastTenJobs].map(job => updater.getJobLogs(job.id)))
+  const all = [...lastTenJobs, ...lastTenFailed, ...running].sort((a, b) => b.timestamp - a.timestamp)
+
+  const allLogs = await Promise.all(all.map(job => updater.getJobLogs(job.id)))
 
   return {
     job: {

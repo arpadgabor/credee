@@ -4,7 +4,7 @@ import { updatePostData } from '../crawlers/reddit/update-post-data.js'
 import { redisConnection } from '../redis.js'
 import { browser } from '../utils/browser.js'
 
-const { queueName, queue } = useRedditUpdater({
+const { queueName } = useRedditUpdater({
   redisConnection,
 })
 
