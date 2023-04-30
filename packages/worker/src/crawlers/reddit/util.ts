@@ -8,7 +8,8 @@ export interface EmittedEvents {
 }
 
 export interface SubredditSpiderInit {
-  page: playwright.Page
+  feedPage: playwright.Page
+  postPage: playwright.Page
   /**
    * @example '/r/Android'
    */

@@ -6,18 +6,30 @@ import { createSubredditCrawler } from './create-subreddit-spider.js'
 import { getPost, parsePost, savePost } from './post-actions.js'
 
 export async function crawlReddit(options: RedditCrawlerOptions) {
+  console.log('Creating browser context')
+
   const context = await browser.newContext({
     viewport: { height: 800, width: 1600 },
   })
 
+  console.log('Got context')
+
+  const feedPage = await context.newPage()
+  const postPage = await context.newPage()
+
+  console.log('Creating spider')
+
   const subredditSpider = createSubredditCrawler({
+    feedPage,
+    postPage,
     subreddit: options.subreddit,
-    page: await context.newPage(),
     limit: options.count || 5,
   })
 
+  console.log('Preparing page')
   await subredditSpider.prepare([`//button[contains(., 'Accept all')]`, `[href="${options.subreddit}/new/"][role="button"]`])
 
+  console.log('Adding post-data event handler')
   subredditSpider.on('post-data', async ({ post, comments, screenshot }) => {
     try {
       if (await getPost(post.id)) {
@@ -72,6 +84,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     }
   })
 
+  console.log('Starting crawl')
   await subredditSpider.crawl()
   subredditSpider.removeAllListeners('post-data')
 

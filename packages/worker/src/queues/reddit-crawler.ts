@@ -8,17 +8,22 @@ const { queueName } = useRedditCrawler({
   redisConnection,
 })
 
+// uncomment for testing on local machine
+// await crawlReddit({
+//   subreddit: '/r/science',
+//   count: 5,
+// })
+
 export const worker = new Worker<CrawlInput>(
   queueName,
   async job => {
     console.log(`Processing ${job.data.subreddit}...`)
-
+    console.log(job.log('test'))
     await crawlReddit({
       subreddit: job.data.subreddit,
       count: job.data.count ?? 5,
     }).catch(e => {
       console.log(e)
-      throw e
     })
   },
   { autorun: false, connection: redisConnection }

@@ -2,11 +2,18 @@ import { EventEmitter } from 'node:events'
 import playwright, { Response } from 'playwright'
 import type { Post, Comment } from '@credee/shared/reddit/types'
 import type { EmittedEvents, SubredditSpiderInit } from './util.js'
+import { crawlPostPage } from './crawl-post-page.js'
 
-export function createSubredditCrawler({ page: _page, subreddit: _subreddit, limit }: SubredditSpiderInit) {
+export function createSubredditCrawler({
+  feedPage: _feedPage,
+  postPage: _postPage,
+  subreddit: _subreddit,
+  limit,
+}: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
   const queue: Map<string, { post: Post; comments?: Comment[] }> = new Map()
-  const page: playwright.Page = _page
+  const feedPage: playwright.Page = _feedPage
+  const postPage: playwright.Page = _postPage
   const subreddit = _subreddit
 
   let crawling = true
@@ -19,7 +26,7 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
   //#region prepare page
   /** @private */
   async function interceptPostsList() {
-    page.on('response', async response => {
+    feedPage.on('response', async response => {
       const url = response.url()
       if (!url.includes('.reddit.com')) return
 
@@ -63,17 +70,17 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
    * @public
    */
   async function prepare(selectors: (string | ((page: playwright.Page) => Promise<void>))[] = []): Promise<void> {
-    await page.goto(`${baseUrl}${subreddit}/top`)
+    await feedPage.goto(`${baseUrl}${subreddit}/top`)
     await interceptPostsList()
 
     for await (const selector of selectors) {
       if (typeof selector === 'string') {
-        const selection = await page.waitForSelector(selector)
+        const selection = await feedPage.waitForSelector(selector)
         await selection.click()
       }
 
       if (typeof selector === 'function') {
-        await selector(page)
+        await selector(feedPage)
       }
     }
   }
@@ -97,14 +104,14 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
         const [post]: Post[] = Object.values(data.posts)
         const comments: Comment[] = Object.values(data.comments)
 
-        page.off('response', intercept)
+        feedPage.off('response', intercept)
         done = true
         resolve({ post, comments })
       }
 
-      page.on('response', intercept)
+      postPage.on('response', intercept)
       setTimeout(() => {
-        page.off('response', intercept)
+        postPage.off('response', intercept)
         if (!done) reject()
       }, 10 * 1000)
     })
@@ -114,7 +121,9 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
   async function scrape(postId: string) {
     console.info('-------------------------')
     console.info(`SCRAPE ${count} ${postId}: Started`)
-    const elems = await page.$$(`[id="${postId}"]`).catch(e => [])
+    const elems = await feedPage.$$(`#${postId}`).catch(e => [])
+
+    console.log('Found post on page?', elems.length)
 
     if (elems.length !== 1) {
       // Probably a cross-post.
@@ -123,49 +132,14 @@ export function createSubredditCrawler({ page: _page, subreddit: _subreddit, lim
       return
     }
 
-    // wait until the post is loaded and scroll to it for screenshot
-    console.info(`SCRAPE ${count} ${postId}: Getting element`)
-    const postElement = await page.waitForSelector(`[id="${postId}"]`, { timeout: 5000 }).catch(e => {
-      console.error(e)
-      return
-    })
-
-    if (!postElement) {
-      console.info(`SCRAPE ${count} ${postId}: Didn't find element with title ${queue.get(postId).post.title}`)
-      queue.delete(postId)
-      return
-    }
-
     console.info(`SCRAPE ${count} ${postId}: Scrolling into view`)
-    await postElement.scrollIntoViewIfNeeded()
+    await feedPage.mouse.wheel(0, 300)
 
     // open post
     // wait until it's loaded, then interceptor is called with the data from the post's comments
     console.info(`SCRAPE ${count} ${postId}: Opening post`)
-    await postElement.click().catch(error => {
-      console.error(error)
-    })
+    await crawlPostPage(postPage, postId, subreddit)
 
-    const expandedPost = page.locator(`#overlayScrollContainer #${postId}`).first()
-
-    console.info(`SCRAPE ${count} ${postId}: Waiting for data`)
-    const waitPostData = awaitPostData()
-
-    console.info(`SCRAPE ${count} ${postId}: Screenshotting`)
-    const screenshot = await expandedPost.screenshot({ type: 'png' })
-
-    const { post, comments } = await waitPostData.catch(() => ({ post: null, comments: null }))
-
-    if (!post || !comments) {
-      console.info(`SCRAPE ${count} ${postId}: No data for ${queue.get(postId).post.title}`)
-      queue.delete(postId)
-      await page.mouse.click(5, 200)
-      return
-    }
-
-    // close the post
-    await page.mouse.click(5, 200)
-    eventQueue.emit('post-data', { screenshot, post, comments })
     console.info(`SCRAPE ${count} ${postId}: Closing post`)
     count++
     queue.delete(postId)

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc'
-import { getActiveJobs, getJobsInQueue, queueRedditCrawl, removeJob } from './jobs.service'
-import { groupById, listRedditResults as listRedditPosts } from './reddit.service'
+import { getActiveJobs, queueRedditCrawl, removeJob } from './jobs.service'
+import { getUpdaterJob, setUpdaterJob } from '@credee/shared/jobs-manager'
 
 const crawlRedditInput = z.object({
   subreddit: z.string().startsWith('/r/'),
@@ -43,8 +43,18 @@ const list = procedure.query(async () => {
   return await getActiveJobs()
 })
 
+const getUpdater = procedure.query(async () => {
+  return getUpdaterJob()
+})
+
+const setUpdaterInterval = procedure.input(z.object({ repeatMinutes: z.number() })).mutation(async ({ input }) => {
+  return setUpdaterJob(input.repeatMinutes)
+})
+
 export const JobsRouter = router({
   redditCrawl,
   list,
   remove,
+  getUpdater,
+  setUpdaterInterval,
 })

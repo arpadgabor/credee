@@ -31,4 +31,18 @@ export const config = convict({
       default: 'credee',
     },
   },
+  redis: {
+    host: {
+      env: 'REDIS_HOST',
+      format: String,
+      nullable: false,
+      default: '127.0.0.1',
+    },
+    port: {
+      env: 'REDIS_PORT',
+      format: Number,
+      nullable: true,
+      default: 6379,
+    },
+  },
 })
