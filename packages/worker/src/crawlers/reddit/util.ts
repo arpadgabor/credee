@@ -1,5 +1,6 @@
 import type playwright from 'playwright'
 import type { Post, Comment } from '@credee/shared/reddit/types'
+import { Job } from 'bullmq'
 
 export interface EmittedEvents {
   // screenshot: { post: Post; screenshot: Buffer }
@@ -15,4 +16,5 @@ export interface SubredditSpiderInit {
    */
   subreddit: `/r/${string}`
   limit: number
+  job: Job
 }

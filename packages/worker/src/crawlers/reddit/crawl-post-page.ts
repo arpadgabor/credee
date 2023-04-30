@@ -40,7 +40,7 @@ export async function crawlPostPage(page: Page, postId: string, subreddit: strin
 
   const screenshot = await expandedPost?.screenshot({ type: 'png', timeout: 5000 }).catch(() => null)
   if (!screenshot) {
-    await job.log(`Could not screenshot post ${postId}`)
+    await job?.log?.(`Could not screenshot post ${postId}`)
     return
   }
 

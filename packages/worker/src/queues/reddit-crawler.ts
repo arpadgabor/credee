@@ -19,10 +19,13 @@ export const worker = new Worker<CrawlInput>(
   async job => {
     console.log(`Processing ${job.data.subreddit}...`)
     console.log(job.log('test'))
-    await crawlReddit({
-      subreddit: job.data.subreddit,
-      count: job.data.count ?? 5,
-    }).catch(e => {
+    await crawlReddit(
+      {
+        subreddit: job.data.subreddit,
+        count: job.data.count ?? 5,
+      },
+      job
+    ).catch(e => {
       console.log(e)
     })
   },

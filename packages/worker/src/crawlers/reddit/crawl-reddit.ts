@@ -4,8 +4,9 @@ import { uploadFile } from '../../utils/file-upload.js'
 import { sentiment } from '../../utils/sentiment.js'
 import { createSubredditCrawler } from './create-subreddit-spider.js'
 import { getPost, parsePost, savePost } from './post-actions.js'
+import { Job } from 'bullmq'
 
-export async function crawlReddit(options: RedditCrawlerOptions) {
+export async function crawlReddit(options: RedditCrawlerOptions, job: Job) {
   console.log('Creating browser context')
 
   const context = await browser.newContext({
@@ -24,6 +25,7 @@ export async function crawlReddit(options: RedditCrawlerOptions) {
     postPage,
     subreddit: options.subreddit,
     limit: options.count || 5,
+    job: job,
   })
 
   console.log('Preparing page')

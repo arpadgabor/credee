@@ -9,6 +9,7 @@ export function createSubredditCrawler({
   postPage: _postPage,
   subreddit: _subreddit,
   limit,
+  job,
 }: SubredditSpiderInit) {
   const baseUrl = 'https://reddit.com'
   const queue: Map<string, { post: Post; comments?: Comment[] }> = new Map()
@@ -87,37 +88,6 @@ export function createSubredditCrawler({
   //#endregion
 
   /** @private */
-  async function awaitPostData() {
-    return await new Promise<{ post: Post; comments: Comment[] }>(async (resolve, reject) => {
-      let done = false
-      async function intercept(response: Response) {
-        const url = response.url()
-        // console.log(url)
-
-        if (!url.includes('gateway.reddit.com')) return
-        if (!url.includes('postcomments')) return
-        // handle post with comments
-        const data = await response.json().catch(() => null)
-
-        if (!('comments' in data)) return reject(new Error('No comments were found.'))
-
-        const [post]: Post[] = Object.values(data.posts)
-        const comments: Comment[] = Object.values(data.comments)
-
-        feedPage.off('response', intercept)
-        done = true
-        resolve({ post, comments })
-      }
-
-      postPage.on('response', intercept)
-      setTimeout(() => {
-        postPage.off('response', intercept)
-        if (!done) reject()
-      }, 10 * 1000)
-    })
-  }
-
-  /** @private */
   async function scrape(postId: string) {
     console.info('-------------------------')
     console.info(`SCRAPE ${count} ${postId}: Started`)
@@ -138,7 +108,7 @@ export function createSubredditCrawler({
     // open post
     // wait until it's loaded, then interceptor is called with the data from the post's comments
     console.info(`SCRAPE ${count} ${postId}: Opening post`)
-    await crawlPostPage(postPage, postId, subreddit)
+    await crawlPostPage(postPage, postId, subreddit, job)
 
     console.info(`SCRAPE ${count} ${postId}: Closing post`)
     count++
