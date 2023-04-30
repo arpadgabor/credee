@@ -20,10 +20,14 @@ export async function updatePostData(browser: BrowserContext, job?: Job) {
   for await (const post of posts) {
     try {
       console.log(`Updating post ${post.post_id} on subreddit ${post.subreddit}.`)
+      const start = Date.now()
 
       await crawlPostPage(page, post.post_id, post.subreddit)
 
-      await job?.log?.(`Saved new post ${post.post_id}.`)
+      const end = Date.now()
+      const takenSeconds = ((end - start) / 1000).toFixed(2)
+      await job?.log?.(`Saved new post ${post.post_id} in ${takenSeconds}s.`)
+
       console.log('Added post')
     } catch (error) {
       await job?.log?.(`ERROR! ${error}.`)
