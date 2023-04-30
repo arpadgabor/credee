@@ -1,5 +1,5 @@
 import { UpdaterOptions, useRedditUpdater } from '../reddit/queue.js'
-import { redisConnection } from './client.js'
+import { redis, redisConnection } from './client.js'
 
 const MINUTE = 1000 * 60
 
@@ -8,7 +8,7 @@ const { queue: updater } = useRedditUpdater({ redisConnection })
 export async function getUpdaterJob() {
   const [job] = await updater.getRepeatableJobs()
 
-  console.log(job)
+  const options = await redis.json.get('reddit-updater:options')
 
   const lastTenJobs = await updater.getCompleted(0, 10)
   const running = await updater.getActive()
@@ -16,7 +16,10 @@ export async function getUpdaterJob() {
   const allLogs = await Promise.all([...running, ...lastTenJobs].map(job => updater.getJobLogs(job.id)))
 
   return {
-    job: job,
+    job: {
+      ...job,
+      options: options as UpdaterOptions,
+    },
     logs: allLogs,
     isRunning: !!running.length,
   }
@@ -34,4 +37,5 @@ export async function setUpdaterJob(options: UpdaterOptions = { repeatMinutes: 6
     },
     keepLogs: 999,
   })
+  await redis.json.set('reddit-updater:options', '$', options as any)
 }

@@ -9,3 +9,4 @@ export const redisConnection = {
 export const redis = createClient({
   url: `redis://${config.get('redis.host')}:${config.get('redis.port')}`,
 })
+await redis.connect()

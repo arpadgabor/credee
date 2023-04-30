@@ -3,10 +3,12 @@ import { crawlPostPage } from './crawl-post-page.js'
 import { listPostsForUpdate } from './post-actions.js'
 import { Job } from 'bullmq'
 import { UpdaterOptions } from '@credee/shared/reddit/queue'
+import { redis } from '../../redis.js'
 
 export async function updatePostData(browser: BrowserContext, job?: Job<UpdaterOptions>) {
   console.log('Updating Post Data')
-  const posts = await listPostsForUpdate(job.data?.maxScrapes, job.data?.maxDays)
+  const jobData = (await redis.json.get('reddit-updater:options')) as UpdaterOptions
+  const posts = await listPostsForUpdate(jobData?.maxScrapes, jobData?.maxDays)
   console.log(posts.map(post => post.post_id))
 
   if (!posts.length) {
@@ -23,7 +25,7 @@ export async function updatePostData(browser: BrowserContext, job?: Job<UpdaterO
       console.log(`Updating post ${post.post_id} on subreddit ${post.subreddit}.`)
       const start = Date.now()
 
-      const result = await crawlPostPage(page, post.post_id, post.subreddit)
+      const result = await crawlPostPage(page, post.post_id, post.subreddit, job)
 
       const end = Date.now()
       const takenSeconds = ((end - start) / 1000).toFixed(2)

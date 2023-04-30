@@ -33,7 +33,7 @@ export async function crawlPostPage(page: Page, postId: string, subreddit: strin
   const isDeleted = (await page.getByText('this post has been removed').count()) > 0
 
   if (isDeleted) {
-    await job.log(`Post ${postId} was deleted.`)
+    await job?.log?.(`Post ${postId} was deleted.`)
     console.log('Post was deleted.')
     return
   }
