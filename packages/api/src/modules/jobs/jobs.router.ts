@@ -47,9 +47,15 @@ const getUpdater = procedure.query(async () => {
   return getUpdaterJob()
 })
 
-const setUpdaterInterval = procedure.input(z.object({ repeatMinutes: z.number() })).mutation(async ({ input }) => {
-  return setUpdaterJob(input.repeatMinutes)
-})
+const setUpdaterInterval = procedure
+  .input(z.object({ repeatMinutes: z.number(), maxDays: z.number().nullish(), maxScrapes: z.number().nullish() }))
+  .mutation(async ({ input }) => {
+    return setUpdaterJob({
+      repeatMinutes: input.repeatMinutes,
+      maxDays: input.maxDays || 3,
+      maxScrapes: input.maxScrapes || 36,
+    })
+  })
 
 export const JobsRouter = router({
   redditCrawl,

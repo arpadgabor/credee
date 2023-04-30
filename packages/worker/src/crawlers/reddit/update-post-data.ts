@@ -2,10 +2,11 @@ import { BrowserContext } from 'playwright'
 import { crawlPostPage } from './crawl-post-page.js'
 import { listPostsForUpdate } from './post-actions.js'
 import { Job } from 'bullmq'
+import { UpdaterOptions } from '@credee/shared/reddit/queue'
 
-export async function updatePostData(browser: BrowserContext, job?: Job) {
+export async function updatePostData(browser: BrowserContext, job?: Job<UpdaterOptions>) {
   console.log('Updating Post Data')
-  const posts = await listPostsForUpdate()
+  const posts = await listPostsForUpdate(job.data.maxScrapes, job.data.maxDays)
   console.log(posts.map(post => post.post_id))
 
   if (!posts.length) {

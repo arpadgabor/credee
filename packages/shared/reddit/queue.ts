@@ -10,12 +10,18 @@ export function useRedditCrawler({ redisConnection }: { redisConnection: Connect
   }
 }
 
+export type UpdaterOptions = {
+  repeatMinutes?: number
+  maxScrapes?: number
+  maxDays?: number
+}
+
 /** Updates the data of old crawls */
 export function useRedditUpdater({ redisConnection }: { redisConnection: ConnectionOptions }) {
   const queueName = 'reddit-updater'
   return {
     queueName,
-    queue: new Queue<null>(queueName, { connection: redisConnection }),
+    queue: new Queue<UpdaterOptions>(queueName, { connection: redisConnection }),
     queueEvents: new QueueEvents(queueName, { connection: redisConnection }),
   }
 }

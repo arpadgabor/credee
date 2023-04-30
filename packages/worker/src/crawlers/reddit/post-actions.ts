@@ -87,14 +87,13 @@ export async function getPost(postId: string) {
   return post
 }
 
-const MAX_SCRAPES = 36
-export async function listPostsForUpdate() {
+export async function listPostsForUpdate(maxScrapes = 36, dayLimit = 3) {
   const posts = await db
     .selectFrom('reddit_posts')
     .select(['post_id', 'permalink', 'subreddit', 'created_at'])
     .groupBy(['post_id', 'permalink', 'subreddit', 'created_at'])
-    .having(b => sql`count(${b.ref('post_id')})`, '<', MAX_SCRAPES)
-    .having('created_at', '>', subDays(new Date(), 3))
+    .having(b => sql`count(${b.ref('post_id')})`, '<', maxScrapes)
+    .having('created_at', '>', subDays(new Date(), dayLimit))
     .execute()
 
   return posts

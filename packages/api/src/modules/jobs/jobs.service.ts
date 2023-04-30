@@ -21,6 +21,7 @@ export async function getJobsInQueue() {
 
 export async function getActiveJobs() {
   const jobs = await RedditCrawler.queue.getRepeatableJobs()
+
   return Promise.all(
     jobs.map(async job => {
       const data = await getJobMetadata(job.key)
