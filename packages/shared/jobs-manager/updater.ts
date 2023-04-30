@@ -6,15 +6,17 @@ const MINUTE = 1000 * 60
 const { queue: updater } = useRedditUpdater({ redisConnection })
 
 export async function getUpdaterJob() {
-  const jobs = await updater.getRepeatableJobs()
-  const lastTenJobs = await updater.getCompleted(0, 10)
+  const [job] = await updater.getRepeatableJobs()
 
+  console.log(job)
+
+  const lastTenJobs = await updater.getCompleted(0, 10)
   const running = await updater.getActive()
 
   const allLogs = await Promise.all([...running, ...lastTenJobs].map(job => updater.getJobLogs(job.id)))
 
   return {
-    job: jobs.find(j => j.id === 'reddit-updater'),
+    job: job,
     logs: allLogs,
     isRunning: !!running.length,
   }

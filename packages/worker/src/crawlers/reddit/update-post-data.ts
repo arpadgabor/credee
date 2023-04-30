@@ -6,7 +6,7 @@ import { UpdaterOptions } from '@credee/shared/reddit/queue'
 
 export async function updatePostData(browser: BrowserContext, job?: Job<UpdaterOptions>) {
   console.log('Updating Post Data')
-  const posts = await listPostsForUpdate(job.data.maxScrapes, job.data.maxDays)
+  const posts = await listPostsForUpdate(job.data?.maxScrapes, job.data?.maxDays)
   console.log(posts.map(post => post.post_id))
 
   if (!posts.length) {
@@ -23,13 +23,11 @@ export async function updatePostData(browser: BrowserContext, job?: Job<UpdaterO
       console.log(`Updating post ${post.post_id} on subreddit ${post.subreddit}.`)
       const start = Date.now()
 
-      await crawlPostPage(page, post.post_id, post.subreddit)
+      const result = await crawlPostPage(page, post.post_id, post.subreddit)
 
       const end = Date.now()
       const takenSeconds = ((end - start) / 1000).toFixed(2)
-      await job?.log?.(`Saved new post ${post.post_id} in ${takenSeconds}s.`)
-
-      console.log('Added post')
+      result && (await job?.log?.(`Done with ${post.post_id} in ${takenSeconds}s.`))
     } catch (error) {
       await job?.log?.(`ERROR! ${error}.`)
       console.log(error)

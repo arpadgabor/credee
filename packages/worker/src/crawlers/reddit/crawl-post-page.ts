@@ -29,16 +29,20 @@ export async function crawlPostPage(page: Page, postId: string, subreddit: strin
   const [postData]: Post[] = Object.values(response.posts)
   const comments: Comment[] = Object.values(response.comments)
 
-  const expandedPost = page.locator(`#${postId}`).first()
-  console.log('Found post container', !!expandedPost)
-  const isDeleted = (await expandedPost.getByText('this post has been removed').count()) > 0
+  const expandedPost = await page.$(`#${postId}`)
+  const isDeleted = (await page.getByText('this post has been removed').count()) > 0
 
   if (isDeleted) {
+    await job.log(`Post ${postId} was deleted.`)
     console.log('Post was deleted.')
     return
   }
 
-  const screenshot = await expandedPost.screenshot({ type: 'png' })
+  const screenshot = await expandedPost.screenshot({ type: 'png', timeout: 5000 }).catch(() => null)
+  if (!screenshot) {
+    await job.log(`Could not screenshot post ${postId}`)
+    return
+  }
 
   const { awards, comments: comms, isCrossPost, isImage, isLink, isSelfPost, isVideo } = parsePost({ post: postData, comments })
 

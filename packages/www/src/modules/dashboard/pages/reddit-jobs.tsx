@@ -177,9 +177,11 @@ const Overview: Component = () => {
 }
 
 function Updater() {
-  const [form, { Field, Form }] = createForm<{ repeat: number }>({
+  const [form, { Field, Form }] = createForm<{ repeat: number; maxDays: number; maxScrapes: number }>({
     initialValues: {
       repeat: 0,
+      maxDays: 3,
+      maxScrapes: 36,
     },
   })
 
@@ -193,6 +195,7 @@ function Updater() {
     onSettled(data) {
       if (!data?.job) return
       setValue(form, 'repeat', Number(data?.job?.pattern) / 1000 / 60)
+      // setValue(form, 'maxScrapes', Number(data?.job?.) / 1000 / 60)
     },
   })
 
@@ -218,20 +221,34 @@ function Updater() {
         This job handles re-scraping posts for time-series data of the progress in time of a post.
       </p>
 
-      <Form onSubmit={onSubmit} class='mb-4'>
-        <div class='flex items-end space-x-2'>
-          <Field name='repeat' type='number'>
-            {(f, props) => (
-              <label class='flex-1 w-full'>
-                <p class='font-bold mb-1'>Interval in minutes</p>
-                <Input {...props} value={f.value} type='number' class='w-full' />
-              </label>
-            )}
-          </Field>
-          <Button disabled={setUpdater.isLoading} theme='accent'>
-            Save
-          </Button>
-        </div>
+      <Form onSubmit={onSubmit} class='mb-4 space-y-2 flex flex-col'>
+        <Field name='repeat' type='number'>
+          {(f, props) => (
+            <label class='flex-1 w-full'>
+              <p class='font-bold mb-1'>Interval in minutes</p>
+              <Input {...props} value={f.value} type='number' class='w-full' />
+            </label>
+          )}
+        </Field>
+        <Field name='maxDays' type='number'>
+          {(f, props) => (
+            <label class='flex-1 w-full'>
+              <p class='font-bold mb-1'>Max age of post</p>
+              <Input {...props} value={f.value} type='number' class='w-full' />
+            </label>
+          )}
+        </Field>
+        <Field name='maxScrapes' type='number'>
+          {(f, props) => (
+            <label class='flex-1 w-full'>
+              <p class='font-bold mb-1'>Max number of scrapes for a post</p>
+              <Input {...props} value={f.value} type='number' class='w-full' />
+            </label>
+          )}
+        </Field>
+        <Button disabled={setUpdater.isLoading} theme='accent'>
+          Save
+        </Button>
       </Form>
 
       <Show when={updater.data?.job}>
