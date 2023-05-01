@@ -90,6 +90,7 @@ export interface Participants {
     fake_news_ability?: number | null
 
     reddit_as_news_source?: string | null
+    credibility_evaluation?: string | null
   }
 
   created_at: Generated<Date>

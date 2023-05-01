@@ -1,16 +1,19 @@
-import { Alert } from '@kobalte/core'
 import { useParams, useSearchParams } from '@solidjs/router'
 import { createMutation, createQuery } from '@tanstack/solid-query'
-import { createSignal, Match, onMount, Switch } from 'solid-js'
+import { Match, Switch, createSignal, onMount } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import { z } from 'zod'
-import { api } from '../../../utils/trpc'
-import { SurveyQuestions } from '../components/survey-question'
-import { SurveyRenderer } from '../form-builder'
-import { createOnboardingForm, OnboardingFields } from '../forms/onboarding.form'
+
+import { Alert } from '@kobalte/core'
 import { TRPCClientError } from '@trpc/client'
 import toast from 'solid-toast'
+import { z } from 'zod'
+
 import { RichEditor } from '../../../components/ui/rich-editor'
+import { api } from '../../../utils/trpc'
+import { OffboardingQuestions } from '../components/offboarding-questions'
+import { SurveyQuestions } from '../components/survey-question'
+import { SurveyRenderer } from '../form-builder'
+import { OnboardingFields, createOnboardingForm } from '../forms/onboarding.form'
 
 const queryParams = z.union([
   z.object({
@@ -62,8 +65,6 @@ export default function Survey() {
           socialMediaUsage: data.socialMediaUsage,
           fakeNewsAbility: data.fakeNewsAbility,
           academicField: data.academicField,
-          // TODO:
-          // redditAsNewsSource: data.redditAsNewsSource,
           nationality: data.nationality,
         },
       })
@@ -96,6 +97,8 @@ export default function Survey() {
     await qOnboard.mutateAsync(data)
   }
 
+  const [redirectUrl, setRedirectUrl] = createSignal<string>()
+
   return (
     <div>
       <section class='max-w-3xl mx-auto pt-32 pb-64 px-4'>
@@ -122,9 +125,14 @@ export default function Survey() {
             />
           </Match>
 
+          {/* Debriefing survey */}
+          <Match when={redirectUrl()}>
+            <OffboardingQuestions redirectUrl={redirectUrl()!} participantId={participantId()!} surveyId={qSurvey.data!.id} />
+          </Match>
+
           {/* Credibility survey */}
           <Match when={participantId() && qSurvey.data}>
-            <SurveyQuestions participantId={participantId()!} surveyId={qSurvey.data!.id} />
+            <SurveyQuestions participantId={participantId()!} surveyId={qSurvey.data!.id} onDone={setRedirectUrl} />
           </Match>
         </Switch>
       </section>

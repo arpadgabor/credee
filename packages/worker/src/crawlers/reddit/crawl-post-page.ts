@@ -2,7 +2,7 @@ import got from 'got'
 import { sentiment } from '../../utils/sentiment.js'
 import { Page } from 'playwright'
 import { Comment, Post } from '@credee/shared/reddit/types'
-import { parsePost, savePost } from './post-actions.js'
+import { parsePost, removeRedditResult, savePost } from './post-actions.js'
 import { uploadFile } from '../../utils/file-upload.js'
 import { Job } from 'bullmq'
 
@@ -35,6 +35,11 @@ export async function crawlPostPage(page: Page, postId: string, subreddit: strin
   if (isDeleted) {
     await job?.log?.(`Post ${postId} was deleted.`)
     console.log('Post was deleted.')
+
+    await removeRedditResult(postId).catch(async e => {
+      await job?.log?.(`Could not remove post ${postId}: ${e}`)
+    })
+
     return
   }
 

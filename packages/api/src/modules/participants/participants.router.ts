@@ -1,24 +1,28 @@
-import { ExternalPlatform, ExternalPlatforms } from '@credee/shared/database'
+import { ExternalPlatform, ExternalPlatforms, Participants, db } from '@credee/shared/database'
 import { z } from 'zod'
 import { procedure, router } from '../../core/trpc'
 import { createParticipant } from './participants.service'
+import { TRPCError } from '@trpc/server'
+
+const responseShape = z.object({
+  age: z.number().nullish(),
+  gender: z.enum(['male', 'female', 'other']).nullish(),
+  nationality: z.string().nullish(),
+  academicStatus: z.string().nullish(),
+  academicField: z.string().nullish(),
+  redditUsage: z.number().nullish(),
+  socialMediaUsage: z.number().nullish(),
+  fakeNewsAbility: z.number().nullish(),
+  redditAsNewsSource: z.string().nullish(),
+  credibilityEvaluation: z.string().nullish(),
+})
 
 const participantCreate = z.object({
   surveyId: z.number(),
   externalPlatform: z.enum(ExternalPlatforms as [string, ...string[]]),
   externalParticipantId: z.string().nullish(),
 
-  response: z.object({
-    age: z.number().nullish(),
-    gender: z.enum(['male', 'female', 'other']).nullish(),
-    nationality: z.string().nullish(),
-    academicStatus: z.string().nullish(),
-    academicField: z.string().nullish(),
-    redditUsage: z.number().nullish(),
-    socialMediaUsage: z.number().nullish(),
-    fakeNewsAbility: z.number().nullish(),
-    redditAsNewsSource: z.string().nullish(),
-  }),
+  response: responseShape,
 })
 
 const participant = participantCreate.and(
@@ -73,6 +77,33 @@ const addParticipant = procedure
     }
   })
 
+const updateResponse = procedure
+  .input(
+    z.object({
+      participantId: z.number(),
+      response: responseShape.pick({ redditAsNewsSource: true, credibilityEvaluation: true }),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const participant = await db.selectFrom('participants').where('id', '=', input.participantId).executeTakeFirst()
+
+    if (!participant) throw new TRPCError({ code: 'NOT_FOUND', message: 'Participant not found' })
+
+    await db
+      .updateTable('participants')
+      .set({
+        response: {
+          ...((participant as Participants)?.response || {}),
+          reddit_as_news_source: input.response.redditAsNewsSource,
+          credibility_evaluation: input.response.credibilityEvaluation,
+        },
+      })
+      .execute()
+
+    return true
+  })
+
 export const ParticipantsRouter = router({
   onboard: addParticipant,
+  updateResponse,
 })

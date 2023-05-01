@@ -98,6 +98,7 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
         socialMediaUsage: r.participant_response?.social_media_usage,
         fakeNewsAbility: r.participant_response?.fake_news_ability,
         redditAsNewsSource: r.participant_response?.reddit_as_news_source,
+        credibilityEvaluation: r.participant_response?.credibility_evaluation,
 
         externalPlatform: r.external_platform,
 

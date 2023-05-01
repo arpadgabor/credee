@@ -228,70 +228,97 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
       col.accessor('post.title', {
         cell: StringCell,
         header: 'Post title',
+        size: 512,
       }),
       col.accessor('post.upvotes', {
         cell: StringCell,
         header: 'Score',
+        size: 64,
       }),
       col.accessor('post.ratio', {
         cell: StringCell,
         header: 'Ratio',
+        size: 64,
       }),
       col.accessor('post.postedAt', {
         cell: DateCell,
         header: 'Posted at',
+        size: 128,
       }),
       col.accessor('credibility', {
         cell: StringCell,
         header: 'Rating: Credibility',
+        size: 128,
       }),
       col.accessor('academicStatus', {
         cell: StringCell,
         header: 'Education',
+        size: 128,
       }),
       col.accessor('academicField', {
         cell: StringCell,
         header: 'Study Field',
+        size: 128,
       }),
       col.accessor('contentStyle', {
         cell: StringCell,
         header: 'Content style',
+        size: 128,
       }),
       col.accessor('contentStyleEffect', {
         cell: StringCell,
         header: 'Content style effect',
+        size: 128,
       }),
       col.accessor('age', {
         cell: StringCell,
         header: 'Age',
+        size: 64,
       }),
       col.accessor('contentStyleOther', {
         cell: StringCell,
         header: 'Style Other',
+        size: 256,
       }),
       col.accessor('gender', {
         cell: StringCell,
         header: 'Gender',
+        size: 64,
       }),
       col.accessor('theirRating', {
         cell: StringCell,
         header: 'They would...',
+        size: 128,
       }),
       col.accessor('theirRatingWhy', {
         cell: StringCell,
         header: 'Reason',
+        size: 256,
       }),
       col.accessor('redditUsage', {
         cell: StringCell,
         header: 'Reddit usage',
+        size: 128,
       }),
       col.accessor('fakeNewsAbility', {
         cell: StringCell,
         header: 'Fake news ability',
+        size: 128,
       }),
       col.accessor('socialMediaUsage', {
         cell: StringCell,
         header: 'Social media usage',
+        size: 128,
+      }),
+      col.accessor('redditAsNewsSource', {
+        cell: StringCell,
+        header: 'Reddit as news source',
+        size: 512,
+      }),
+      col.accessor('credibilityEvaluation', {
+        cell: StringCell,
+        header: 'Credibility evaluation',
+        size: 512,
       }),
     ],
     getCoreRowModel: getCoreRowModel(),
@@ -312,7 +339,8 @@ function SurveyResponses(props: { answers: Answer[]; onRefresh: () => void; isLo
           Refresh
         </Button>
       </div>
-      <DataTable table={table} loading={false} error={false} size='auto' hideFooter={true} />
+
+      <DataTable table={table} loading={false} error={false} size='fixed' hideFooter={true} />
     </div>
   )
 }

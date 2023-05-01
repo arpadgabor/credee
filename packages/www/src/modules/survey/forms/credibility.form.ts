@@ -32,7 +32,6 @@ export function createPostCredibilityForm(options: {
         id: 'theirRating',
         title: 'Would you upvote or downvote the post?',
         validator: z.string(),
-        media: [{ type: 'image', href: options.imageHref, alt: options.imageAlt }],
         options: [
           { value: 'upvote', label: 'Upvote' },
           { value: 'downvote', label: 'Downvote' },

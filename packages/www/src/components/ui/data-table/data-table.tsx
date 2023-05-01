@@ -62,7 +62,7 @@ function TableCell<T>(cell: Cell<T, unknown>) {
 }
 function TableRow<T>(row: Row<T>) {
   return (
-    <tr>
+    <tr class='hover:bg-gray-50'>
       <For each={row.getVisibleCells()}>{TableCell}</For>
     </tr>
   )
@@ -108,7 +108,7 @@ export function DataTable<T extends unknown>(props: DataTableProps<T>) {
                 {(_, index) => (
                   <tr>
                     <td colSpan={100} class='py-3 px-3'>
-                      <span class='opacity-0 invisible'>{index}</span>
+                      <span class='opacity-0 invisible'>{index()}</span>
                     </td>
                   </tr>
                 )}

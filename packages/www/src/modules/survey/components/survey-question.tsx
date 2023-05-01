@@ -10,6 +10,7 @@ import { createPostCredibilityForm, CredibilityForm } from '../forms/credibility
 interface Props {
   surveyId: number
   participantId: number
+  onDone: (redirectUrl: string) => void
 }
 
 export function SurveyQuestions(props: Props) {
@@ -29,7 +30,9 @@ export function SurveyQuestions(props: Props) {
     },
     onSuccess({ post, remaining, redirectUrl }) {
       if (redirectUrl && !post) {
-        location.replace(redirectUrl)
+        props.onDone(redirectUrl)
+        window.scrollTo({ top: 0 })
+        return
       }
 
       window.scrollTo({ top: 0 })
@@ -91,12 +94,7 @@ export function SurveyQuestions(props: Props) {
         <Match when={isDone()}>Thank you for completing the survey!</Match>
 
         <Match when={!isDone() && question.isSuccess && formStructure()}>
-          <SurveyRenderer
-            onSubmit={onSubmit}
-            survey={formStructure()!}
-            loading={submit.isLoading}
-            submitLabel={question.data?.remaining === 0 ? 'Finish' : 'Next'}
-          />
+          <SurveyRenderer onSubmit={onSubmit} survey={formStructure()!} loading={submit.isLoading} submitLabel='Next' />
         </Match>
 
         <Match when={!isDone() && question.isError}>
