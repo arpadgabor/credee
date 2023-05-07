@@ -35,7 +35,7 @@ interface InputProps<Options extends Option> extends StyleProps {
   placeholder?: string
   value?: string
   options: Options[]
-  onSelect?: (value: string) => void
+  onSelect?: (value: Option) => void
 }
 
 export function Select<T extends Option>(props: InputProps<T>) {
@@ -45,7 +45,7 @@ export function Select<T extends Option>(props: InputProps<T>) {
       optionValue='value'
       optionTextValue='label'
       name={props.name}
-      onChange={e => (e ? props.onSelect?.(e.value) : null)}
+      onChange={e => (e ? props.onSelect?.(e) : undefined)}
       value={props.options.find(option => option.value === props.value)}
       placeholder={props.placeholder}
       itemComponent={option => (

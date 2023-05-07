@@ -84,6 +84,7 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
         participantId: r.external_participant_id,
 
         credibility: r.credibility_response.credibility,
+        familiarity: r.credibility_response.topic_familiarity,
         contentStyle: r.credibility_response.content_style,
         contentStyleEffect: r.credibility_response.content_style_effect,
         contentStyleOther: r.credibility_response.content_style_other,

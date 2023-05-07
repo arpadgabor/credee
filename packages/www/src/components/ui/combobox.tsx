@@ -36,16 +36,13 @@ interface ComboboxProps<Options extends Option> extends StyleProps {
   placeholder?: string
   value?: string
   options: Options[]
-  onSelect?: (value: string) => void
+  onSelect?: (value: Option) => void
 }
 
 export function Combobox<T extends Option>(props: ComboboxProps<T>) {
   const filter = createFilter({ sensitivity: 'base' })
 
   const [options, setOptions] = createSignal<Option[]>(props.options || [])
-  // const shownOptions = createMemo(() => {
-  //   return props.options.filter(option => filter.contains()
-  // })
 
   function onInput(query: string) {
     if (!query) {
@@ -67,7 +64,7 @@ export function Combobox<T extends Option>(props: ComboboxProps<T>) {
       options={options()}
       onInputChange={onInput}
       onOpenChange={onOpen}
-      onChange={v => props.onSelect?.(v.value)}
+      onChange={v => props.onSelect?.(v)}
       value={props.options.find(option => option.value === props.value)}
       optionValue='value'
       optionTextValue='label'

@@ -4,7 +4,6 @@ import { Combobox } from '../../../../components/ui/combobox'
 
 export function FieldSearch($: SurveyFieldProps<'search'>) {
   function onChange(value: { label: string; value: string }) {
-    console.log(value)
     setValue($.form, $.field.name, value.value)
   }
 
@@ -15,7 +14,6 @@ export function FieldSearch($: SurveyFieldProps<'search'>) {
       label={$.formField.title}
       options={$.formField.options}
       placeholder={$.formField.placeholder}
-      // @ts-expect-error kobalte is stupid
       onSelect={onChange}
     />
   )

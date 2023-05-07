@@ -14,7 +14,6 @@ export function FieldDropdown($: SurveyFieldProps<'dropdown'>) {
       label={$.formField.title}
       options={$.formField.options}
       placeholder={$.formField.placeholder}
-      //@ts-expect-error kobalte is stupid
       onSelect={onChange}
     />
   )

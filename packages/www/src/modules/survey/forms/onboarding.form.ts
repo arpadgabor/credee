@@ -29,8 +29,8 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         type: 'multi-select',
         id: 'gender',
         title: 'What gender do you identify as?',
-        description: `You can skip this if you don't want to share.`,
-        validator: z.string().optional(),
+        // description: `You can skip this if you don't want to share.`,
+        validator: z.string(),
         options: [
           { value: 'male', label: `Male` },
           { value: 'female', label: `Female` },
@@ -41,18 +41,15 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         type: 'number',
         id: 'age',
         title: "What's your age?",
-        description: "You can skip this if you don't want to share.",
-        validator: z
-          .string()
-          .optional()
-          .transform(v => Number(v)),
+        // description: "You can skip this if you don't want to share.",
+        validator: z.string().transform(v => Number(v)),
       },
       {
         type: 'search',
         id: 'nationality',
         title: "What's your nationality?",
-        description: "You can skip this if you don't want to share.",
-        validator: z.string().optional(),
+        // description: "You can skip this if you don't want to share.",
+        validator: z.string(),
         options: countries,
       },
       {
@@ -60,7 +57,7 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         id: 'academicStatus',
         title: 'What is the highest level of studies you graduated?',
         description: `You can skip this if you don't want to share. Eg. if you are currently doing your masters, please choose Undergraduate`,
-        validator: z.string().optional(),
+        validator: z.string(),
         options: [
           { value: 'primary-school', label: `Primary school` },
           { value: 'middle-school', label: `Middle school` },
@@ -76,7 +73,7 @@ export function createOnboardingForm(options: { title: string }): FormData<keyof
         type: 'dropdown',
         id: 'academicField',
         title: 'What is your field of study?',
-        validator: z.string().optional(),
+        validator: z.string(),
         options: [
           'Agriculture & Natural Resources',
           'Arts',
