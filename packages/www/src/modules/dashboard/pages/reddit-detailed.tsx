@@ -1,5 +1,5 @@
 import type { Outputs } from '@credee/api'
-import { useNavigate, useSearchParams } from '@solidjs/router'
+import { NavLink, useNavigate, useSearchParams } from '@solidjs/router'
 import { createMutation, createQuery } from '@tanstack/solid-query'
 import {
   CellContext,
@@ -205,6 +205,14 @@ function PostDataCell(props: { cell: CellContext<DetailedPost, any>; onDelete: (
           <a href={post.permalink} target='_blank' class='underline decoration-dotted text-accent-500'>
             {post.post_id}
           </a>
+
+          <NavLink
+            href={`/dashboard/reddit/dataset?post_id=${post.post_id}`}
+            target='_blank'
+            class='underline decoration-dotted text-accent-500'
+          >
+            View variants
+          </NavLink>
         </div>
 
         <p class='mb-2 select-none'>{post.title}</p>

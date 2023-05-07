@@ -45,7 +45,7 @@ export function Select<T extends Option>(props: InputProps<T>) {
       optionValue='value'
       optionTextValue='label'
       name={props.name}
-      onChange={e => props.onSelect?.(e.value)}
+      onChange={e => (e ? props.onSelect?.(e.value) : null)}
       value={props.options.find(option => option.value === props.value)}
       placeholder={props.placeholder}
       itemComponent={option => (
