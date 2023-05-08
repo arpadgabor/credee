@@ -37,6 +37,9 @@ export async function createParticipant(data: Omit<Participants, 'id' | 'created
         academic_field: data?.response?.academic_field,
         reddit_usage: data?.response?.reddit_usage,
         social_media_usage: data?.response?.social_media_usage,
+        fake_news_ability: data?.response?.fake_news_ability,
+        reddit_as_news_source: null,
+        credibility_evaluation: null,
       },
     })
     .returningAll()
