@@ -85,7 +85,7 @@ const updateResponse = procedure
     })
   )
   .mutation(async ({ input }) => {
-    const participant = await db.selectFrom('participants').where('id', '=', input.participantId).executeTakeFirst()
+    const participant = await db.selectFrom('participants').selectAll().where('id', '=', input.participantId).executeTakeFirst()
 
     if (!participant) throw new TRPCError({ code: 'NOT_FOUND', message: 'Participant not found' })
 
@@ -93,7 +93,7 @@ const updateResponse = procedure
       .updateTable('participants')
       .set({
         response: {
-          ...((participant as Participants)?.response || {}),
+          ...(participant?.response || {}),
           reddit_as_news_source: input.response.redditAsNewsSource,
           credibility_evaluation: input.response.credibilityEvaluation,
         },
