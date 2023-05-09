@@ -76,7 +76,7 @@ export function RedditFilters({
           name='subreddits'
           class='w-64'
           placeholder='Select subreddit'
-          onSelect={e => setFilter('subreddit', e)}
+          onSelect={e => setFilter('subreddit', e.value)}
         />
       </ErrorBoundary>
 
@@ -88,7 +88,7 @@ export function RedditFilters({
           name='flair'
           class='w-64'
           placeholder='Select flair'
-          onSelect={e => setFilter('flair', e)}
+          onSelect={e => setFilter('flair', e.value)}
         />
       </ErrorBoundary>
 
