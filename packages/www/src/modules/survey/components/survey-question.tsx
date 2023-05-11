@@ -6,6 +6,7 @@ import { api } from '../../../utils/trpc'
 import { SurveyRenderer } from '../form-builder'
 import { FormData } from '../form-builder/form.type'
 import { createPostCredibilityForm, CredibilityForm } from '../forms/credibility.form'
+import { FormStore, reset } from '@modular-forms/solid'
 
 interface Props {
   surveyId: number
@@ -84,8 +85,11 @@ export function SurveyQuestions(props: Props) {
     },
   })
 
-  function onSubmit(values: CredibilityForm) {
-    submit.mutateAsync(values)
+  async function onSubmit(values: CredibilityForm, form?: FormStore<any, any>) {
+    await submit.mutateAsync(values)
+    if (form) {
+      reset(form)
+    }
   }
 
   return (

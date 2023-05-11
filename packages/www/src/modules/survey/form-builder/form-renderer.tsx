@@ -2,7 +2,7 @@ import { For, JSX, Match, ParentComponent, Show, Switch } from 'solid-js'
 import { cx } from 'class-variance-authority'
 import { z } from 'zod'
 
-import { createFormStore, Field, Form, zodForm, FormStore } from '@modular-forms/solid'
+import { createFormStore, Field, Form, zodForm, FormStore, reset } from '@modular-forms/solid'
 import { Alert, Image } from '@kobalte/core'
 
 import { Button } from '../../../components/ui'
@@ -18,7 +18,7 @@ interface Props {
   survey: FormData
   loading?: boolean
   submitLabel?: string | JSX.Element
-  onSubmit: (values: any) => void
+  onSubmit: (values: any, form?: FormStore<any, any>) => void | Promise<void>
 }
 
 export function SurveyRenderer(props: Props) {
@@ -35,8 +35,12 @@ export function SurveyRenderer(props: Props) {
     validate: zodForm(validationSchema),
   })
 
+  const onSubmit = async (values: any) => {
+    await props.onSubmit(values, form)
+  }
+
   return (
-    <Form of={form} onSubmit={props.onSubmit}>
+    <Form of={form} onSubmit={onSubmit}>
       <div class='flex flex-col space-y-4 mb-8'>
         <For each={props.survey.fields}>{field => <FormFieldMapper formField={field} form={form} />}</For>
       </div>

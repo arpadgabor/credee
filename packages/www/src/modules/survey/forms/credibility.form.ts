@@ -31,7 +31,7 @@ export function createPostCredibilityForm(options: {
         type: 'multi-select',
         id: 'theirRating',
         title: 'Would you upvote or downvote the post?',
-        validator: z.string(),
+        validator: z.enum(['upvote', 'downvote']),
         options: [
           { value: 'upvote', label: 'Upvote' },
           { value: 'downvote', label: 'Downvote' },
@@ -63,7 +63,16 @@ export function createPostCredibilityForm(options: {
         id: 'contentStyle',
         title: 'How would you characterize the content of the post?',
         description: 'Please choose what is most representative.',
-        validator: z.string(),
+        validator: z.enum([
+          'jargony',
+          'misleading-title',
+          'offensive',
+          'disagreement',
+          'agreement',
+          'easy-to-understand',
+          'none',
+          'other',
+        ]),
         options: [
           { value: 'jargony', label: `I find the title hard to read or understand` },
           { value: 'misleading-title', label: `I find the title misleading` },
