@@ -24,9 +24,9 @@ export async function getSurveyDetails({ surveyId }: z.infer<typeof surveyDetail
       'responses_credibility.post_variant_id',
       'responses_credibility.post_id',
       'responses_credibility.response as credibility_response',
+      'responses_credibility.created_at as responded_at',
 
       'participants.external_participant_id',
-      'participants.created_at as responded_at',
       'participants.external_platform',
       'participants.response as participant_response',
 
