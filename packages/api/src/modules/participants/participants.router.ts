@@ -98,6 +98,7 @@ const updateResponse = procedure
           credibility_evaluation: input.response.credibilityEvaluation,
         },
       })
+      .where('id', '=', input.participantId)
       .execute()
 
     return true
