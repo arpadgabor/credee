@@ -155,7 +155,7 @@ export async function getNextSurveyQuestion({
     .leftJoin('reddit_posts as post', 'post.id', 'dataset.post_variant_id')
     .leftJoin('variant_answers', 'variant_answers.post_variant_id', 'dataset.post_variant_id')
     .where('post.post_id', 'in', q => q.selectFrom('unanswered').select(['unanswered.post_id']))
-    .orderBy('variant_answers.total', 'desc')
+    .orderBy('variant_answers.total', 'asc')
 
   const result = await query.execute()
 
